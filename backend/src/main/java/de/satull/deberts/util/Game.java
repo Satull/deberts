@@ -3,7 +3,13 @@ package de.satull.deberts.util;
 import de.satull.deberts.model.SuitDeck;
 import java.util.Map;
 
-
+/**
+ * Util class for general game methods.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 public class Game {
 
   public static final int ACTION = 3;
@@ -42,6 +48,13 @@ public class Game {
     throw new AssertionError();
   }
 
+  /**
+   * <p>Calculates how many points has each card.</p>
+   *
+   * @param cardValue the card for calculation
+   * @param {@code    true} if it is a trump card
+   * @return points of the card
+   */
   public static int getCardPoints(SuitDeck cardValue, boolean trump) {
     return trump ? trumpPointMap.get(cardValue) : cardPointMap.get(cardValue);
   }

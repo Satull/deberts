@@ -1,26 +1,29 @@
 package de.satull.deberts.service;
 
 
-import de.satull.deberts.deck.CardDeck;
-import de.satull.deberts.deck.HandDeck;
-import de.satull.deberts.deck.TrumpDeck;
+import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
 import de.satull.deberts.model.Comparator;
 import de.satull.deberts.model.ComparedCard;
 import de.satull.deberts.model.Points;
 import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.deck.CardDeck;
+import de.satull.deberts.model.deck.HandDeck;
+import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.util.Game;
-import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
 import java.util.Objects;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Represents the actual round of the party.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 public class Round {
 
-  private static final Logger LOG =
-      LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   private final HandDeck botHand;
   private final CardDeck cardDeck;
   private final HandDeck playerHand;
@@ -46,7 +49,13 @@ public class Round {
     initRound();
   }
 
-  public void decideChallenge(Comparator comparator) throws Exception {
+  /**
+   * <p>Decides a turn challenge between two cards</p>
+   *
+   * @param comparator compared cards
+   * @throws NoSuchCardException removed card is not in the deck
+   */
+  public void decideChallenge(Comparator comparator) throws NoSuchCardException {
     Points winnerPoints = getWinnerPoints(comparator.getAttacker(), comparator.getDefender());
     addScore(winnerPoints);
     setTurn(winnerPoints.getOwner());
@@ -71,18 +80,38 @@ public class Round {
         Objects.equals(getTurn(), round.getTurn());
   }
 
+  /**
+   * <p>Gets the round score of each player</p>
+   *
+   * @return round score
+   */
   public LinkedHashMap<String, Integer> getScore() {
     return score;
   }
 
+  /**
+   * <p>Gets a player name who picked a trump in the round</p>
+   *
+   * @return player name
+   */
   public String getTrumpPicker() {
     return trumpPicker;
   }
 
+  /**
+   * <p>Gets a player name who has an actual turn</p>
+   *
+   * @return player name
+   */
   public String getTurn() {
     return turn;
   }
 
+  /**
+   * <p>Sets a player name who will have the next turn</p>
+   *
+   * @param turn player name
+   */
   public void setTurn(String turn) {
     this.turn = turn;
   }
@@ -93,7 +122,14 @@ public class Round {
         .hash(botHand, cardDeck, playerHand, trumpDeck, getScore(), getTrumpPicker(), getTurn());
   }
 
-  public void playTrump(String trump, String owner) throws Exception {
+  /**
+   * <p>Decides who picked the trump and which one is it.</p>
+   *
+   * @param trump picked trump
+   * @param owner player name who picked the trump
+   * @throws NoSuchCardException removed card is not in the deck
+   */
+  public void playTrump(String trump, String owner) throws NoSuchCardException {
     if (!trump.equals(trumpDeck.getSuit())) {
       trumpDeck.resetDeck();
       trumpDeck.setTrump(cardDeck.getRandomCardFromSuit(trump));
@@ -102,7 +138,7 @@ public class Round {
   }
 
   /**
-   * <p>reset round to the init state.</p>
+   * <p>Resets round to the init state.</p>
    */
   public void resetRound() {
     cardDeck.resetDeck();
@@ -112,10 +148,21 @@ public class Round {
     initRound();
   }
 
+  /**
+   * <p>Sets new score for the player</p>
+   *
+   * @param owner  player name
+   * @param points new score
+   */
   public void setScore(String owner, Integer points) {
     score.replace(owner, points);
   }
 
+  /**
+   * <p>Checks if the trump switch is allowed</p>
+   *
+   * @return {@code true} if the switch is allowed
+   */
   public boolean switchAllowed() {
     try {
       Card card = new Card(trumpDeck.getSuit(), SuitDeck.SEVEN);
@@ -127,16 +174,31 @@ public class Round {
     }
   }
 
-  public void switchPhaseToAction() throws Exception {
+  /**
+   * <p>Switches game phase to action (with 9 cards)</p>
+   *
+   * @throws NoSuchCardException removed card is not in the deck
+   */
+  public void switchPhaseToAction() throws NoSuchCardException {
     fillHands(Game.ACTION);
   }
 
-  public void switchPhaseToTrade() throws Exception {
+  /**
+   * <p>Switches game phase to trade (with 6 cards)</p>
+   *
+   * @throws NoSuchCardException removed card is not in the deck
+   */
+  public void switchPhaseToTrade() throws NoSuchCardException {
     decideTrump();
     fillHands(Game.TRADE);
   }
 
-  public void switchTrump() throws Exception {
+  /**
+   * <p>Switches the trump in the round</p>
+   *
+   * @throws NoSuchCardException removed card is not in the deck
+   */
+  public void switchTrump() throws NoSuchCardException {
     Card card = new Card(trumpDeck.getSuit(), SuitDeck.SEVEN);
     if (playerHand.contains(card) && trumpPicker.equals(Game.UNDEFINED)) {
       playerHand.addCard(trumpDeck.getCard());
@@ -167,11 +229,11 @@ public class Round {
     score.replace(points.getOwner(), newScore);
   }
 
-  private void decideTrump() throws Exception {
+  private void decideTrump() throws NoSuchCardException {
     trumpDeck.setTrump(cardDeck.getRandomCard());
   }
 
-  private void fillHands(int cards) throws Exception {
+  private void fillHands(int cards) throws NoSuchCardException {
     for (int i = 0; i < cards; i++) {
       playerHand.addCard(cardDeck.getRandomCard());
       botHand.addCard(cardDeck.getRandomCard());
@@ -207,7 +269,8 @@ public class Round {
     trumpPicker = "undefined";
   }
 
-  private void removePlayedCards(ComparedCard attacker, ComparedCard defender) throws Exception {
+  private void removePlayedCards(ComparedCard attacker, ComparedCard defender)
+      throws NoSuchCardException {
     if (attacker.getOwner().equals(Game.BOT)) {
       botHand.removeCard(attacker.getCard());
       playerHand.removeCard(defender.getCard());

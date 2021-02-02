@@ -2,6 +2,13 @@ package de.satull.deberts.model;
 
 import java.util.Objects;
 
+/**
+ * Represents a comparator DTO which contains two cards to compare.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 public class Comparator {
   private ComparedCard attacker;
   private ComparedCard defender;
@@ -19,18 +26,38 @@ public class Comparator {
         Objects.equals(getDefender(), that.getDefender());
   }
 
+  /**
+   * <p>Gets a card from attacker</p>
+   *
+   * @return compared card from attacker
+   */
   public ComparedCard getAttacker() {
     return attacker;
   }
 
+  /**
+   * <p>Sets a card from attacker</p>
+   *
+   * @param attacker compared card from attacker
+   */
   public void setAttacker(ComparedCard attacker) {
     this.attacker = attacker;
   }
 
+  /**
+   * <p>Gets a card from defender</p>
+   *
+   * @return compared card from defender
+   */
   public ComparedCard getDefender() {
     return defender;
   }
 
+  /**
+   * <p>Sets a card from defender</p>
+   *
+   * @param defender compared card from defender
+   */
   public void setDefender(ComparedCard defender) {
     this.defender = defender;
   }

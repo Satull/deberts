@@ -1,5 +1,6 @@
-package de.satull.deberts.deck;
+package de.satull.deberts.model.deck;
 
+import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
 import de.satull.deberts.model.SuitDeck;
 import java.lang.invoke.MethodHandles;
@@ -9,6 +10,13 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Abstract calls with functions which are necessary for each possible deck type.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 public abstract class StockDeck {
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
@@ -16,12 +24,18 @@ public abstract class StockDeck {
   protected LinkedHashMap<String, List<SuitDeck>> stockDeck;
   protected List<String> suitKeys;
 
+  /**
+   * <p>>Returns {@code true} if this deck contains the specified card.</p.
+   *
+   * @param card card whose presence in this deck is to be tested
+   * @return {@code true} if this deck contains the specified card
+   */
   public boolean contains(Card card) {
     return stockDeck.get(card.getSuit()).contains(card.getValue());
   }
 
   /**
-   * <p>count cards in the deck.</p>
+   * <p>Counts cards in the deck and returns its number.</p>
    *
    * @return number of cards
    */
@@ -46,23 +60,23 @@ public abstract class StockDeck {
   }
 
   /**
-   * <p>get a card from the deck.</p>
+   * <p>Gets a card from the deck.</p>
    *
    * @param suit  of the card
    * @param value of the card
-   * @return card
-   * @throws Exception card does not exist
+   * @return card founded card
+   * @throws NoSuchCardException removed card is not in the deck
    */
-  public Card getCard(String suit, SuitDeck value) throws Exception {
+  public Card getCard(String suit, SuitDeck value) throws NoSuchCardException {
     Card card = new Card(suit, value);
     removeCard(card);
     return card;
   }
 
   /**
-   * <p>get the deck information and number of cards.</p>
+   * <p>Gets the deck information and the actual number of cards.</p>
    *
-   * @return cards in the deck and number of cards
+   * @return information about cards in the deck and its number
    */
   public LinkedHashMap<String, Object> getDeck() {
     LinkedHashMap<String, Object> result = new LinkedHashMap<>();
@@ -71,6 +85,11 @@ public abstract class StockDeck {
     return result;
   }
 
+  /**
+   * <p>Gets a list of actual suits in the deck</p>
+   *
+   * @return list of all suits in the deck
+   */
   public List<String> getSuitList() {
     return suitKeys;
   }
@@ -81,23 +100,26 @@ public abstract class StockDeck {
   }
 
   /**
-   * <p>remove card from the deck.</p>
+   * <p>Removes card from the deck.</p>
    *
    * @param card to remove
-   * @throws Exception remove not existing card
+   * @throws NoSuchCardException removed card is not in the deck
    */
-  public void removeCard(Card card) throws Exception {
+  public void removeCard(Card card) throws NoSuchCardException {
     if (stockDeck.get(card.getSuit()).contains(card.getValue())) {
       stockDeck.get(card.getSuit()).remove(card.getValue());
       if (stockDeck.get(card.getSuit()).isEmpty()) {
         removeSuit(card.getSuit());
       }
     } else {
-      throw new Exception(
+      throw new NoSuchCardException(
           "Deck does not contain a card: " + card.getSuit() + " " + card.getValue().toString());
     }
   }
 
+  /**
+   * <p>Reset the deck to the init values.</p>
+   */
   public abstract void resetDeck();
 
   @Override

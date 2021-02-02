@@ -6,13 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 import de.satull.deberts.config.DebertsConfigTest;
-import de.satull.deberts.deck.CardDeck;
-import de.satull.deberts.deck.HandDeck;
-import de.satull.deberts.deck.TrumpDeck;
+import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
 import de.satull.deberts.model.Comparator;
 import de.satull.deberts.model.ComparedCard;
 import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.deck.CardDeck;
+import de.satull.deberts.model.deck.HandDeck;
+import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.util.Game;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +44,8 @@ class PartyTest {
   @Autowired
   TrumpDeck testTrumpDeck;
 
-  private void endRoundWithWinner(Card firstCardPlayer, Card secondCardBot) throws Exception {
+  private void endRoundWithWinner(Card firstCardPlayer, Card secondCardBot) throws
+      NoSuchCardException {
     testParty.switchPhase();
     testParty.playTrump(testTrumpDeck.getSuit(), Game.BOT);
     testParty.switchPhase();
@@ -66,7 +68,7 @@ class PartyTest {
   }
 
   @Test
-  void decideFirstTurn_PartyAndCards_BotsTurn() throws Exception {
+  void decideFirstTurn_PartyAndCards_BotsTurn() throws NoSuchCardException {
     final Card firstCardPlayer = testCardDeck.getCard("diamonds", SuitDeck.QUEEN);
     final Card secondCardBot = testCardDeck.getCard("diamonds", SuitDeck.KING);
 
@@ -75,7 +77,7 @@ class PartyTest {
   }
 
   @Test
-  void decideFirstTurn_PartyAndCards_NoWinnerRandomTurnIsNotUndefined() throws Exception {
+  void decideFirstTurn_PartyAndCards_NoWinnerRandomTurnIsNotUndefined() throws NoSuchCardException {
     final Card firstCardPlayer = testCardDeck.getCard("diamonds", SuitDeck.SEVEN);
     final Card secondCardBot = testCardDeck.getCard("diamonds", SuitDeck.EIGHT);
 
@@ -84,7 +86,7 @@ class PartyTest {
   }
 
   @Test
-  void decideFirstTurn_PartyAndCards_PlayersTurn() throws Exception {
+  void decideFirstTurn_PartyAndCards_PlayersTurn() throws NoSuchCardException {
     final Card firstCardPlayer = testCardDeck.getCard("diamonds", SuitDeck.KING);
     final Card secondCardBot = testCardDeck.getCard("diamonds", SuitDeck.QUEEN);
 
@@ -93,13 +95,13 @@ class PartyTest {
   }
 
   @Test
-  void decideFirstTurn_PartyFirstRound_RandomTurnIsNotUndefined() throws Exception {
+  void decideFirstTurn_PartyFirstRound_RandomTurnIsNotUndefined() throws NoSuchCardException {
     testParty.switchPhase();
     assertNotEquals(Game.UNDEFINED, testParty.decideTurn());
   }
 
   @Test
-  void getRoundHistory_Party_HandDeck_RoundHistoryHasOneLineInNewGame() throws Exception {
+  void getRoundHistory_Party_HandDeck_RoundHistoryHasOneLineInNewGame() throws NoSuchCardException {
     testParty.switchPhase();
     testParty.playTrump(testTrumpDeck.getSuit(), Game.BOT);
     testParty.switchPhase();
@@ -118,7 +120,7 @@ class PartyTest {
   }
 
   @Test
-  void getScore_Party_TwoHandDeck_Round_InTheEndScoreNotEqualsZero() throws Exception {
+  void getScore_Party_TwoHandDeck_Round_InTheEndScoreNotEqualsZero() throws NoSuchCardException {
     final Card firstCardPlayer = testCardDeck.getCard("diamonds", SuitDeck.JACK);
     final Card secondCardBot = testCardDeck.getCard("hearts", SuitDeck.JACK);
 
@@ -129,7 +131,7 @@ class PartyTest {
   }
 
   @Test
-  void resetParty_PartyTrumpDeck_TrumpAfterResetIsNull() throws Exception {
+  void resetParty_PartyTrumpDeck_TrumpAfterResetIsNull() throws NoSuchCardException {
     testParty.switchPhase();
     testParty.switchPhase();
     testParty.resetParty();
@@ -138,7 +140,8 @@ class PartyTest {
   }
 
   @Test
-  void switchPhase_PartyAndBotHand_switchPhaseThreeTimesBotCardsStillEquals9() throws Exception {
+  void switchPhase_PartyAndBotHand_switchPhaseThreeTimesBotCardsStillEquals9()
+      throws NoSuchCardException {
     testParty.switchPhase();
     testParty.playTrump(testTrumpDeck.getSuit(), Game.BOT);
     testParty.switchPhase();
@@ -148,7 +151,8 @@ class PartyTest {
   }
 
   @Test
-  void switchPhase_PartyAndBotHand_switchPhaseThreeTimesNextGameBotCardsEquals6() throws Exception {
+  void switchPhase_PartyAndBotHand_switchPhaseThreeTimesNextGameBotCardsEquals6()
+      throws NoSuchCardException {
     testParty.switchPhase();
     testParty.playTrump(testTrumpDeck.getSuit(), Game.BOT);
     testParty.switchPhase();
@@ -160,7 +164,7 @@ class PartyTest {
   }
 
   @Test
-  void switchPhase_PartyAndBotHand_switchPhaseToActionBotCardsEquals9() throws Exception {
+  void switchPhase_PartyAndBotHand_switchPhaseToActionBotCardsEquals9() throws NoSuchCardException {
     testParty.switchPhase();
     testParty.playTrump(testTrumpDeck.getSuit(), Game.BOT);
     testParty.switchPhase();
@@ -169,7 +173,7 @@ class PartyTest {
   }
 
   @Test
-  void switchPhase_PartyAndBotHand_switchPhaseToTradeBotCardsEquals6() throws Exception {
+  void switchPhase_PartyAndBotHand_switchPhaseToTradeBotCardsEquals6() throws NoSuchCardException {
     testParty.switchPhase();
 
     assertEquals(6, testBotHand.countCards());

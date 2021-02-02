@@ -4,13 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 import de.satull.deberts.config.DebertsConfigTest;
-import de.satull.deberts.deck.CardDeck;
-import de.satull.deberts.deck.HandDeck;
-import de.satull.deberts.deck.TrumpDeck;
+import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
 import de.satull.deberts.model.Comparator;
 import de.satull.deberts.model.ComparedCard;
 import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.deck.CardDeck;
+import de.satull.deberts.model.deck.HandDeck;
+import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.util.Game;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class RoundTest {
   TrumpDeck testTrumpDeck;
 
   private void simulateCards(Card trumpCard, Card attackerCard, Card defenderCard)
-      throws Exception {
+      throws NoSuchCardException {
     testParty.switchPhase();
     testParty.switchPhase();
     testPlayerHand.addCard(defenderCard);
@@ -56,7 +57,7 @@ class RoundTest {
   }
 
   @Test
-  void decideChallenge_TwoCardsAttackerHasTrump_AttackerWins() throws Exception {
+  void decideChallenge_TwoCardsAttackerHasTrump_AttackerWins() throws NoSuchCardException {
     final Card trumpCard = testCardDeck.getCard("spades", SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard("spades", SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard("hearts", SuitDeck.ACE);
@@ -73,7 +74,7 @@ class RoundTest {
   }
 
   @Test
-  void decideChallenge_TwoCardsDefenderHasTrump_DefenderWins() throws Exception {
+  void decideChallenge_TwoCardsDefenderHasTrump_DefenderWins() throws NoSuchCardException {
     final Card trumpCard = testCardDeck.getCard("spades", SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard("hearts", SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard("spades", SuitDeck.ACE);
@@ -90,7 +91,7 @@ class RoundTest {
   }
 
   @Test
-  void decideChallenge_TwoCardsDifferentSuitsNotTrump_AttackerWins() throws Exception {
+  void decideChallenge_TwoCardsDifferentSuitsNotTrump_AttackerWins() throws NoSuchCardException {
     final Card trumpCard = testCardDeck.getCard("clubs", SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard("spades", SuitDeck.ACE);
@@ -107,7 +108,7 @@ class RoundTest {
   }
 
   @Test
-  void decideChallenge_TwoCardsSameSuitsNotTrump_AttackerWins() throws Exception {
+  void decideChallenge_TwoCardsSameSuitsNotTrump_AttackerWins() throws NoSuchCardException {
     final Card trumpCard = testCardDeck.getCard("clubs", SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.JACK);
@@ -124,7 +125,7 @@ class RoundTest {
   }
 
   @Test
-  void decideChallenge_TwoCardsSameSuitsNotTrump_DefenderWins() throws Exception {
+  void decideChallenge_TwoCardsSameSuitsNotTrump_DefenderWins() throws NoSuchCardException {
     final Card trumpCard = testCardDeck.getCard("spades", SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard("hearts", SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard("hearts", SuitDeck.ACE);
@@ -141,7 +142,8 @@ class RoundTest {
   }
 
   @Test
-  void decideChallenge_TwoCardsWithoutPointsSameSuit_DefenderWinsGetsLastCard() throws Exception {
+  void decideChallenge_TwoCardsWithoutPointsSameSuit_DefenderWinsGetsLastCard()
+      throws NoSuchCardException {
     final Card trumpCard = testCardDeck.getCard("clubs", SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.SEVEN);
     final Card defenderCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.EIGHT);
@@ -165,7 +167,7 @@ class RoundTest {
   }
 
   @Test
-  void decideChallenge_TwoTrumpCards_AttackerWins() throws Exception {
+  void decideChallenge_TwoTrumpCards_AttackerWins() throws NoSuchCardException {
     final Card trumpCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.JACK);
     final Card defenderCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.NINE);
@@ -182,7 +184,7 @@ class RoundTest {
   }
 
   @Test
-  void resetRound_PartyAndRound_SwitchPhaseToActionPhaseAndResetRound() throws Exception {
+  void resetRound_PartyAndRound_SwitchPhaseToActionPhaseAndResetRound() throws NoSuchCardException {
     testParty.switchPhase();
     testParty.switchPhase();
     testRound.resetRound();
@@ -191,7 +193,7 @@ class RoundTest {
   }
 
   @Test
-  void switchPhaseToAction_Round_SwitchPhaseToActionPhase() throws Exception {
+  void switchPhaseToAction_Round_SwitchPhaseToActionPhase() throws NoSuchCardException {
     testRound.switchPhaseToTrade();
     testRound.switchPhaseToAction();
 
@@ -199,7 +201,7 @@ class RoundTest {
   }
 
   @Test
-  void switchPhaseToTrade_Round_SwitchPhaseToTradePhase() throws Exception {
+  void switchPhaseToTrade_Round_SwitchPhaseToTradePhase() throws NoSuchCardException {
     testRound.switchPhaseToTrade();
 
     assertEquals(19, testCardDeck.countCards());

@@ -1,10 +1,11 @@
 package de.satull.deberts.config;
 
-import de.satull.deberts.deck.CardDeck;
-import de.satull.deberts.deck.HandDeck;
-import de.satull.deberts.deck.TrumpDeck;
+import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Comparator;
 import de.satull.deberts.model.Trump;
+import de.satull.deberts.model.deck.CardDeck;
+import de.satull.deberts.model.deck.HandDeck;
+import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.service.Party;
 import de.satull.deberts.service.Round;
 import de.satull.deberts.util.Game;
@@ -19,11 +20,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+/**
+ * Main controller of the deberts-api.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.0
+ * @since 1.0
+ */
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/")
 public class DebertsController {
+
 
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
@@ -35,14 +43,14 @@ public class DebertsController {
   private final TrumpDeck trumpDeck;
 
   /**
-   * <p>Parametrised constructor for dependency injection.</p>
+   * <p>Creates controller class with dependencies</p>
    *
-   * @param botHand    bot cards
-   * @param cardDeck   starting deck
-   * @param party      party information
+   * @param botHand    opponents cards
+   * @param cardDeck   card deck for the round
+   * @param party      played party
    * @param playerHand player cards
-   * @param round      round information in the party
-   * @param trumpDeck  trump in the round
+   * @param round      actual round
+   * @param trumpDeck  trump deck for the round
    */
   public DebertsController(HandDeck botHand, CardDeck cardDeck, Party party,
                            HandDeck playerHand,
@@ -55,8 +63,14 @@ public class DebertsController {
     this.trumpDeck = trumpDeck;
   }
 
+  /**
+   * <p>PostEndpoint to compare opponents cards.</p>
+   *
+   * @param cardComparator two cards of both players to compare
+   * @throws NoSuchCardException removed card is not in the deck
+   */
   @PostMapping(value = "/compare", consumes = "application/json")
-  public void compareCards(@RequestBody Comparator cardComparator) throws Exception {
+  public void compareCards(@RequestBody Comparator cardComparator) throws NoSuchCardException {
     round.decideChallenge(cardComparator);
   }
 
@@ -110,31 +124,53 @@ public class DebertsController {
     return turnMap;
   }
 
+  /**
+   * <p>PostEndpoint to choose a trump in the round</p>
+   *
+   * @param trump picked trump
+   * @throws NoSuchCardException removed card is not in the deck
+   */
   @PostMapping(value = "/playTrump", consumes = "application/json")
   public void playTrump(@RequestBody Trump trump) throws Exception {
-    LOG.info(trump.toString());
+    LOG.debug(trump.toString());
     party.playTrump(trump.getSuit(), trump.getOwner());
     party.switchPhase();
   }
 
+  /**
+   * <p>PostEndpoint to reset the party with all rounds </p>
+   */
   @PostMapping("/reset")
   public void resetParty() {
     party.resetParty();
   }
 
+  /**
+   * <p>PostEndpoint to shut down the API</p>
+   */
   @PostMapping("/shutdown")
   public void shutdown() {
     Runtime runtime = Runtime.getRuntime();
     runtime.exit(1);
   }
 
+  /**
+   * <p>PostEndpoint to switch the phase of a round</p>
+   *
+   * @throws NoSuchCardException removed card is not in the deck
+   */
   @PostMapping("/switchPhase")
-  public void switchPhase() throws Exception {
+  public void switchPhase() throws NoSuchCardException {
     party.switchPhase();
   }
 
+  /**
+   * <p>PostEndpoint to switch trump seven to the native trump</p>
+   *
+   * @throws NoSuchCardException removed card is not in the deck
+   */
   @PostMapping(value = "/switchTrump")
-  public void switchTrump() throws Exception {
+  public void switchTrump() throws NoSuchCardException {
     party.switchTrump();
   }
 

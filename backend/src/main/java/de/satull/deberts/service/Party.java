@@ -1,6 +1,7 @@
 package de.satull.deberts.service;
 
-import de.satull.deberts.deck.HandDeck;
+import de.satull.deberts.exception.NoSuchCardException;
+import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.util.Game;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
@@ -9,6 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Represents the party which will go until one of the players will get 501 points.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 public class Party {
 
   private static final Logger LOG =
@@ -39,6 +47,11 @@ public class Party {
     initParty();
   }
 
+  /**
+   * decides the turn based on the round history
+   *
+   * @return player name who starts the round
+   */
   public String decideTurn() {
     if (roundHistory.isEmpty() ||
         roundHistory.get(roundNumber).get(Game.BOT)
@@ -69,14 +82,30 @@ public class Party {
         Objects.equals(getRoundHistory(), party.getRoundHistory());
   }
 
+  /**
+   * <p>Each round has a trade phase with 6 and game phase with 9 cards.</p>
+   *
+   * @return 6 for the trade phase and 9 for the game phase
+   */
+
   public int getPhase() {
     return phase;
   }
 
+  /**
+   * <p>Gets a Map with the round number and its information</p>
+   *
+   * @return HashMap with the history of all rounds
+   */
   public LinkedHashMap<Integer, LinkedHashMap<String, Integer>> getRoundHistory() {
     return roundHistory;
   }
 
+  /**
+   * <p>Gets the score</p>
+   *
+   * @return score
+   */
   public LinkedHashMap<String, Integer> getScore() {
     return score;
   }
@@ -89,7 +118,15 @@ public class Party {
             getRoundHistory(), trumpDefined);
   }
 
-  public void playTrump(String trump, String owner) throws Exception {
+
+  /**
+   * <p>Decides who picked the trump and which one is it.</p>
+   *
+   * @param trump picked trump
+   * @param owner player name who picked the trump
+   * @throws NoSuchCardException removed card is not in the deck
+   */
+  public void playTrump(String trump, String owner) throws NoSuchCardException {
     round.playTrump(trump, owner);
     trumpDefined = true;
   }
@@ -105,11 +142,11 @@ public class Party {
   }
 
   /**
-   * <p>switch the round to the next phase.</p>
+   * <p>Switches a round to the next phase.</p>
    *
-   * @throws Exception Deck does not contain a card
+   * @throws NoSuchCardException removed card is not in the deck
    */
-  public void switchPhase() throws Exception {
+  public void switchPhase() throws NoSuchCardException {
     if (phase == Game.START) {
       round.switchPhaseToTrade();
       round.setTurn(decideTurn());
@@ -129,7 +166,12 @@ public class Party {
     }
   }
 
-  public void switchTrump() throws Exception {
+  /**
+   * <p>Switches a trump in the actual round.</p>
+   *
+   * @throws NoSuchCardException removed card is not in the deck
+   */
+  public void switchTrump() throws NoSuchCardException {
     round.switchTrump();
   }
 

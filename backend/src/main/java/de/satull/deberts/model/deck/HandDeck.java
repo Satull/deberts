@@ -1,4 +1,4 @@
-package de.satull.deberts.deck;
+package de.satull.deberts.model.deck;
 
 import de.satull.deberts.model.Card;
 import java.lang.invoke.MethodHandles;
@@ -8,11 +8,23 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Represents a cards in the hand of the player.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 public class HandDeck extends StockDeck {
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   public final String owner;
 
+  /**
+   * <p>Creates card deck for one player</p>
+   *
+   * @param owner owner of the deck
+   */
   public HandDeck(String owner) {
     resetDeck();
     this.owner = owner;

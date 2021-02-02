@@ -1,15 +1,21 @@
 package de.satull.deberts.config;
 
-import de.satull.deberts.deck.CardDeck;
-import de.satull.deberts.deck.HandDeck;
-import de.satull.deberts.deck.TrumpDeck;
+import de.satull.deberts.model.deck.CardDeck;
+import de.satull.deberts.model.deck.HandDeck;
+import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.service.Party;
 import de.satull.deberts.service.Round;
 import de.satull.deberts.util.Game;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-
+/**
+ * Config class for the bean-creation
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 @Configuration
 public class DebertsConfig {
 

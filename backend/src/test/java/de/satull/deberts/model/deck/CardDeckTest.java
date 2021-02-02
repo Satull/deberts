@@ -1,4 +1,4 @@
-package de.satull.deberts.deck;
+package de.satull.deberts.model.deck;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 import de.satull.deberts.config.DebertsConfigTest;
+import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
 import de.satull.deberts.model.SuitDeck;
 import java.util.ArrayList;
@@ -40,10 +41,11 @@ class CardDeckTest {
   }
 
   @Test
-  void getCard_CardDeck_FailGetCardCardIsNotInTheDeck() throws Exception {
+  void getCard_CardDeck_FailGetCardCardIsNotInTheDeck() throws NoSuchCardException {
     testCardDeck.getCard("spades", SuitDeck.QUEEN);
-    Exception exception;
-    exception = assertThrows(Exception.class, () -> testCardDeck.getCard("spades", SuitDeck.QUEEN));
+    NoSuchCardException exception;
+    exception = assertThrows(NoSuchCardException.class,
+        () -> testCardDeck.getCard("spades", SuitDeck.QUEEN));
 
     String expectedMessage =
         "Deck does not contain a card: " + "spades" + " " + SuitDeck.QUEEN.toString();
@@ -53,13 +55,13 @@ class CardDeckTest {
   }
 
   @Test
-  void getCard_CardDeck_GetQueenOfSpadesFromTheDeckAsExpected() throws Exception {
+  void getCard_CardDeck_GetQueenOfSpadesFromTheDeckAsExpected() throws NoSuchCardException {
     assertEquals(testCardDeck.getCard("spades", SuitDeck.QUEEN),
         new Card("spades", SuitDeck.QUEEN));
   }
 
   @Test
-  void getCard_CardDeck_GetTenOfSpadesInsteadOfAceOfSpades() throws Exception {
+  void getCard_CardDeck_GetTenOfSpadesInsteadOfAceOfSpades() throws NoSuchCardException {
     assertNotEquals(new Card("spades", SuitDeck.ACE), testCardDeck.getCard("spades", SuitDeck.TEN));
   }
 
@@ -95,7 +97,7 @@ class CardDeckTest {
   }
 
   @Test
-  void getRandomCardFormSuit_CardDeck_FailGetRandomCardFromSuit() throws Exception {
+  void getRandomCardFormSuit_CardDeck_FailGetRandomCardFromSuit() throws NoSuchCardException {
     for (int i = 0; i < startCardsNumber / 4 + 1; i++) {
       testCardDeck.getRandomCardFromSuit("clubs");
     }
@@ -103,13 +105,13 @@ class CardDeckTest {
   }
 
   @Test
-  void getRandomCardFromSuit_CardDeckAndCard_NewCardHasExpectedSuit() throws Exception {
+  void getRandomCardFromSuit_CardDeckAndCard_NewCardHasExpectedSuit() throws NoSuchCardException {
     Card testcard = testCardDeck.getRandomCardFromSuit("spades");
     assertEquals("spades", testcard.getSuit());
   }
 
   @Test
-  void getRandomCardFromSuit_CardDeck_GetAllCardsFromTheSuit() throws Exception {
+  void getRandomCardFromSuit_CardDeck_GetAllCardsFromTheSuit() throws NoSuchCardException {
     for (int i = 0; i < startCardsNumber / 4; i++) {
       testCardDeck.getRandomCardFromSuit("hearts");
     }
@@ -117,7 +119,7 @@ class CardDeckTest {
   }
 
   @Test
-  void getRandomCard_CardDeck_DeckHas31CardsAfterGet() throws Exception {
+  void getRandomCard_CardDeck_DeckHas31CardsAfterGet() throws NoSuchCardException {
     testCardDeck.getRandomCard();
     assertEquals(startCardsNumber - 1, testCardDeck.countCards());
   }
@@ -137,7 +139,7 @@ class CardDeckTest {
   }
 
   @Test
-  void getRandomCard_CardDeck_GetAllCardsWithGetRandomCard() throws Exception {
+  void getRandomCard_CardDeck_GetAllCardsWithGetRandomCard() throws NoSuchCardException {
     for (int i = 0; i < startCardsNumber; i++) {
       testCardDeck.getRandomCard();
     }
@@ -165,7 +167,7 @@ class CardDeckTest {
   }
 
   @Test
-  void getSuitList_CardDeck_GetEmptySuitList() throws Exception {
+  void getSuitList_CardDeck_GetEmptySuitList() throws NoSuchCardException {
     List<String> suitArray = new ArrayList<>();
     for (int i = 0; i < startCardsNumber; i++) {
       testCardDeck.getRandomCard();
@@ -175,13 +177,13 @@ class CardDeckTest {
   }
 
   @Test
-  void removeCard_CardDeck_DeckHas31Cards() throws Exception {
+  void removeCard_CardDeck_DeckHas31Cards() throws NoSuchCardException {
     testCardDeck.removeCard(new Card("spades", SuitDeck.QUEEN));
     assertEquals(startCardsNumber - 1, testCardDeck.countCards());
   }
 
   @Test
-  void removeCard_CardDeck_FailRemovingCard() throws Exception {
+  void removeCard_CardDeck_FailRemovingCard() throws NoSuchCardException {
     testCardDeck.removeCard(new Card("spades", SuitDeck.QUEEN));
     Exception exception = assertThrows(Exception.class,
         () -> testCardDeck.removeCard(new Card("spades", SuitDeck.QUEEN)));
@@ -194,7 +196,7 @@ class CardDeckTest {
   }
 
   @Test
-  void resetDeck_CardDeck_DeckHas32CardsAfterReset() throws Exception {
+  void resetDeck_CardDeck_DeckHas32CardsAfterReset() throws NoSuchCardException {
     testCardDeck.getRandomCard();
     testCardDeck.resetDeck();
     assertEquals(startCardsNumber, testCardDeck.countCards());

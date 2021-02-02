@@ -1,5 +1,6 @@
-package de.satull.deberts.deck;
+package de.satull.deberts.model.deck;
 
+import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
 import de.satull.deberts.model.SuitDeck;
 import java.util.ArrayList;
@@ -8,9 +9,19 @@ import java.util.LinkedHashMap;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ * Represents a cards in the hand of the player.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.5
+ * @since 1.0
+ */
 
 public class CardDeck extends StockDeck {
 
+  /**
+   * <p>Creates CardDeck with 32 cards</p>
+   */
   @Autowired
   public CardDeck() {
     resetDeck();
@@ -20,9 +31,9 @@ public class CardDeck extends StockDeck {
    * <p>Method returns a random card form the deck.</p>
    *
    * @return random card
-   * @throws Exception Deck does not contain a card
+   * @throws NoSuchCardException removed card is not in the deck
    */
-  public Card getRandomCard() throws Exception {
+  public Card getRandomCard() throws NoSuchCardException {
     int randomSuitIndex = new Random().nextInt(stockDeck.size());
     String randomSuitKey = suitKeys.get(randomSuitIndex);
     int randomCardIndex = new Random().nextInt(stockDeck.get(randomSuitKey).size());
@@ -34,9 +45,9 @@ public class CardDeck extends StockDeck {
    * <p>Method returns a random card form the deck.</p>
    *
    * @return random card from the special suit
-   * @throws Exception Deck does not contain a card
+   * @throws NoSuchCardException removed card is not in the deck
    */
-  public Card getRandomCardFromSuit(String suit) throws Exception {
+  public Card getRandomCardFromSuit(String suit) throws NoSuchCardException {
     try {
       int randomCardIndex = new Random().nextInt(stockDeck.get(suit).size());
       return getCard(suit, stockDeck.get(suit).get(randomCardIndex));
@@ -64,5 +75,6 @@ public class CardDeck extends StockDeck {
         ", suitKeys=" + suitKeys +
         '}';
   }
+
 
 }
