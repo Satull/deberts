@@ -9,10 +9,11 @@ https://giftour.ru/en/contests-birthday/the-rules-of-the-debert-card-game-debert
 
 ### Actual ToDo's:
 
-1. Docker
-2. Refactoring of the card storage to the cartesian product
-3. Card combinations
-4. ...
+1. Refactoring of the card storage to the cartesian product
+2. Docker
+3. Test-Data generator
+4. Card combinations
+5. ...
 
 ### Project setup
 
