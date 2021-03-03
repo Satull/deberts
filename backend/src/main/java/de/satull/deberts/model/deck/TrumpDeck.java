@@ -1,6 +1,7 @@
 package de.satull.deberts.model.deck;
 
 import de.satull.deberts.model.Card;
+import de.satull.deberts.model.Suit;
 import de.satull.deberts.model.SuitDeck;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,16 +18,12 @@ public class TrumpDeck extends StockDeck {
 
   private boolean nativeTrump;
 
-  /**
-   * <p>Creates empty trump deck</p>
-   */
+  /** Creates empty trump deck */
   public TrumpDeck() {
     resetDeck();
   }
 
-  /**
-   * <p>Creates trump deck with trump card</p>
-   */
+  /** Creates trump deck with trump card */
   public TrumpDeck(Card card) {
     resetDeck();
     setTrump(card);
@@ -48,7 +45,7 @@ public class TrumpDeck extends StockDeck {
   }
 
   /**
-   * <p>Gets the only one card from the trump deck.</p>
+   * Gets the only one card from the trump deck.
    *
    * @return trump card
    */
@@ -57,11 +54,11 @@ public class TrumpDeck extends StockDeck {
   }
 
   /**
-   * <p>Gets the only one suit from the trump deck.</p>
+   * Gets the only one suit from the trump deck.
    *
    * @return {@code true} if the trump is the native one
    */
-  public String getSuit() {
+  public Suit getSuit() {
     return stockDeck.isEmpty() ? null : getSuitList().get(0);
   }
 
@@ -71,7 +68,7 @@ public class TrumpDeck extends StockDeck {
   }
 
   /**
-   * <p>Checks if the actual trump is the native one or was chosed from the player</p>
+   * Checks if the actual trump is the native one or was chosed from the player
    *
    * @return
    */
@@ -79,17 +76,15 @@ public class TrumpDeck extends StockDeck {
     return nativeTrump;
   }
 
-  /**
-   * <p>Reset the deck to the init values.</p>
-   */
+  /** Reset the deck to the init values. */
   public void resetDeck() {
-    stockDeck = new LinkedHashMap<>();
-    suitKeys = new ArrayList<>(stockDeck.keySet());
+    stockDeck = new LinkedHashMap<Suit, java.util.List<SuitDeck>>();
+    suitKeys = new ArrayList<Suit>(stockDeck.keySet());
     nativeTrump = true;
   }
 
   /**
-   * <p>set trump into the deck.</p>
+   * set trump into the deck.
    *
    * @param card trump to set
    */
@@ -102,13 +97,14 @@ public class TrumpDeck extends StockDeck {
   }
 
   /**
-   * <p>Switches a trump seven with the native trump</p>
+   * Switches a trump seven with the native trump
    *
    * @param card which should switch the trump
    */
   public void switchTrump(Card card) {
-    if (!stockDeck.isEmpty() && card.getSuit().equals(getSuit()) &&
-        card.getValue().equals(SuitDeck.SEVEN)) {
+    if (!stockDeck.isEmpty()
+        && card.getSuit().equals(getSuit())
+        && card.getValue().equals(SuitDeck.SEVEN)) {
       resetDeck();
       setTrump(card);
     }
@@ -116,11 +112,13 @@ public class TrumpDeck extends StockDeck {
 
   @Override
   public String toString() {
-    return "TrumpDeck{" +
-        "stockDeck=" + stockDeck +
-        ", suitKeys=" + suitKeys +
-        ", nativeTrump=" + nativeTrump +
-        '}';
+    return "TrumpDeck{"
+        + "stockDeck="
+        + stockDeck
+        + ", suitKeys="
+        + suitKeys
+        + ", nativeTrump="
+        + nativeTrump
+        + '}';
   }
-
 }

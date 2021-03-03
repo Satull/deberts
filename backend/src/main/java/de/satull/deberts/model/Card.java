@@ -10,16 +10,16 @@ import java.util.Objects;
  * @since 1.0
  */
 public class Card {
-  private final String suit;
+  private final Suit suit;
   private final SuitDeck value;
 
   /**
-   * <p>Creates a card entity</p>
+   * Creates a card entity
    *
-   * @param suit      suit of the card
+   * @param suit suit of the card
    * @param cardValue value of the card
    */
-  public Card(String suit, SuitDeck cardValue) {
+  public Card(Suit suit, SuitDeck cardValue) {
     this.suit = suit;
     this.value = cardValue;
   }
@@ -39,10 +39,9 @@ public class Card {
    *
    * @return suit name
    */
-  public String getSuit() {
+  public Suit getSuit() {
     return suit;
   }
-
 
   /**
    * Gets a value of the card
@@ -60,10 +59,6 @@ public class Card {
 
   @Override
   public String toString() {
-    return "Card{" +
-        "suit='" + suit + '\'' +
-        ", value=" + value +
-        '}';
+    return "Card{" + "suit='" + suit + '\'' + ", value=" + value + '}';
   }
-
 }

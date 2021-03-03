@@ -1,14 +1,15 @@
-package de.satull.deberts.config;
+package de.satull.deberts.web;
 
 import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Comparator;
+import de.satull.deberts.model.Constant;
+import de.satull.deberts.model.Owner;
 import de.satull.deberts.model.Trump;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.service.Party;
 import de.satull.deberts.service.Round;
-import de.satull.deberts.util.Game;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
 import org.slf4j.Logger;
@@ -32,7 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class DebertsController {
 
-
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   private final HandDeck botHand;
@@ -43,18 +43,22 @@ public class DebertsController {
   private final TrumpDeck trumpDeck;
 
   /**
-   * <p>Creates controller class with dependencies</p>
+   * Creates controller class with dependencies
    *
-   * @param botHand    opponents cards
-   * @param cardDeck   card deck for the round
-   * @param party      played party
+   * @param botHand opponents cards
+   * @param cardDeck card deck for the round
+   * @param party played party
    * @param playerHand player cards
-   * @param round      actual round
-   * @param trumpDeck  trump deck for the round
+   * @param round actual round
+   * @param trumpDeck trump deck for the round
    */
-  public DebertsController(HandDeck botHand, CardDeck cardDeck, Party party,
-                           HandDeck playerHand,
-                           Round round, TrumpDeck trumpDeck) {
+  public DebertsController(
+      HandDeck botHand,
+      CardDeck cardDeck,
+      Party party,
+      HandDeck playerHand,
+      Round round,
+      TrumpDeck trumpDeck) {
     this.botHand = botHand;
     this.cardDeck = cardDeck;
     this.party = party;
@@ -64,7 +68,7 @@ public class DebertsController {
   }
 
   /**
-   * <p>PostEndpoint to compare opponents cards.</p>
+   * PostEndpoint to compare opponents cards.
    *
    * @param cardComparator two cards of both players to compare
    * @throws NoSuchCardException removed card is not in the deck
@@ -75,26 +79,26 @@ public class DebertsController {
   }
 
   /**
-   * <p>GetEndpoint for party information.</p>
+   * GetEndpoint for party information.
    *
    * @return party information
    */
   @GetMapping("/party")
-  public LinkedHashMap<String, Object> getParty() {
-    LinkedHashMap<String, Object> partyMap = new LinkedHashMap<>();
-    partyMap.put(Game.CARD_DECK, cardDeck.getDeck());
-    partyMap.put(Game.TRUMP, trumpDeck.getDeck());
-    partyMap.put(Game.BOT, botHand.getDeck());
-    partyMap.put(Game.PLAYER, playerHand.getDeck());
-    partyMap.put(Game.ROUND_HISTORY, party.getRoundHistory());
-    partyMap.put(Game.TURN, getTurn());
-    partyMap.put(Game.PHASE, party.getPhase());
-    partyMap.put(Game.SWITCH_ALLOWED, round.switchAllowed());
+  public LinkedHashMap<Enum, Object> getParty() {
+    LinkedHashMap<Enum, Object> partyMap = new LinkedHashMap<>();
+    partyMap.put(Constant.CARD_DECK, cardDeck.getDeck());
+    partyMap.put(Owner.TRUMP, trumpDeck.getDeck());
+    partyMap.put(Owner.BOT, botHand.getDeck());
+    partyMap.put(Owner.PLAYER, playerHand.getDeck());
+    partyMap.put(Constant.ROUND_HISTORY, party.getRoundHistory());
+    partyMap.put(Constant.TURN, getTurn());
+    partyMap.put(Constant.PHASE, party.getPhase());
+    partyMap.put(Constant.SWITCH_ALLOWED, round.switchAllowed());
     return partyMap;
   }
 
   /**
-   * <p>GetEndpoint for runtime information.</p>
+   * GetEndpoint for runtime information.
    *
    * @return runtime information
    */
@@ -111,43 +115,39 @@ public class DebertsController {
   }
 
   /**
-   * <p>GetEndpoint for score information.</p>
+   * GetEndpoint for score information.
    *
    * @return score information
    */
   @GetMapping("/turn")
-  public LinkedHashMap<String, Object> getTurn() {
-    LinkedHashMap<String, Object> turnMap = new LinkedHashMap<>();
-    turnMap.put(Game.PARTY, party.getScore());
-    turnMap.put(Game.ROUND, round.getScore());
-    turnMap.put(Game.TURN, round.getTurn());
+  public LinkedHashMap<Enum, Object> getTurn() {
+    LinkedHashMap<Enum, Object> turnMap = new LinkedHashMap<>();
+    turnMap.put(Constant.PARTY, party.getScore());
+    turnMap.put(Constant.ROUND, round.getScore());
+    turnMap.put(Constant.TURN, round.getTurn());
     return turnMap;
   }
 
   /**
-   * <p>PostEndpoint to choose a trump in the round</p>
+   * PostEndpoint to choose a trump in the round
    *
    * @param trump picked trump
    * @throws NoSuchCardException removed card is not in the deck
    */
   @PostMapping(value = "/playTrump", consumes = "application/json")
-  public void playTrump(@RequestBody Trump trump) throws Exception {
+  public void playTrump(@RequestBody Trump trump) throws NoSuchCardException {
     LOG.debug(trump.toString());
     party.playTrump(trump.getSuit(), trump.getOwner());
     party.switchPhase();
   }
 
-  /**
-   * <p>PostEndpoint to reset the party with all rounds </p>
-   */
+  /** PostEndpoint to reset the party with all rounds */
   @PostMapping("/reset")
   public void resetParty() {
     party.resetParty();
   }
 
-  /**
-   * <p>PostEndpoint to shut down the API</p>
-   */
+  /** PostEndpoint to shut down the API */
   @PostMapping("/shutdown")
   public void shutdown() {
     Runtime runtime = Runtime.getRuntime();
@@ -155,7 +155,7 @@ public class DebertsController {
   }
 
   /**
-   * <p>PostEndpoint to switch the phase of a round</p>
+   * PostEndpoint to switch the phase of a round
    *
    * @throws NoSuchCardException removed card is not in the deck
    */
@@ -165,7 +165,7 @@ public class DebertsController {
   }
 
   /**
-   * <p>PostEndpoint to switch trump seven to the native trump</p>
+   * PostEndpoint to switch trump seven to the native trump
    *
    * @throws NoSuchCardException removed card is not in the deck
    */
@@ -173,5 +173,4 @@ public class DebertsController {
   public void switchTrump() throws NoSuchCardException {
     party.switchTrump();
   }
-
 }

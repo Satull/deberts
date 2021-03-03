@@ -2,6 +2,8 @@ package de.satull.deberts.model.deck;
 
 import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
+import de.satull.deberts.model.Constant;
+import de.satull.deberts.model.Suit;
 import de.satull.deberts.model.SuitDeck;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
@@ -21,11 +23,11 @@ public abstract class StockDeck {
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
 
-  protected LinkedHashMap<String, List<SuitDeck>> stockDeck;
-  protected List<String> suitKeys;
+  protected LinkedHashMap<Suit, List<SuitDeck>> stockDeck;
+  protected List<Suit> suitKeys;
 
   /**
-   * <p>>Returns {@code true} if this deck contains the specified card.</p.
+   * >Returns {@code true} if this deck contains the specified card.</p.
    *
    * @param card card whose presence in this deck is to be tested
    * @return {@code true} if this deck contains the specified card
@@ -35,7 +37,7 @@ public abstract class StockDeck {
   }
 
   /**
-   * <p>Counts cards in the deck and returns its number.</p>
+   * Counts cards in the deck and returns its number.
    *
    * @return number of cards
    */
@@ -55,42 +57,42 @@ public abstract class StockDeck {
       return false;
     }
     StockDeck stockDeck1 = (StockDeck) o;
-    return Objects.equals(stockDeck, stockDeck1.stockDeck) &&
-        Objects.equals(suitKeys, stockDeck1.suitKeys);
+    return Objects.equals(stockDeck, stockDeck1.stockDeck)
+        && Objects.equals(suitKeys, stockDeck1.suitKeys);
   }
 
   /**
-   * <p>Gets a card from the deck.</p>
+   * Gets a card from the deck.
    *
-   * @param suit  of the card
+   * @param suit of the card
    * @param value of the card
    * @return card founded card
    * @throws NoSuchCardException removed card is not in the deck
    */
-  public Card getCard(String suit, SuitDeck value) throws NoSuchCardException {
+  public Card getCard(Suit suit, SuitDeck value) throws NoSuchCardException {
     Card card = new Card(suit, value);
     removeCard(card);
     return card;
   }
 
   /**
-   * <p>Gets the deck information and the actual number of cards.</p>
+   * Gets the deck information and the actual number of cards.
    *
    * @return information about cards in the deck and its number
    */
-  public LinkedHashMap<String, Object> getDeck() {
-    LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-    result.put("cards", countCards());
-    result.put("deck", stockDeck);
+  public LinkedHashMap<Constant, Object> getDeck() {
+    LinkedHashMap<Constant, Object> result = new LinkedHashMap<>();
+    result.put(Constant.CARDS, countCards());
+    result.put(Constant.CARD_DECK, stockDeck);
     return result;
   }
 
   /**
-   * <p>Gets a list of actual suits in the deck</p>
+   * Gets a list of actual suits in the deck
    *
    * @return list of all suits in the deck
    */
-  public List<String> getSuitList() {
+  public List<Suit> getSuitList() {
     return suitKeys;
   }
 
@@ -100,7 +102,7 @@ public abstract class StockDeck {
   }
 
   /**
-   * <p>Removes card from the deck.</p>
+   * Removes card from the deck.
    *
    * @param card to remove
    * @throws NoSuchCardException removed card is not in the deck
@@ -117,23 +119,16 @@ public abstract class StockDeck {
     }
   }
 
-  /**
-   * <p>Reset the deck to the init values.</p>
-   */
+  /** Reset the deck to the init values. */
   public abstract void resetDeck();
 
   @Override
   public String toString() {
-    return "StockDeck{" +
-        "stockDeck=" + stockDeck +
-        ", suitKeys=" + suitKeys +
-        '}';
+    return "StockDeck{" + "stockDeck=" + stockDeck + ", suitKeys=" + suitKeys + '}';
   }
 
-  private void removeSuit(String suitKey) {
+  private void removeSuit(Suit suitKey) {
     stockDeck.remove(suitKey);
     suitKeys.remove(suitKey);
-
   }
-
 }
