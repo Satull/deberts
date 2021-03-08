@@ -112,23 +112,23 @@ export default {
       this.$store.dispatch('player/setDeck', null)
       this.$store.dispatch('bot/setDeck', null)
       DebertsService.getParty().then(response => {
-        this.$store.dispatch('setRoundHistory', response.data.roundHistory)
-        this.$store.dispatch('setRoundTurn', response.data.turn.turn)
-        this.$store.dispatch('setDeckCards', response.data.cardDeck.cards)
-        this.$store.dispatch('setPhase', response.data.phase)
-        this.$store.dispatch('setSwitchAllowed', response.data.switchAllowed)
-        this.$store.dispatch('trump/setTrump', response.data.trump.deck)
-        this.$store.dispatch('bot/setDeck', response.data.bot.deck)
-        this.$store.dispatch('bot/addCards', response.data.bot.cards)
-        this.$store.dispatch('player/setDeck', response.data.player.deck)
-        this.$store.dispatch('player/addCards', response.data.player.cards)
-        this.$store.dispatch('player/addScore', response.data.turn.party.player)
+        this.$store.dispatch('setRoundHistory', response.data.ROUND_HISTORY)
+        this.$store.dispatch('setRoundTurn', response.data.TURN.TURN)
+        this.$store.dispatch('setDeckCards', response.data.CARD_DECK.CARDS)
+        this.$store.dispatch('setPhase', response.data.PHASE)
+        this.$store.dispatch('setSwitchAllowed', response.data.SWITCH_ALLOWED)
+        this.$store.dispatch('trump/setTrump', response.data.TRUMP.CARD_DECK)
+        this.$store.dispatch('bot/setDeck', response.data.BOT.CARD_DECK)
+        this.$store.dispatch('bot/addCards', response.data.BOT.CARDS)
+        this.$store.dispatch('player/setDeck', response.data.PLAYER.CARD_DECK)
+        this.$store.dispatch('player/addCards', response.data.PLAYER.CARDS)
+        this.$store.dispatch('player/addScore', response.data.TURN.PARTY.PLAYER)
         this.$store.dispatch(
           'player/addPoints',
-          response.data.turn.round.player
+          response.data.TURN.ROUND.PLAYER
         )
-        this.$store.dispatch('bot/addScore', response.data.turn.party.bot)
-        this.$store.dispatch('bot/addPoints', response.data.turn.round.bot)
+        this.$store.dispatch('bot/addScore', response.data.TURN.PARTY.BOT)
+        this.$store.dispatch('bot/addPoints', response.data.TURN.ROUND.BOT)
       })
     },
     updateScore() {

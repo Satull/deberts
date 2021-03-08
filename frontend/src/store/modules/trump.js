@@ -1,7 +1,7 @@
 export const namespaced = true
 
 export const state = {
-  suit: null,
+  suit: '',
   card: null
 }
 
