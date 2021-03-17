@@ -146,7 +146,7 @@ export default {
       required: true
     },
     trumpSuit: {
-      type: Object
+      type: String
     }
   },
   mounted() {

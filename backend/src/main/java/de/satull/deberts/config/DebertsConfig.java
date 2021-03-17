@@ -1,11 +1,11 @@
 package de.satull.deberts.config;
 
+import de.satull.deberts.model.Owner;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.service.Party;
 import de.satull.deberts.service.Round;
-import de.satull.deberts.util.Game;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +21,7 @@ public class DebertsConfig {
 
   @Bean
   public HandDeck botHand() {
-    return new HandDeck(Game.BOT);
+    return new HandDeck(Owner.BOT);
   }
 
   @Bean
@@ -36,7 +36,7 @@ public class DebertsConfig {
 
   @Bean
   public HandDeck playerHand() {
-    return new HandDeck(Game.PLAYER);
+    return new HandDeck(Owner.PLAYER);
   }
 
   @Bean

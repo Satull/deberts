@@ -11,16 +11,16 @@ import java.util.Objects;
  */
 public class ComparedCard {
 
-  private final String owner;
+  private final Owner owner;
   private final Card card;
 
   /**
-   * <p>Creates ComparedCard card and owner</p>
+   * Creates ComparedCard card and owner
    *
    * @param owner owner of the card
-   * @param card  card which will be compared
+   * @param card card which will be compared
    */
-  public ComparedCard(String owner, Card card) {
+  public ComparedCard(Owner owner, Card card) {
     this.owner = owner;
     this.card = card;
   }
@@ -38,7 +38,7 @@ public class ComparedCard {
   }
 
   /**
-   * <p>Gets card</p>
+   * Gets card
    *
    * @return card entity
    */
@@ -47,12 +47,11 @@ public class ComparedCard {
   }
 
   /**
-   * <p>Gets owner name</p>
+   * Gets owner name
    *
    * @return owner name
    */
-
-  public String getOwner() {
+  public Owner getOwner() {
     return owner;
   }
 
@@ -63,9 +62,6 @@ public class ComparedCard {
 
   @Override
   public String toString() {
-    return "ComparedCard{" +
-        "owner='" + owner + '\'' +
-        ", card=" + card +
-        '}';
+    return "ComparedCard{" + "owner='" + owner + '\'' + ", card=" + card + '}';
   }
 }

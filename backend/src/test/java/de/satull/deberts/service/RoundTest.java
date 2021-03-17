@@ -2,17 +2,17 @@ package de.satull.deberts.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 import de.satull.deberts.config.DebertsConfigTest;
 import de.satull.deberts.exception.NoSuchCardException;
 import de.satull.deberts.model.Card;
 import de.satull.deberts.model.Comparator;
 import de.satull.deberts.model.ComparedCard;
+import de.satull.deberts.model.Owner;
+import de.satull.deberts.model.Suit;
 import de.satull.deberts.model.SuitDeck;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
-import de.satull.deberts.util.Game;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +23,17 @@ import org.springframework.context.annotation.Import;
 @Import(DebertsConfigTest.class)
 class RoundTest {
 
-  @Autowired
-  HandDeck testBotHand;
+  @Autowired HandDeck testBotHand;
 
-  @Autowired
-  CardDeck testCardDeck;
+  @Autowired CardDeck testCardDeck;
 
-  @Autowired
-  Party testParty;
+  @Autowired Party testParty;
 
-  @Autowired
-  HandDeck testPlayerHand;
+  @Autowired HandDeck testPlayerHand;
 
-  @Autowired
-  Round testRound;
+  @Autowired Round testRound;
 
-  @Autowired
-  TrumpDeck testTrumpDeck;
+  @Autowired TrumpDeck testTrumpDeck;
 
   private void simulateCards(Card trumpCard, Card attackerCard, Card defenderCard)
       throws NoSuchCardException {
@@ -58,95 +52,95 @@ class RoundTest {
 
   @Test
   void decideChallenge_TwoCardsAttackerHasTrump_AttackerWins() throws NoSuchCardException {
-    final Card trumpCard = testCardDeck.getCard("spades", SuitDeck.QUEEN);
-    final Card attackerCard = testCardDeck.getCard("spades", SuitDeck.TEN);
-    final Card defenderCard = testCardDeck.getCard("hearts", SuitDeck.ACE);
+    final Card trumpCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN);
+    final Card attackerCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.TEN);
+    final Card defenderCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.ACE);
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
     Comparator comparator = new Comparator();
-    comparator.setAttacker(new ComparedCard(Game.PLAYER, attackerCard));
-    comparator.setDefender(new ComparedCard(Game.BOT, defenderCard));
+    comparator.setAttacker(new ComparedCard(Owner.PLAYER, attackerCard));
+    comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRound.decideChallenge(comparator);
 
-    assertEquals(21, testRound.getScore().get(Game.PLAYER));
-    assertEquals(Game.PLAYER, testRound.getTurn());
+    assertEquals(21, testRound.getScore().get(Owner.PLAYER));
+    assertEquals(Owner.PLAYER, testRound.getTurn());
   }
 
   @Test
   void decideChallenge_TwoCardsDefenderHasTrump_DefenderWins() throws NoSuchCardException {
-    final Card trumpCard = testCardDeck.getCard("spades", SuitDeck.QUEEN);
-    final Card attackerCard = testCardDeck.getCard("hearts", SuitDeck.TEN);
-    final Card defenderCard = testCardDeck.getCard("spades", SuitDeck.ACE);
+    final Card trumpCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN);
+    final Card attackerCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.TEN);
+    final Card defenderCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.ACE);
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
     Comparator comparator = new Comparator();
-    comparator.setAttacker(new ComparedCard(Game.PLAYER, attackerCard));
-    comparator.setDefender(new ComparedCard(Game.BOT, defenderCard));
+    comparator.setAttacker(new ComparedCard(Owner.PLAYER, attackerCard));
+    comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRound.decideChallenge(comparator);
 
-    assertEquals(21, testRound.getScore().get(Game.BOT));
-    assertEquals(Game.BOT, testRound.getTurn());
+    assertEquals(21, testRound.getScore().get(Owner.BOT));
+    assertEquals(Owner.BOT, testRound.getTurn());
   }
 
   @Test
   void decideChallenge_TwoCardsDifferentSuitsNotTrump_AttackerWins() throws NoSuchCardException {
-    final Card trumpCard = testCardDeck.getCard("clubs", SuitDeck.QUEEN);
-    final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.TEN);
-    final Card defenderCard = testCardDeck.getCard("spades", SuitDeck.ACE);
+    final Card trumpCard = testCardDeck.getCard(Suit.CLUBS, SuitDeck.QUEEN);
+    final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.TEN);
+    final Card defenderCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.ACE);
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
     Comparator comparator = new Comparator();
-    comparator.setAttacker(new ComparedCard(Game.PLAYER, attackerCard));
-    comparator.setDefender(new ComparedCard(Game.BOT, defenderCard));
+    comparator.setAttacker(new ComparedCard(Owner.PLAYER, attackerCard));
+    comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRound.decideChallenge(comparator);
 
-    assertEquals(21, testRound.getScore().get(Game.PLAYER));
-    assertEquals(Game.PLAYER, testRound.getTurn());
+    assertEquals(21, testRound.getScore().get(Owner.PLAYER));
+    assertEquals(Owner.PLAYER, testRound.getTurn());
   }
 
   @Test
   void decideChallenge_TwoCardsSameSuitsNotTrump_AttackerWins() throws NoSuchCardException {
-    final Card trumpCard = testCardDeck.getCard("clubs", SuitDeck.QUEEN);
-    final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.TEN);
-    final Card defenderCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.JACK);
+    final Card trumpCard = testCardDeck.getCard(Suit.CLUBS, SuitDeck.QUEEN);
+    final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.TEN);
+    final Card defenderCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.JACK);
 
     simulateCards(trumpCard, attackerCard, defenderCard);
 
     Comparator comparator = new Comparator();
-    comparator.setAttacker(new ComparedCard(Game.BOT, attackerCard));
-    comparator.setDefender(new ComparedCard(Game.PLAYER, defenderCard));
+    comparator.setAttacker(new ComparedCard(Owner.BOT, attackerCard));
+    comparator.setDefender(new ComparedCard(Owner.PLAYER, defenderCard));
     testRound.decideChallenge(comparator);
 
-    assertEquals(12, testRound.getScore().get(Game.BOT));
-    assertEquals(Game.BOT, testRound.getTurn());
+    assertEquals(12, testRound.getScore().get(Owner.BOT));
+    assertEquals(Owner.BOT, testRound.getTurn());
   }
 
   @Test
   void decideChallenge_TwoCardsSameSuitsNotTrump_DefenderWins() throws NoSuchCardException {
-    final Card trumpCard = testCardDeck.getCard("spades", SuitDeck.QUEEN);
-    final Card attackerCard = testCardDeck.getCard("hearts", SuitDeck.TEN);
-    final Card defenderCard = testCardDeck.getCard("hearts", SuitDeck.ACE);
+    final Card trumpCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN);
+    final Card attackerCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.TEN);
+    final Card defenderCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.ACE);
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
     Comparator comparator = new Comparator();
-    comparator.setAttacker(new ComparedCard(Game.PLAYER, attackerCard));
-    comparator.setDefender(new ComparedCard(Game.BOT, defenderCard));
+    comparator.setAttacker(new ComparedCard(Owner.PLAYER, attackerCard));
+    comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRound.decideChallenge(comparator);
 
-    assertEquals(21, testRound.getScore().get(Game.BOT));
-    assertEquals(Game.BOT, testRound.getTurn());
+    assertEquals(21, testRound.getScore().get(Owner.BOT));
+    assertEquals(Owner.BOT, testRound.getTurn());
   }
 
   @Test
   void decideChallenge_TwoCardsWithoutPointsSameSuit_DefenderWinsGetsLastCard()
       throws NoSuchCardException {
-    final Card trumpCard = testCardDeck.getCard("clubs", SuitDeck.QUEEN);
-    final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.SEVEN);
-    final Card defenderCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.EIGHT);
+    final Card trumpCard = testCardDeck.getCard(Suit.CLUBS, SuitDeck.QUEEN);
+    final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.SEVEN);
+    final Card defenderCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.EIGHT);
 
     testParty.switchPhase();
     testParty.switchPhase();
@@ -158,29 +152,29 @@ class RoundTest {
     testTrumpDeck.setTrump(trumpCard);
 
     Comparator comparator = new Comparator();
-    comparator.setAttacker(new ComparedCard(Game.PLAYER, attackerCard));
-    comparator.setDefender(new ComparedCard(Game.BOT, defenderCard));
+    comparator.setAttacker(new ComparedCard(Owner.PLAYER, attackerCard));
+    comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRound.decideChallenge(comparator);
 
-    assertEquals(10, testRound.getScore().get(Game.BOT));
-    assertEquals(Game.BOT, testRound.getTurn());
+    assertEquals(10, testRound.getScore().get(Owner.BOT));
+    assertEquals(Owner.BOT, testRound.getTurn());
   }
 
   @Test
   void decideChallenge_TwoTrumpCards_AttackerWins() throws NoSuchCardException {
-    final Card trumpCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.QUEEN);
-    final Card attackerCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.JACK);
-    final Card defenderCard = testCardDeck.getCard(Game.DIAMONDS, SuitDeck.NINE);
+    final Card trumpCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.QUEEN);
+    final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.JACK);
+    final Card defenderCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.NINE);
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
     Comparator comparator = new Comparator();
-    comparator.setAttacker(new ComparedCard(Game.PLAYER, attackerCard));
-    comparator.setDefender(new ComparedCard(Game.BOT, defenderCard));
+    comparator.setAttacker(new ComparedCard(Owner.PLAYER, attackerCard));
+    comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRound.decideChallenge(comparator);
 
-    assertEquals(34, testRound.getScore().get(Game.PLAYER));
-    assertEquals(Game.PLAYER, testRound.getTurn());
+    assertEquals(34, testRound.getScore().get(Owner.PLAYER));
+    assertEquals(Owner.PLAYER, testRound.getTurn());
   }
 
   @Test
@@ -206,5 +200,4 @@ class RoundTest {
 
     assertEquals(19, testCardDeck.countCards());
   }
-
 }

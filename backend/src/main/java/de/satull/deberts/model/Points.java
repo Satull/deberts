@@ -11,18 +11,18 @@ import java.util.Objects;
  */
 public class Points {
 
-  private final String owner;
-  private final int points;
+  private final Owner owner;
+  private final int number;
 
   /**
-   * <p>Creates points for the player</p>
+   * Creates points for the player
    *
-   * @param owner  player which will own the points
-   * @param points score points
+   * @param owner player which will own the points
+   * @param number score points
    */
-  public Points(String owner, int points) {
+  public Points(Owner owner, int number) {
     this.owner = owner;
-    this.points = points;
+    this.number = number;
   }
 
   @Override
@@ -34,38 +34,34 @@ public class Points {
       return false;
     }
     Points points1 = (Points) o;
-    return getPoints() == points1.getPoints() && getOwner().equals(points1.getOwner());
+    return getNumber() == points1.getNumber() && getOwner().equals(points1.getOwner());
   }
 
   /**
-   * <p>Gets owner of the points</p>
-   *
-   * @return points owner
-   */
-  public String getOwner() {
-    return owner;
-  }
-
-  /**
-   * <p>Gets score points</p>
+   * Gets score points
    *
    * @return score points
    */
+  public int getNumber() {
+    return number;
+  }
 
-  public int getPoints() {
-    return points;
+  /**
+   * Gets owner of the points
+   *
+   * @return points owner
+   */
+  public Owner getOwner() {
+    return owner;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getOwner(), getPoints());
+    return Objects.hash(getOwner(), getNumber());
   }
 
   @Override
   public String toString() {
-    return "Points{" +
-        "owner='" + owner + '\'' +
-        ", points=" + points +
-        '}';
+    return "Points{" + "owner='" + owner + '\'' + ", points=" + number + '}';
   }
 }

@@ -1,9 +1,13 @@
 package de.satull.deberts.model.deck;
 
 import de.satull.deberts.model.Card;
+import de.satull.deberts.model.Owner;
+import de.satull.deberts.model.Suit;
+import de.satull.deberts.model.SuitDeck;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,20 +22,20 @@ import org.slf4j.LoggerFactory;
 public class HandDeck extends StockDeck {
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
-  public final String owner;
+  public final Owner owner;
 
   /**
-   * <p>Creates card deck for one player</p>
+   * Creates card deck for one player
    *
    * @param owner owner of the deck
    */
-  public HandDeck(String owner) {
+  public HandDeck(Owner owner) {
     resetDeck();
     this.owner = owner;
   }
 
   /**
-   * <p>Add card into the hand deck.</p>
+   * Add card into the hand deck.
    *
    * @param card to add
    */
@@ -61,25 +65,25 @@ public class HandDeck extends StockDeck {
     return Objects.hash(owner);
   }
 
-  /**
-   * <p>Reset the deck to the init values.</p>
-   */
+  /** Reset the deck to the init values. */
   public void resetDeck() {
-    stockDeck = new LinkedHashMap<>();
-    stockDeck.put("clubs", new ArrayList<>());
-    stockDeck.put("diamonds", new ArrayList<>());
-    stockDeck.put("hearts", new ArrayList<>());
-    stockDeck.put("spades", new ArrayList<>());
-    suitKeys = new ArrayList<>(stockDeck.keySet());
+    stockDeck = new LinkedHashMap<Suit, List<SuitDeck>>();
+    for (Suit suit : Suit.values()) {
+      stockDeck.put(suit, new ArrayList<>());
+    }
+    suitKeys = new ArrayList<Suit>(stockDeck.keySet());
   }
 
   @Override
   public String toString() {
-    return "HandDeck{" +
-        "owner='" + owner + '\'' +
-        ", stockDeck=" + stockDeck +
-        ", suitKeys=" + suitKeys +
-        '}';
+    return "HandDeck{"
+        + "owner='"
+        + owner
+        + '\''
+        + ", stockDeck="
+        + stockDeck
+        + ", suitKeys="
+        + suitKeys
+        + '}';
   }
-
 }

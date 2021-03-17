@@ -11,16 +11,16 @@ import java.util.Objects;
  */
 public class Trump {
 
-  private String suit;
-  private String owner;
+  private Suit suit;
+  private Owner owner;
 
   /**
-   * <p>Creates trump with the information about the player</p>
+   * Creates trump with the information about the player
    *
-   * @param suit  suit of the trump in the round
+   * @param suit suit of the trump in the round
    * @param owner player who chose the trump
    */
-  public Trump(String suit, String owner) {
+  public Trump(Suit suit, Owner owner) {
     this.suit = suit;
     this.owner = owner;
   }
@@ -34,43 +34,43 @@ public class Trump {
       return false;
     }
     Trump trump = (Trump) o;
-    return Objects.equals(getSuit(), trump.getSuit()) &&
-        Objects.equals(getOwner(), trump.getOwner());
+    return Objects.equals(getSuit(), trump.getSuit())
+        && Objects.equals(getOwner(), trump.getOwner());
   }
 
   /**
-   * <p>Gets player chose the trump</p>
+   * Gets player chose the trump
    *
    * @return player name
    */
-  public String getOwner() {
+  public Owner getOwner() {
     return owner;
   }
 
   /**
-   * <p>Sets player chose the trump</p>
+   * Sets player chose the trump
    *
    * @param owner player name
    */
-  public void setOwner(String owner) {
+  public void setOwner(Owner owner) {
     this.owner = owner;
   }
 
   /**
-   * <p>Gets an actual suit of the trump</p>
+   * Gets an actual suit of the trump
    *
    * @return suit of the trump
    */
-  public String getSuit() {
+  public Suit getSuit() {
     return suit;
   }
 
   /**
-   * <p>Sets suit for the trump</p>
+   * Sets suit for the trump
    *
    * @param suit trump suit
    */
-  public void setSuit(String suit) {
+  public void setSuit(Suit suit) {
     this.suit = suit;
   }
 
@@ -81,9 +81,6 @@ public class Trump {
 
   @Override
   public String toString() {
-    return "Trump{" +
-        "suit='" + suit + '\'' +
-        ", owner='" + owner + '\'' +
-        '}';
+    return "Trump{" + "suit='" + suit + '\'' + ", owner='" + owner + '\'' + '}';
   }
 }
