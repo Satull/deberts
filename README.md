@@ -9,11 +9,10 @@ https://giftour.ru/en/contests-birthday/the-rules-of-the-debert-card-game-debert
 
 ### Actual ToDo's:
 
-1. Refactoring of the card storage to the cartesian product
-2. Docker
-3. Test-Data generator
-4. Card combinations
-5. ...
+1. Create Docker for PostgreSQL
+2. Create tables to enable save option
+3. Create an option to save the game
+4. Configure work with two docker images (game + database)
 
 ### Project setup
 
