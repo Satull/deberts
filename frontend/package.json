@@ -12,6 +12,7 @@
     "@vue/test-utils": "^1.0.3",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "force": "^0.0.3",
     "gsap": "^3.2.6",
     "lodash": "^4.17.15",
     "velocity-animate": "^1.5.2",

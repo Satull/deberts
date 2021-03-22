@@ -34,7 +34,6 @@ yarn-error.log*
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
 *.iws
 *.iml
 *.ipr
@@ -49,3 +48,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### generated Sources ###
+backend/src/main/resources/public/
