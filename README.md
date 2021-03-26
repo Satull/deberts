@@ -32,4 +32,6 @@ deberts
 ```
 mvn clean install
 mvn --projects backend spring-boot:run
+or 
+docker-compose up :)
 ```
