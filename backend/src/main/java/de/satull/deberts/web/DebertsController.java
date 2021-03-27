@@ -9,11 +9,13 @@ import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.service.Party;
+import de.satull.deberts.service.PlayerService;
 import de.satull.deberts.service.Round;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +43,9 @@ public class DebertsController {
   private final HandDeck playerHand;
   private final Round round;
   private final TrumpDeck trumpDeck;
+
+  @Autowired
+  private PlayerService playerService;
 
   /**
    * Creates controller class with dependencies
@@ -161,6 +166,7 @@ public class DebertsController {
    */
   @PostMapping("/switchPhase")
   public void switchPhase() throws NoSuchCardException {
+    LOG.info("Hello Players: " + playerService.list().get(0).getPlr_name());
     party.switchPhase();
   }
 
