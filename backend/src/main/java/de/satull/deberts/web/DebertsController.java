@@ -166,7 +166,7 @@ public class DebertsController {
    */
   @PostMapping("/switchPhase")
   public void switchPhase() throws NoSuchCardException {
-    LOG.info("Hello Players: " + playerService.list().get(0).getPlr_name());
+    LOG.info("Hello Players: " + playerService.list().get(0).getName());
     party.switchPhase();
   }
 

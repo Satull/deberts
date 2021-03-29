@@ -1,6 +1,7 @@
 package de.satull.deberts.model.db;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,79 +11,146 @@ public class Players {
 
   @Id
   @GeneratedValue
-  private Long plr_id;
-  private String plr_name;
-  private int  plr_last_game_result;
-  private int plr_total_wins;
-  private int plr_total_loses;
-  private Long plr_win_rate;
-  private int plr_actual_win_streak;
-  private int plr_best_win_streak;
+  @Column(name = "plr_id", updatable = false, nullable = false)
+  private Long id;
+  @Column(name = "plr_name")
+  private String name;
+  @Column(name = "plr_last_game_result")
+  private int  lastGameResult;
+  @Column(name = "plr_total_wins")
+  private int totalWins;
+  @Column(name = "plr_total_loses")
+  private int totalLoses;
+  @Column(name = "plr_win_rate")
+  private long winRate;
+  @Column(name = "plr_actual_win_streak")
+  private int actualWinStreak;
+  @Column(name = "plr_best_win_streak")
+  private int bestWinStreak;
 
-  public Long getPlr_id() {
-    return plr_id;
+  public Long getId() {
+    return id;
   }
 
-  public void setPlr_id(Long plr_id) {
-    this.plr_id = plr_id;
+  public void setId(Long id) {
+    this.id = id;
   }
 
-  public String getPlr_name() {
-    return plr_name;
+  public String getName() {
+    return name;
   }
 
-  public void setPlr_name(String plr_name) {
-    this.plr_name = plr_name;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public int getPlr_last_game_result() {
-    return plr_last_game_result;
+  public int getLastGameResult() {
+    return lastGameResult;
   }
 
-  public void setPlr_last_game_result(int plr_last_game_result) {
-    this.plr_last_game_result = plr_last_game_result;
+  public void setLastGameResult(int lastGameResult) {
+    this.lastGameResult = lastGameResult;
   }
 
-  public int getPlr_total_wins() {
-    return plr_total_wins;
+  public int getTotalWins() {
+    return totalWins;
   }
 
-  public void setPlr_total_wins(int plr_total_wins) {
-    this.plr_total_wins = plr_total_wins;
+  public void setTotalWins(int totalWins) {
+    this.totalWins = totalWins;
   }
 
-  public int getPlr_total_loses() {
-    return plr_total_loses;
+  public int getTotalLoses() {
+    return totalLoses;
   }
 
-  public void setPlr_total_loses(int plr_total_loses) {
-    this.plr_total_loses = plr_total_loses;
+  public void setTotalLoses(int totalLoses) {
+    this.totalLoses = totalLoses;
   }
 
-  public Long getPlr_win_rate() {
-    return plr_win_rate;
+  public long getWinRate() {
+    return winRate;
   }
 
-  public void setPlr_win_rate(Long plr_win_rate) {
-    this.plr_win_rate = plr_win_rate;
+  public void setWinRate(long winRate) {
+    this.winRate = winRate;
   }
 
-  public int getPlr_actual_win_streak() {
-    return plr_actual_win_streak;
+  public int getActualWinStreak() {
+    return actualWinStreak;
   }
 
-  public void setPlr_actual_win_streak(int plr_actual_win_streak) {
-    this.plr_actual_win_streak = plr_actual_win_streak;
+  public void setActualWinStreak(int actualWinStreak) {
+    this.actualWinStreak = actualWinStreak;
   }
 
-  public int getPlr_best_win_streak() {
-    return plr_best_win_streak;
+  public int getBestWinStreak() {
+    return bestWinStreak;
   }
 
-  public void setPlr_best_win_streak(int plr_best_win_streak) {
-    this.plr_best_win_streak = plr_best_win_streak;
+  public void setBestWinStreak(int bestWinStreak) {
+    this.bestWinStreak = bestWinStreak;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Players)) {
+      return false;
+    }
 
+    Players players = (Players) o;
 
+    if (getLastGameResult() != players.getLastGameResult()) {
+      return false;
+    }
+    if (getTotalWins() != players.getTotalWins()) {
+      return false;
+    }
+    if (getTotalLoses() != players.getTotalLoses()) {
+      return false;
+    }
+    if (getWinRate() != players.getWinRate()) {
+      return false;
+    }
+    if (getActualWinStreak() != players.getActualWinStreak()) {
+      return false;
+    }
+    if (getBestWinStreak() != players.getBestWinStreak()) {
+      return false;
+    }
+    if (!getId().equals(players.getId())) {
+      return false;
+    }
+    return getName() != null ? getName().equals(players.getName()) : players.getName() == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = getId().hashCode();
+    result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+    result = 31 * result + getLastGameResult();
+    result = 31 * result + getTotalWins();
+    result = 31 * result + getTotalLoses();
+    result = 31 * result + (int) (getWinRate() ^ (getWinRate() >>> 32));
+    result = 31 * result + getActualWinStreak();
+    result = 31 * result + getBestWinStreak();
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Players{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", lastGameResult=" + lastGameResult +
+        ", totalWins=" + totalWins +
+        ", totalLoses=" + totalLoses +
+        ", winRate=" + winRate +
+        ", actualWinStreak=" + actualWinStreak +
+        ", bestWinStreak=" + bestWinStreak +
+        '}';
+  }
 }
