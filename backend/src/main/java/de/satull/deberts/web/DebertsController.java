@@ -5,6 +5,7 @@ import de.satull.deberts.model.Comparator;
 import de.satull.deberts.model.Constant;
 import de.satull.deberts.model.Owner;
 import de.satull.deberts.model.Trump;
+import de.satull.deberts.model.db.Players;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
@@ -13,6 +14,7 @@ import de.satull.deberts.service.PlayerService;
 import de.satull.deberts.service.Round;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +110,7 @@ public class DebertsController {
    * @return runtime information
    */
   @GetMapping("/runtime")
-  public LinkedHashMap<String, Object> getRuntime() {
+  public Map<String, Object> getRuntime() {
     LinkedHashMap<String, Object> runtimeMap = new LinkedHashMap<>();
     Runtime runtime = Runtime.getRuntime();
     runtimeMap.put("availableProcessors", runtime.availableProcessors());
@@ -125,7 +127,7 @@ public class DebertsController {
    * @return score information
    */
   @GetMapping("/turn")
-  public LinkedHashMap<Enum, Object> getTurn() {
+  public Map<Enum, Object> getTurn() {
     LinkedHashMap<Enum, Object> turnMap = new LinkedHashMap<>();
     turnMap.put(Constant.PARTY, party.getScore());
     turnMap.put(Constant.ROUND, round.getScore());
@@ -167,6 +169,9 @@ public class DebertsController {
   @PostMapping("/switchPhase")
   public void switchPhase() throws NoSuchCardException {
     LOG.info("Hello Players: " + playerService.list().get(0).getName());
+    Players player = playerService.list().get(0);
+    player.setBestWinStreak(99);
+    playerService.save(player);
     party.switchPhase();
   }
 

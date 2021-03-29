@@ -7,6 +7,7 @@ BEGIN
         CREATE USER deberts WITH ENCRYPTED PASSWORD 'password123';
         GRANT ALL PRIVILEGES ON DATABASE postgres TO deberts;
         GRANT SELECT ON ALL TABLES IN SCHEMA public TO deberts;
+        GRANT UPDATE ON ALL TABLES IN SCHEMA public TO deberts;
 END IF;
 END
 $do$;
