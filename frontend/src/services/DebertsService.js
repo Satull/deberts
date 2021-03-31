@@ -27,6 +27,12 @@ export default {
   reset() {
     return apiClient.post('/reset')
   },
+  save() {
+    return apiClient.post('/save')
+  },
+  load() {
+    return apiClient.post('/load')
+  },
   switchTrump() {
     return apiClient.post('/switchTrump')
   },

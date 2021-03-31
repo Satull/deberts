@@ -101,6 +101,16 @@
       <div class="bg-green-700 cursor-pointer float-right text-gray-300">
         <a
           class="border-l-2 duration-500 ease-in-out float-left hover:bg-gray-300 hover:text-green-700 p-4 text-center transition w-32"
+          v-on:click="save()"
+          >Save</a
+        >
+        <a
+          class="border-l-2 duration-500 ease-in-out float-left hover:bg-gray-300 hover:text-green-700 p-4 text-center transition w-32"
+          v-on:click="load()"
+          >Load</a
+        >
+        <a
+          class="border-l-2 duration-500 ease-in-out float-left hover:bg-gray-300 hover:text-green-700 p-4 text-center transition w-32"
           v-on:click="isOpen = !isOpen"
           >History</a
         >
@@ -192,6 +202,16 @@ export default {
       DebertsService.reset().then(response => {
         if (response.status === 200) {
           this.$store.dispatch('setPasses', 0)
+          this.$emit('update:party')
+        }
+      })
+    },
+    save() {
+      DebertsService.save()
+    },
+    load() {
+      DebertsService.load().then(response => {
+        if (response.status === 200) {
           this.$emit('update:party')
         }
       })
