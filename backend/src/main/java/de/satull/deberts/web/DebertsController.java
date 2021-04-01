@@ -1,17 +1,17 @@
 package de.satull.deberts.web;
 
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.Comparator;
-import de.satull.deberts.model.Constant;
-import de.satull.deberts.model.Owner;
-import de.satull.deberts.model.Trump;
-import de.satull.deberts.model.db.Players;
+import de.satull.deberts.model.db.Player;
+import de.satull.deberts.model.web.Comparator;
+import de.satull.deberts.model.enums.Constant;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.web.Trump;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
-import de.satull.deberts.service.Party;
+import de.satull.deberts.service.PartyService;
 import de.satull.deberts.service.PlayerService;
-import de.satull.deberts.service.Round;
+import de.satull.deberts.service.RoundService;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -41,9 +41,9 @@ public class DebertsController {
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   private final HandDeck botHand;
   private final CardDeck cardDeck;
-  private final Party party;
+  private final PartyService partyService;
   private final HandDeck playerHand;
-  private final Round round;
+  private final RoundService roundService;
   private final TrumpDeck trumpDeck;
 
   @Autowired
@@ -54,23 +54,23 @@ public class DebertsController {
    *
    * @param botHand opponents cards
    * @param cardDeck card deck for the round
-   * @param party played party
+   * @param partyService played party
    * @param playerHand player cards
-   * @param round actual round
+   * @param roundService actual round
    * @param trumpDeck trump deck for the round
    */
   public DebertsController(
       HandDeck botHand,
       CardDeck cardDeck,
-      Party party,
+      PartyService partyService,
       HandDeck playerHand,
-      Round round,
+      RoundService roundService,
       TrumpDeck trumpDeck) {
     this.botHand = botHand;
     this.cardDeck = cardDeck;
-    this.party = party;
+    this.partyService = partyService;
     this.playerHand = playerHand;
-    this.round = round;
+    this.roundService = roundService;
     this.trumpDeck = trumpDeck;
   }
 
@@ -82,7 +82,7 @@ public class DebertsController {
    */
   @PostMapping(value = "/compare", consumes = "application/json")
   public void compareCards(@RequestBody Comparator cardComparator) throws NoSuchCardException {
-    round.decideChallenge(cardComparator);
+    roundService.decideChallenge(cardComparator);
   }
 
   /**
@@ -97,10 +97,10 @@ public class DebertsController {
     partyMap.put(Owner.TRUMP, trumpDeck.getDeck());
     partyMap.put(Owner.BOT, botHand.getDeck());
     partyMap.put(Owner.PLAYER, playerHand.getDeck());
-    partyMap.put(Constant.ROUND_HISTORY, party.getRoundHistory());
+    partyMap.put(Constant.ROUND_HISTORY, partyService.getRoundHistory());
     partyMap.put(Constant.TURN, getTurn());
-    partyMap.put(Constant.PHASE, party.getPhase());
-    partyMap.put(Constant.SWITCH_ALLOWED, round.switchAllowed());
+    partyMap.put(Constant.PHASE, partyService.getPhase());
+    partyMap.put(Constant.SWITCH_ALLOWED, roundService.switchAllowed());
     return partyMap;
   }
 
@@ -129,9 +129,9 @@ public class DebertsController {
   @GetMapping("/turn")
   public Map<Enum, Object> getTurn() {
     LinkedHashMap<Enum, Object> turnMap = new LinkedHashMap<>();
-    turnMap.put(Constant.PARTY, party.getScore());
-    turnMap.put(Constant.ROUND, round.getScore());
-    turnMap.put(Constant.TURN, round.getTurn());
+    turnMap.put(Constant.PARTY, partyService.getScore());
+    turnMap.put(Constant.ROUND, roundService.getScore());
+    turnMap.put(Constant.TURN, roundService.getTurn());
     return turnMap;
   }
 
@@ -144,14 +144,14 @@ public class DebertsController {
   @PostMapping(value = "/playTrump", consumes = "application/json")
   public void playTrump(@RequestBody Trump trump) throws NoSuchCardException {
     LOG.debug(trump.toString());
-    party.playTrump(trump.getSuit(), trump.getOwner());
-    party.switchPhase();
+    partyService.playTrump(trump.getSuit(), trump.getOwner());
+    partyService.switchPhase();
   }
 
   /** PostEndpoint to reset the party with all rounds */
   @PostMapping("/reset")
   public void resetParty() {
-    party.resetParty();
+    partyService.resetParty();
   }
 
   /** PostEndpoint to shut down the API */
@@ -168,11 +168,23 @@ public class DebertsController {
    */
   @PostMapping("/switchPhase")
   public void switchPhase() throws NoSuchCardException {
-    LOG.info("Hello Players: " + playerService.list().get(0).getName());
-    Players player = playerService.list().get(0);
-    player.setBestWinStreak(99);
-    playerService.save(player);
-    party.switchPhase();
+    partyService.switchPhase();
+  }
+
+  /**
+   * PostEndpoint to save the game on the current round
+   */
+  @PostMapping("/save")
+  public void save() {
+    LOG.info("You are trying to save the game " + playerService.list().get(0).getName());
+    Player playerTable = playerService.list().get(0);
+    playerTable.setBestWinStreak(99);
+    playerService.save(playerTable);
+  }
+
+  @PostMapping("/load")
+  public void load() {
+    LOG.info("You are trying to load the game");
   }
 
   /**
@@ -182,6 +194,6 @@ public class DebertsController {
    */
   @PostMapping(value = "/switchTrump")
   public void switchTrump() throws NoSuchCardException {
-    party.switchTrump();
+    partyService.switchTrump();
   }
 }

@@ -2,7 +2,7 @@
   <div>
     <div class="absolute bottom-0 left-0 pl-10 pb-74" display="inline">
       <Deck
-        v-on:update:party="updateParty"
+        v-on:update:partyService="updateParty"
         :bot="bot"
         :deckCards="deckCards"
         :player="player"
@@ -41,7 +41,7 @@
       ></Hand>
     </div>
     <NavbarTop
-      v-on:update:party="updateParty"
+      v-on:update:partyService="updateParty"
       v-on:update:turn="updateTurn"
       :bot="bot"
       :passes="passes"
@@ -51,7 +51,7 @@
       :trumpSuit="trump.suit"
     ></NavbarTop>
     <NavbarBottom
-      v-on:update:party="updateParty"
+      v-on:update:partyService="updateParty"
       v-on:update:turn="updateTurn"
       :passes="passes"
       :phase="phase"

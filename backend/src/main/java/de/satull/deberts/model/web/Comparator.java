@@ -1,4 +1,4 @@
-package de.satull.deberts.model;
+package de.satull.deberts.model.web;
 
 import java.util.Objects;
 

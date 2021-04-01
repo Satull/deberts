@@ -1,4 +1,4 @@
-package de.satull.deberts.model;
+package de.satull.deberts.model.enums;
 
 /**
  * Represents all relevant cards for each suit.

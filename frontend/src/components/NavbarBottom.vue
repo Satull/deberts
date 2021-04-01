@@ -11,12 +11,12 @@
         <table class="bg-gray-900 border-l-2 border-t-2 text-center">
           <tr
             class="border-b-2 duration-500 ease-in-out float-right hover:bg-gray-300 hover:text-gray-900 transition w-64"
-            v-for="(round, suitIndex) in roundHistory"
+            v-for="(roundService, suitIndex) in roundHistory"
             :key="suitIndex"
           >
-            <td class="py-3 w-31">{{ round.bot }}</td>
+            <td class="py-3 w-31">{{ roundService.bot }}</td>
             <td class="border-l-2 py-3 w-32">
-              {{ round.player }}
+              {{ roundService.player }}
             </td>
           </tr>
         </table>
@@ -193,7 +193,7 @@ export default {
         DebertsService.playTrump('player', trump).then(response => {
           if (response.status === 200) {
             this.$store.dispatch('setPasses', 5)
-            this.$emit('update:party')
+            this.$emit('update:partyService')
           }
         })
       }
@@ -202,7 +202,7 @@ export default {
       DebertsService.reset().then(response => {
         if (response.status === 200) {
           this.$store.dispatch('setPasses', 0)
-          this.$emit('update:party')
+          this.$emit('update:partyService')
         }
       })
     },
@@ -212,7 +212,7 @@ export default {
     load() {
       DebertsService.load().then(response => {
         if (response.status === 200) {
-          this.$emit('update:party')
+          this.$emit('update:partyService')
         }
       })
     },

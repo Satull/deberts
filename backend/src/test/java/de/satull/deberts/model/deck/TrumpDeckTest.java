@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.satull.deberts.config.DebertsConfigTest;
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.Card;
-import de.satull.deberts.model.Suit;
-import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

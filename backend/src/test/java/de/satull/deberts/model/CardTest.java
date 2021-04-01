@@ -2,6 +2,10 @@ package de.satull.deberts.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.web.Card;
 import org.junit.jupiter.api.Test;
 
 class CardTest {

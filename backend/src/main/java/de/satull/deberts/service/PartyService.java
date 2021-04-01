@@ -1,8 +1,8 @@
 package de.satull.deberts.service;
 
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.Owner;
-import de.satull.deberts.model.Suit;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.enums.Suit;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.util.Game;
 import java.lang.invoke.MethodHandles;
@@ -19,13 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version 1.5
  * @since 1.0
  */
-public class Party {
+public class PartyService {
 
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   private final HandDeck botHand;
   private final HandDeck playerHand;
-  private final Round round;
+  private final RoundService roundService;
   private int botScore;
   private int roundNumber;
   private LinkedHashMap<Owner, Integer> score;
@@ -39,13 +39,13 @@ public class Party {
    *
    * @param botHand bot cards
    * @param playerHand player cards
-   * @param round round information in the party
+   * @param roundService round information in the party
    */
   @Autowired
-  public Party(HandDeck botHand, HandDeck playerHand, Round round) {
+  public PartyService(HandDeck botHand, HandDeck playerHand, RoundService roundService) {
     this.botHand = botHand;
     this.playerHand = playerHand;
-    this.round = round;
+    this.roundService = roundService;
     initParty();
   }
 
@@ -74,20 +74,20 @@ public class Party {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Party)) {
+    if (!(o instanceof PartyService)) {
       return false;
     }
-    Party party = (Party) o;
-    return botScore == party.botScore
-        && roundNumber == party.roundNumber
-        && getPhase() == party.getPhase()
-        && playerScore == party.playerScore
-        && trumpDefined == party.trumpDefined
-        && Objects.equals(botHand, party.botHand)
-        && Objects.equals(playerHand, party.playerHand)
-        && Objects.equals(round, party.round)
-        && Objects.equals(getScore(), party.getScore())
-        && Objects.equals(getRoundHistory(), party.getRoundHistory());
+    PartyService partyService = (PartyService) o;
+    return botScore == partyService.botScore
+        && roundNumber == partyService.roundNumber
+        && getPhase() == partyService.getPhase()
+        && playerScore == partyService.playerScore
+        && trumpDefined == partyService.trumpDefined
+        && Objects.equals(botHand, partyService.botHand)
+        && Objects.equals(playerHand, partyService.playerHand)
+        && Objects.equals(roundService, partyService.roundService)
+        && Objects.equals(getScore(), partyService.getScore())
+        && Objects.equals(getRoundHistory(), partyService.getRoundHistory());
   }
 
   /**
@@ -122,7 +122,7 @@ public class Party {
     return Objects.hash(
         botHand,
         playerHand,
-        round,
+        roundService,
         botScore,
         roundNumber,
         getScore(),
@@ -140,14 +140,14 @@ public class Party {
    * @throws NoSuchCardException removed card is not in the deck
    */
   public void playTrump(Suit trump, Owner owner) throws NoSuchCardException {
-    round.playTrump(trump, owner);
+    roundService.playTrump(trump, owner);
     trumpDefined = true;
   }
 
   /** resets party between two players. */
   public void resetParty() {
     initParty();
-    round.resetRound();
+    roundService.resetRound();
     phase = Game.START;
     trumpDefined = false;
   }
@@ -159,19 +159,19 @@ public class Party {
    */
   public void switchPhase() throws NoSuchCardException {
     if (phase == Game.START) {
-      round.switchPhaseToTrade();
-      round.setTurn(decideTurn());
+      roundService.switchPhaseToTrade();
+      roundService.setTurn(decideTurn());
       phase = Game.TRADE;
 
     } else if (phase == Game.TRADE && trumpDefined) {
-      round.switchPhaseToAction();
+      roundService.switchPhaseToAction();
       phase = Game.ACTION;
 
     } else if (phase == Game.ACTION && playerHand.countCards() + botHand.countCards() == 0) {
       finishRound();
-      round.resetRound();
-      round.switchPhaseToTrade();
-      round.setTurn(decideTurn());
+      roundService.resetRound();
+      roundService.switchPhaseToTrade();
+      roundService.setTurn(decideTurn());
       phase = Game.TRADE;
     }
   }
@@ -182,7 +182,7 @@ public class Party {
    * @throws NoSuchCardException removed card is not in the deck
    */
   public void switchTrump() throws NoSuchCardException {
-    round.switchTrump();
+    roundService.switchTrump();
   }
 
   @Override
@@ -193,7 +193,7 @@ public class Party {
         + ", playerHand="
         + playerHand
         + ", round="
-        + round
+        + roundService
         + ", botScore="
         + botScore
         + ", roundNumber="
@@ -212,31 +212,31 @@ public class Party {
   }
 
   private void finishRound() {
-    if (round.getScore().get(playerHand.owner) < round.getScore().get(botHand.owner)
-        && round.getTrumpPicker().equals(playerHand.owner)) {
+    if (roundService.getScore().get(playerHand.owner) < roundService.getScore().get(botHand.owner)
+        && roundService.getTrumpPicker().equals(playerHand.owner)) {
       LOG.debug("player lost his trump-round");
-      round.setScore(
+      roundService.setScore(
           botHand.owner,
-          round.getScore().get(playerHand.owner) + round.getScore().get(botHand.owner));
-      round.setScore(playerHand.owner, 0);
-      botScore += round.getScore().get(botHand.owner) + round.getScore().get(playerHand.owner);
+          roundService.getScore().get(playerHand.owner) + roundService.getScore().get(botHand.owner));
+      roundService.setScore(playerHand.owner, 0);
+      botScore += roundService.getScore().get(botHand.owner) + roundService.getScore().get(playerHand.owner);
 
-    } else if (round.getScore().get(botHand.owner) < round.getScore().get(playerHand.owner)
-        && round.getTrumpPicker().equals(botHand.owner)) {
+    } else if (roundService.getScore().get(botHand.owner) < roundService.getScore().get(playerHand.owner)
+        && roundService.getTrumpPicker().equals(botHand.owner)) {
       LOG.debug("bot lost his trump-round");
-      round.setScore(
+      roundService.setScore(
           playerHand.owner,
-          round.getScore().get(playerHand.owner) + round.getScore().get(botHand.owner));
-      round.setScore(botHand.owner, 0);
-      playerScore += round.getScore().get(playerHand.owner) + round.getScore().get(botHand.owner);
+          roundService.getScore().get(playerHand.owner) + roundService.getScore().get(botHand.owner));
+      roundService.setScore(botHand.owner, 0);
+      playerScore += roundService.getScore().get(playerHand.owner) + roundService.getScore().get(botHand.owner);
 
     } else {
       LOG.debug("normal round");
-      playerScore += round.getScore().get(playerHand.owner);
-      botScore += round.getScore().get(botHand.owner);
+      playerScore += roundService.getScore().get(playerHand.owner);
+      botScore += roundService.getScore().get(botHand.owner);
     }
 
-    roundHistory.putIfAbsent(++roundNumber, round.getScore());
+    roundHistory.putIfAbsent(++roundNumber, roundService.getScore());
     LOG.info("Round history: " + roundHistory.toString());
     score.replace(playerHand.owner, playerScore);
     score.replace(botHand.owner, botScore);

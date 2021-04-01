@@ -1,9 +1,9 @@
 package de.satull.deberts.model.deck;
 
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.Card;
-import de.satull.deberts.model.Suit;
-import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;

@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Players {
+public class Player {
 
   @Id
   @GeneratedValue
@@ -97,34 +97,34 @@ public class Players {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Players)) {
+    if (!(o instanceof Player)) {
       return false;
     }
 
-    Players players = (Players) o;
+    Player player = (Player) o;
 
-    if (getLastGameResult() != players.getLastGameResult()) {
+    if (getLastGameResult() != player.getLastGameResult()) {
       return false;
     }
-    if (getTotalWins() != players.getTotalWins()) {
+    if (getTotalWins() != player.getTotalWins()) {
       return false;
     }
-    if (getTotalLoses() != players.getTotalLoses()) {
+    if (getTotalLoses() != player.getTotalLoses()) {
       return false;
     }
-    if (getWinRate() != players.getWinRate()) {
+    if (getWinRate() != player.getWinRate()) {
       return false;
     }
-    if (getActualWinStreak() != players.getActualWinStreak()) {
+    if (getActualWinStreak() != player.getActualWinStreak()) {
       return false;
     }
-    if (getBestWinStreak() != players.getBestWinStreak()) {
+    if (getBestWinStreak() != player.getBestWinStreak()) {
       return false;
     }
-    if (!getId().equals(players.getId())) {
+    if (!getId().equals(player.getId())) {
       return false;
     }
-    return getName() != null ? getName().equals(players.getName()) : players.getName() == null;
+    return getName() != null ? getName().equals(player.getName()) : player.getName() == null;
   }
 
   @Override

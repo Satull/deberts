@@ -1,11 +1,11 @@
 package de.satull.deberts.config;
 
-import de.satull.deberts.model.Owner;
+import de.satull.deberts.model.enums.Owner;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
-import de.satull.deberts.service.Party;
-import de.satull.deberts.service.Round;
+import de.satull.deberts.service.PartyService;
+import de.satull.deberts.service.RoundService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -30,8 +30,8 @@ public class DebertsConfig {
   }
 
   @Bean
-  public Party party() {
-    return new Party(botHand(), playerHand(), round());
+  public PartyService party() {
+    return new PartyService(botHand(), playerHand(), round());
   }
 
   @Bean
@@ -40,8 +40,8 @@ public class DebertsConfig {
   }
 
   @Bean
-  public Round round() {
-    return new Round(botHand(), cardDeck(), playerHand(), trumpDeck());
+  public RoundService round() {
+    return new RoundService(botHand(), cardDeck(), playerHand(), trumpDeck());
   }
 
   @Bean

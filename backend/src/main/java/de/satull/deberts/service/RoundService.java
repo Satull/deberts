@@ -1,13 +1,13 @@
 package de.satull.deberts.service;
 
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.Card;
-import de.satull.deberts.model.Comparator;
-import de.satull.deberts.model.ComparedCard;
-import de.satull.deberts.model.Owner;
-import de.satull.deberts.model.Points;
-import de.satull.deberts.model.Suit;
-import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.web.Comparator;
+import de.satull.deberts.model.web.ComparedCard;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.web.Points;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version 1.5
  * @since 1.0
  */
-public class Round {
+public class RoundService {
 
   private final HandDeck botHand;
   private final CardDeck cardDeck;
@@ -42,7 +42,7 @@ public class Round {
    * @param trumpDeck trump in the round
    */
   @Autowired
-  public Round(HandDeck botHand, CardDeck cardDeck, HandDeck playerHand, TrumpDeck trumpDeck) {
+  public RoundService(HandDeck botHand, CardDeck cardDeck, HandDeck playerHand, TrumpDeck trumpDeck) {
     this.botHand = botHand;
     this.cardDeck = cardDeck;
     this.playerHand = playerHand;
@@ -68,17 +68,17 @@ public class Round {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Round)) {
+    if (!(o instanceof RoundService)) {
       return false;
     }
-    Round round = (Round) o;
-    return Objects.equals(botHand, round.botHand)
-        && Objects.equals(cardDeck, round.cardDeck)
-        && Objects.equals(playerHand, round.playerHand)
-        && Objects.equals(trumpDeck, round.trumpDeck)
-        && Objects.equals(getScore(), round.getScore())
-        && Objects.equals(getTrumpPicker(), round.getTrumpPicker())
-        && Objects.equals(getTurn(), round.getTurn());
+    RoundService roundService = (RoundService) o;
+    return Objects.equals(botHand, roundService.botHand)
+        && Objects.equals(cardDeck, roundService.cardDeck)
+        && Objects.equals(playerHand, roundService.playerHand)
+        && Objects.equals(trumpDeck, roundService.trumpDeck)
+        && Objects.equals(getScore(), roundService.getScore())
+        && Objects.equals(getTrumpPicker(), roundService.getTrumpPicker())
+        && Objects.equals(getTurn(), roundService.getTurn());
   }
 
   /**

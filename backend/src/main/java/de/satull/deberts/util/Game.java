@@ -1,6 +1,6 @@
 package de.satull.deberts.util;
 
-import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.enums.SuitDeck;
 import java.util.Map;
 
 /**

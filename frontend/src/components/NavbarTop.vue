@@ -146,7 +146,7 @@ export default {
         DebertsService.playTrump('bot', trump).then(response => {
           if (response.status === 200) {
             this.$store.dispatch('setPasses', 5)
-            this.$emit('update:party')
+            this.$emit('update:partyService')
           }
         })
       }

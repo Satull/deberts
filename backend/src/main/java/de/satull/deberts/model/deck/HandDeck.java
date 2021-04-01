@@ -1,9 +1,9 @@
 package de.satull.deberts.model.deck;
 
-import de.satull.deberts.model.Card;
-import de.satull.deberts.model.Owner;
-import de.satull.deberts.model.Suit;
-import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

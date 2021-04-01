@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.satull.deberts.config.DebertsConfigTest;
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.Card;
-import de.satull.deberts.model.Constant;
-import de.satull.deberts.model.Suit;
-import de.satull.deberts.model.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.enums.Constant;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;

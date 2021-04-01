@@ -60,7 +60,7 @@ export default {
     }
   },
   beforeMount() {
-    this.$emit('update:party')
+    this.$emit('update:partyService')
   },
   mounted() {
     gsap.config({ nullTargetWarn: false })
@@ -98,14 +98,14 @@ export default {
       DebertsService.switchPhase().then(response => {
         if (response.status === 200) {
           this.$store.dispatch('setPasses', 0)
-          this.$emit('update:party')
+          this.$emit('update:partyService')
         }
       })
     },
     switchTrump() {
       DebertsService.switchTrump().then(response => {
         if (response.status === 200) {
-          this.$emit('update:party')
+          this.$emit('update:partyService')
         }
       })
     }

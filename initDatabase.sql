@@ -12,7 +12,7 @@ END IF;
 END
 $do$;
 
-CREATE TABLE IF NOT EXISTS players (
+CREATE TABLE IF NOT EXISTS player (
                                        plr_id SERIAL PRIMARY KEY,
                                        plr_name VARCHAR (50) UNIQUE NOT NULL,
     plr_last_game_result VARCHAR (4) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS parties (
                                        prt_bot_score INT,
                                        CONSTRAINT fk_player
                                        FOREIGN KEY(prt_plr_id)
-    REFERENCES players(plr_id)
+    REFERENCES player(plr_id)
     ON DELETE SET NULL
     );
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS rounds (
 
     CONSTRAINT fk_player
     FOREIGN KEY(rnd_plr_id)
-    REFERENCES players(plr_id)
+    REFERENCES player(plr_id)
     ON DELETE SET NULL,
 
     CONSTRAINT fk_parties
@@ -65,10 +65,10 @@ CREATE TABLE IF NOT EXISTS rounds (
 DO
 $do$
 BEGIN
-   IF NOT EXISTS ( SELECT FROM players
+   IF NOT EXISTS ( SELECT FROM player
                    WHERE  plr_name = 'player') THEN
 
-        INSERT INTO players(plr_name
+        INSERT INTO player(plr_name
                    ,plr_last_game_result
                    ,plr_total_wins
                    ,plr_total_loses

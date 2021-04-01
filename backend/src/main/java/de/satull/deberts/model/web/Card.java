@@ -1,5 +1,7 @@
-package de.satull.deberts.model;
+package de.satull.deberts.model.web;
 
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
 import java.util.Objects;
 
 /**
