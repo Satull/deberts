@@ -1,16 +1,20 @@
 package de.satull.deberts.web;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.satull.deberts.exception.NoSuchCardException;
+import de.satull.deberts.model.db.Party;
 import de.satull.deberts.model.db.Player;
-import de.satull.deberts.model.web.Comparator;
-import de.satull.deberts.model.enums.Constant;
-import de.satull.deberts.model.enums.Owner;
-import de.satull.deberts.model.web.Trump;
+import de.satull.deberts.model.db.Round;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
+import de.satull.deberts.model.enums.Constant;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.web.Comparator;
+import de.satull.deberts.model.web.Trump;
+import de.satull.deberts.service.DataBaseService;
 import de.satull.deberts.service.PartyService;
-import de.satull.deberts.service.PlayerService;
 import de.satull.deberts.service.RoundService;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
@@ -46,8 +50,7 @@ public class DebertsController {
   private final RoundService roundService;
   private final TrumpDeck trumpDeck;
 
-  @Autowired
-  private PlayerService playerService;
+  @Autowired private DataBaseService dataBaseService;
 
   /**
    * Creates controller class with dependencies
@@ -171,15 +174,27 @@ public class DebertsController {
     partyService.switchPhase();
   }
 
-  /**
-   * PostEndpoint to save the game on the current round
-   */
+  /** PostEndpoint to save the game on the current round */
   @PostMapping("/save")
-  public void save() {
-    LOG.info("You are trying to save the game " + playerService.list().get(0).getName());
-    Player playerTable = playerService.list().get(0);
-    playerTable.setBestWinStreak(99);
-    playerService.save(playerTable);
+  public void save() throws JsonProcessingException {
+    LOG.info("You are trying to save the game " + dataBaseService.list().get(0).getName());
+    ObjectMapper objectMapper = new ObjectMapper();
+    Player playerTable = dataBaseService.list().get(0);
+    Party currentParty = new Party();
+    currentParty.setBotScore(200);
+    currentParty.setPlayer(playerTable);
+    currentParty.setPlayerScore(100);
+    Round currentRound = new Round();
+
+    /*
+
+    currentRound.setBotDeck(objectMapper.writeValueAsString(botHand));
+    currentRound.setBotPoints(10);
+    currentRound.setPlayer(playerTable);
+    currentRound.setRoundDeck(objectMapper.writeValueAsString(cardDeck));
+    */
+
+    dataBaseService.save(currentParty);
   }
 
   @PostMapping("/load")

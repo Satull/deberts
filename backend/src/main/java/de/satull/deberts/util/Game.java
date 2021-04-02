@@ -18,15 +18,41 @@ public class Game {
   public static final int TRADE = 6;
 
   private static final Map<SuitDeck, Integer> cardPointMap =
-      Map.of(SuitDeck.SEVEN, 0, SuitDeck.EIGHT, 0,
-          SuitDeck.NINE, 0, SuitDeck.TEN, 10, SuitDeck.JACK, 2, SuitDeck.QUEEN, 3, SuitDeck.KING, 4,
+      Map.of(
+          SuitDeck.SEVEN,
+          0,
+          SuitDeck.EIGHT,
+          0,
+          SuitDeck.NINE,
+          0,
+          SuitDeck.TEN,
+          10,
+          SuitDeck.JACK,
+          2,
+          SuitDeck.QUEEN,
+          3,
+          SuitDeck.KING,
+          4,
           SuitDeck.ACE,
           11);
 
   private static final Map<SuitDeck, Integer> trumpPointMap =
-      Map.of(SuitDeck.SEVEN, 0, SuitDeck.EIGHT, 0,
-          SuitDeck.NINE, 14, SuitDeck.TEN, 10, SuitDeck.JACK, 20, SuitDeck.QUEEN, 3, SuitDeck.KING,
-          4, SuitDeck.ACE,
+      Map.of(
+          SuitDeck.SEVEN,
+          0,
+          SuitDeck.EIGHT,
+          0,
+          SuitDeck.NINE,
+          14,
+          SuitDeck.TEN,
+          10,
+          SuitDeck.JACK,
+          20,
+          SuitDeck.QUEEN,
+          3,
+          SuitDeck.KING,
+          4,
+          SuitDeck.ACE,
           11);
 
   private Game() {
@@ -34,14 +60,13 @@ public class Game {
   }
 
   /**
-   * <p>Calculates how many points has each card.</p>
+   * Calculates how many points has each card.
    *
    * @param cardValue the card for calculation
-   * @param {@code    true} if it is a trump card
+   * @param trump {@code true} if it is a trump card
    * @return points of the card
    */
   public static int getCardPoints(SuitDeck cardValue, boolean trump) {
     return trump ? trumpPointMap.get(cardValue) : cardPointMap.get(cardValue);
   }
-
 }

@@ -4,10 +4,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@IdClass(RoundId.class)
+@Table(name = "rounds", schema = "public")
 public class Round {
 
   @Id
@@ -18,6 +22,10 @@ public class Round {
   @Id
   @Column(name = "rnd_number")
   private int roundNumber;
+
+  public RoundId getId() {
+    return new RoundId(id, roundNumber);
+  }
 
   @ManyToOne
   @JoinColumn(name = "rnd_plr_id")
@@ -53,14 +61,6 @@ public class Round {
 
   @Column(name = "rnd_status")
   private String status;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public int getRoundNumber() {
     return roundNumber;

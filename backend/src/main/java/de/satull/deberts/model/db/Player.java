@@ -1,32 +1,49 @@
 package de.satull.deberts.model.db;
 
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "players", schema = "public")
 public class Player {
 
   @Id
   @GeneratedValue
   @Column(name = "plr_id", updatable = false, nullable = false)
   private Long id;
+
   @Column(name = "plr_name")
   private String name;
+
   @Column(name = "plr_last_game_result")
-  private int  lastGameResult;
+  private int lastGameResult;
+
   @Column(name = "plr_total_wins")
   private int totalWins;
+
   @Column(name = "plr_total_loses")
   private int totalLoses;
+
   @Column(name = "plr_win_rate")
   private long winRate;
+
   @Column(name = "plr_actual_win_streak")
   private int actualWinStreak;
+
   @Column(name = "plr_best_win_streak")
   private int bestWinStreak;
+
+  @OneToMany(mappedBy = "player")
+  private List<Party> parties = new ArrayList<Party>();
+
+  @OneToMany(mappedBy = "player")
+  private List<Round> rounds = new ArrayList<Round>();
 
   public Long getId() {
     return id;
@@ -142,15 +159,24 @@ public class Player {
 
   @Override
   public String toString() {
-    return "Players{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", lastGameResult=" + lastGameResult +
-        ", totalWins=" + totalWins +
-        ", totalLoses=" + totalLoses +
-        ", winRate=" + winRate +
-        ", actualWinStreak=" + actualWinStreak +
-        ", bestWinStreak=" + bestWinStreak +
-        '}';
+    return "Players{"
+        + "id="
+        + id
+        + ", name='"
+        + name
+        + '\''
+        + ", lastGameResult="
+        + lastGameResult
+        + ", totalWins="
+        + totalWins
+        + ", totalLoses="
+        + totalLoses
+        + ", winRate="
+        + winRate
+        + ", actualWinStreak="
+        + actualWinStreak
+        + ", bestWinStreak="
+        + bestWinStreak
+        + '}';
   }
 }
