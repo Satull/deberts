@@ -19,7 +19,7 @@ public class Player {
   @Column(name = "plr_id", updatable = false, nullable = false)
   private Long id;
 
-  @Column(name = "plr_name")
+  @Column(name = "plr_name", unique = true, nullable = false)
   private String name;
 
   @Column(name = "plr_last_game_result")

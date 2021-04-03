@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS parties
     prt_plr_id       SERIAL,
     prt_player_score INT,
     prt_bot_score    INT,
+    prt_status       VARCHAR(8) NOT NULL,
     CONSTRAINT fk_player
         FOREIGN KEY (prt_plr_id)
             REFERENCES players (plr_id)
@@ -50,9 +51,9 @@ CREATE TABLE IF NOT EXISTS rounds
     rnd_bot_deck      jsonb,
     rnd_player_points INT,
     rnd_bot_points    INT,
-    rnd_turn          VARCHAR(5),
+    rnd_turn          VARCHAR(5) NOT NULL,
     rnd_trump_picker  VARCHAR(5),
-    rnd_status        VARCHAR(8),
+    rnd_status        VARCHAR(8) NOT NULL,
 
     PRIMARY KEY (rnd_id, rnd_number),
 
@@ -85,5 +86,3 @@ $do$
         END IF;
     END
 $do$;
-
-
