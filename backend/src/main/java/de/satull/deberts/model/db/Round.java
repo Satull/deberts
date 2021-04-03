@@ -3,6 +3,7 @@ package de.satull.deberts.model.db;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 public class Round {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "rnd_id", updatable = false, nullable = false)
   private Long id;
 

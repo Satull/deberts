@@ -180,6 +180,7 @@ public class DebertsController {
     LOG.info("You are trying to save the game " + dataBaseService.list().get(0).getName());
     ObjectMapper objectMapper = new ObjectMapper();
     Player playerTable = dataBaseService.list().get(0);
+    playerTable.setActualWinStreak(88);
     Party currentParty = new Party();
     currentParty.setBotScore(200);
     currentParty.setPlayer(playerTable);
