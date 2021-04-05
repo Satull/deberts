@@ -31,7 +31,7 @@ public class DebertsConfig {
 
   @Bean
   public PartyService partyService() {
-    return new PartyService(botHand(), playerHand(), roundService());
+    return new PartyService(roundService());
   }
 
   @Bean

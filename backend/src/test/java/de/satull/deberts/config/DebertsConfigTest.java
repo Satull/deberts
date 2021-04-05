@@ -1,9 +1,9 @@
 package de.satull.deberts.config;
 
-import de.satull.deberts.model.enums.Owner;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
+import de.satull.deberts.model.enums.Owner;
 import de.satull.deberts.service.PartyService;
 import de.satull.deberts.service.RoundService;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -30,8 +30,8 @@ public class DebertsConfigTest {
   }
 
   @Bean
-  public PartyService testParty() {
-    return new PartyService(testBotHand(), testPlayerHand(), testRound());
+  public PartyService testPartyService() {
+    return new PartyService(testRoundService());
   }
 
   @Bean
@@ -40,7 +40,7 @@ public class DebertsConfigTest {
   }
 
   @Bean
-  public RoundService testRound() {
+  public RoundService testRoundService() {
     return new RoundService(testBotHand(), testCardDeck(), testPlayerHand(), testTrumpDeck());
   }
 

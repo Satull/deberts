@@ -2,6 +2,7 @@ package de.satull.deberts.service;
 
 import de.satull.deberts.model.db.Party;
 import de.satull.deberts.model.db.Player;
+import de.satull.deberts.model.db.Round;
 import de.satull.deberts.repository.PartyRepository;
 import de.satull.deberts.repository.PlayerRepository;
 import de.satull.deberts.repository.RoundRepository;
@@ -18,12 +19,21 @@ public class DataBaseService {
 
   @Autowired private RoundRepository roundRepository;
 
-  public List<Player> list() {
+  public List<Player> listPlayers() {
     return (List<Player>) playerRepository.findAll();
   }
 
-  public void save(Party party) {
-    playerRepository.save(party.getPlayer());
-    partyRepository.save(party);
+  public List<Party> listParties() {
+    return (List<Party>) partyRepository.findAll();
+  }
+
+  public List<Round> listRounds() {
+    return (List<Round>) roundRepository.findAll();
+  }
+
+  public void save(Round round) {
+    playerRepository.save(round.getPlayer());
+    partyRepository.save(round.getParty());
+    roundRepository.save(round);
   }
 }

@@ -6,15 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import de.satull.deberts.config.DebertsConfigTest;
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.web.Card;
-import de.satull.deberts.model.web.Comparator;
-import de.satull.deberts.model.web.ComparedCard;
-import de.satull.deberts.model.enums.Owner;
-import de.satull.deberts.model.enums.Suit;
-import de.satull.deberts.model.enums.SuitDeck;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.web.Comparator;
+import de.satull.deberts.model.web.ComparedCard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,13 +30,11 @@ class PartyServiceTest {
 
   @Autowired CardDeck testCardDeck;
 
-  @Autowired
-  PartyService testPartyService;
+  @Autowired PartyService testPartyService;
 
   @Autowired HandDeck testPlayerHand;
 
-  @Autowired
-  RoundService testRoundService;
+  @Autowired RoundService testRoundService;
 
   @Autowired TrumpDeck testTrumpDeck;
 
@@ -111,7 +109,9 @@ class PartyServiceTest {
   @Test
   void getScore_Party_AtBeginningScoreEqualsZero() {
     testPartyService.resetParty();
-    assertEquals(0, testPartyService.getScore().get(Owner.BOT) + testPartyService.getScore().get(Owner.PLAYER));
+    assertEquals(
+        0,
+        testPartyService.getScore().get(Owner.BOT) + testPartyService.getScore().get(Owner.PLAYER));
   }
 
   @Test
@@ -122,7 +122,8 @@ class PartyServiceTest {
     endRoundWithWinner(firstCardPlayer, secondCardBot);
 
     assertNotEquals(
-        0, testPartyService.getScore().get(Owner.BOT) + testPartyService.getScore().get(Owner.PLAYER));
+        0,
+        testPartyService.getScore().get(Owner.BOT) + testPartyService.getScore().get(Owner.PLAYER));
   }
 
   @Test

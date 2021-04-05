@@ -1,11 +1,7 @@
 package de.satull.deberts.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.db.Party;
-import de.satull.deberts.model.db.Player;
-import de.satull.deberts.model.db.Round;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
@@ -17,6 +13,7 @@ import de.satull.deberts.service.DataBaseService;
 import de.satull.deberts.service.PartyService;
 import de.satull.deberts.service.RoundService;
 import java.lang.invoke.MethodHandles;
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -176,26 +173,8 @@ public class DebertsController {
 
   /** PostEndpoint to save the game on the current round */
   @PostMapping("/save")
-  public void save() throws JsonProcessingException {
-    LOG.info("You are trying to save the game " + dataBaseService.list().get(0).getName());
-    ObjectMapper objectMapper = new ObjectMapper();
-    Player playerTable = dataBaseService.list().get(0);
-    playerTable.setActualWinStreak(88);
-    Party currentParty = new Party();
-    currentParty.setBotScore(200);
-    currentParty.setPlayer(playerTable);
-    currentParty.setPlayerScore(100);
-    Round currentRound = new Round();
-
-    /*
-
-    currentRound.setBotDeck(objectMapper.writeValueAsString(botHand));
-    currentRound.setBotPoints(10);
-    currentRound.setPlayer(playerTable);
-    currentRound.setRoundDeck(objectMapper.writeValueAsString(cardDeck));
-    */
-
-    dataBaseService.save(currentParty);
+  public void save() throws JsonProcessingException, SQLException {
+    partyService.saveParty();
   }
 
   @PostMapping("/load")

@@ -1,16 +1,16 @@
 package de.satull.deberts.service;
 
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.web.Card;
-import de.satull.deberts.model.web.Comparator;
-import de.satull.deberts.model.web.ComparedCard;
-import de.satull.deberts.model.enums.Owner;
-import de.satull.deberts.model.web.Points;
-import de.satull.deberts.model.enums.Suit;
-import de.satull.deberts.model.enums.SuitDeck;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.web.Comparator;
+import de.satull.deberts.model.web.ComparedCard;
+import de.satull.deberts.model.web.Points;
 import de.satull.deberts.util.Game;
 import java.util.LinkedHashMap;
 import java.util.Objects;
@@ -26,6 +26,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RoundService {
 
   private final HandDeck botHand;
+
+  public HandDeck getBotHand() {
+    return botHand;
+  }
+
+  public CardDeck getCardDeck() {
+    return cardDeck;
+  }
+
+  public HandDeck getPlayerHand() {
+    return playerHand;
+  }
+
+  public TrumpDeck getTrumpDeck() {
+    return trumpDeck;
+  }
+
   private final CardDeck cardDeck;
   private final HandDeck playerHand;
   private final TrumpDeck trumpDeck;
@@ -42,7 +59,8 @@ public class RoundService {
    * @param trumpDeck trump in the round
    */
   @Autowired
-  public RoundService(HandDeck botHand, CardDeck cardDeck, HandDeck playerHand, TrumpDeck trumpDeck) {
+  public RoundService(
+      HandDeck botHand, CardDeck cardDeck, HandDeck playerHand, TrumpDeck trumpDeck) {
     this.botHand = botHand;
     this.cardDeck = cardDeck;
     this.playerHand = playerHand;

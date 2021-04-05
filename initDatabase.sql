@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS parties
 
 CREATE TABLE IF NOT EXISTS rounds
 (
-    rnd_id            SERIAL,
+    rnd_id            SERIAL PRIMARY KEY,
     rnd_number        INT,
     rnd_plr_id        SERIAL,
     rnd_prt_id        SERIAL,
@@ -51,11 +51,11 @@ CREATE TABLE IF NOT EXISTS rounds
     rnd_bot_deck      jsonb,
     rnd_player_points INT,
     rnd_bot_points    INT,
-    rnd_turn          VARCHAR(5) NOT NULL,
-    rnd_trump_picker  VARCHAR(5),
-    rnd_status        VARCHAR(8) NOT NULL,
+    rnd_turn          VARCHAR(50) NOT NULL,
+    rnd_trump_picker  VARCHAR(50),
+    rnd_status        VARCHAR(8)  NOT NULL,
 
-    PRIMARY KEY (rnd_id, rnd_number),
+    UNIQUE (rnd_prt_id, rnd_number),
 
     CONSTRAINT fk_player
         FOREIGN KEY (rnd_plr_id)

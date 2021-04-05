@@ -1,12 +1,17 @@
 package de.satull.deberts.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.satull.deberts.exception.NoSuchCardException;
+import de.satull.deberts.model.db.Party;
+import de.satull.deberts.model.db.Player;
+import de.satull.deberts.model.db.Round;
 import de.satull.deberts.model.enums.Owner;
 import de.satull.deberts.model.enums.Suit;
-import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.util.Game;
 import java.lang.invoke.MethodHandles;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +28,8 @@ public class PartyService {
 
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
-  private final HandDeck botHand;
-  private final HandDeck playerHand;
   private final RoundService roundService;
+  @Autowired private DataBaseService dbService;
   private int botScore;
   private int roundNumber;
   private LinkedHashMap<Owner, Integer> score;
@@ -37,14 +41,10 @@ public class PartyService {
   /**
    * Parametrised constructor for dependency injection.
    *
-   * @param botHand bot cards
-   * @param playerHand player cards
    * @param roundService round information in the party
    */
   @Autowired
-  public PartyService(HandDeck botHand, HandDeck playerHand, RoundService roundService) {
-    this.botHand = botHand;
-    this.playerHand = playerHand;
+  public PartyService(RoundService roundService) {
     this.roundService = roundService;
     initParty();
   }
@@ -83,8 +83,6 @@ public class PartyService {
         && getPhase() == partyService.getPhase()
         && playerScore == partyService.playerScore
         && trumpDefined == partyService.trumpDefined
-        && Objects.equals(botHand, partyService.botHand)
-        && Objects.equals(playerHand, partyService.playerHand)
         && Objects.equals(roundService, partyService.roundService)
         && Objects.equals(getScore(), partyService.getScore())
         && Objects.equals(getRoundHistory(), partyService.getRoundHistory());
@@ -104,7 +102,7 @@ public class PartyService {
    *
    * @return HashMap with the history of all rounds
    */
-  public LinkedHashMap<Integer, LinkedHashMap<Owner, Integer>> getRoundHistory() {
+  public Map<Integer, LinkedHashMap<Owner, Integer>> getRoundHistory() {
     return roundHistory;
   }
 
@@ -113,15 +111,13 @@ public class PartyService {
    *
    * @return score
    */
-  public LinkedHashMap<Owner, Integer> getScore() {
+  public Map<Owner, Integer> getScore() {
     return score;
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        botHand,
-        playerHand,
         roundService,
         botScore,
         roundNumber,
@@ -167,7 +163,9 @@ public class PartyService {
       roundService.switchPhaseToAction();
       phase = Game.ACTION;
 
-    } else if (phase == Game.ACTION && playerHand.countCards() + botHand.countCards() == 0) {
+    } else if (phase == Game.ACTION
+        && roundService.getPlayerHand().countCards() + roundService.getBotHand().countCards()
+            == 0) {
       finishRound();
       roundService.resetRound();
       roundService.switchPhaseToTrade();
@@ -185,13 +183,37 @@ public class PartyService {
     roundService.switchTrump();
   }
 
+  public void saveParty() throws JsonProcessingException {
+    LOG.info("You are trying to save the game");
+    ObjectMapper objectMapper = new ObjectMapper();
+    // set player
+    Player playerEntity = dbService.listPlayers().get(0);
+    // set party
+    Party currentParty = dbService.listParties().get(0);
+    currentParty.setStatus("ACTIVE");
+    currentParty.setBotScore(botScore);
+    currentParty.setPlayerScore(playerScore);
+    currentParty.setPlayer(playerEntity);
+    // set Round
+    Round currentRound = dbService.listRounds().get(0);
+    currentRound.setPlayer(playerEntity);
+    currentRound.setParty(currentParty);
+    currentRound.setRoundDeck(objectMapper.writeValueAsString(roundService.getCardDeck()));
+    currentRound.setTrumpDeck(objectMapper.writeValueAsString(roundService.getTrumpDeck()));
+    currentRound.setPlayerDeck(objectMapper.writeValueAsString(roundService.getPlayerHand()));
+    currentRound.setBotDeck(objectMapper.writeValueAsString(roundService.getBotHand()));
+    currentRound.setPlayerPoints(roundService.getScore().get(Owner.PLAYER));
+    currentRound.setBotPoints(roundService.getScore().get(Owner.BOT));
+    currentRound.setTurn(roundService.getTurn().toString());
+    currentRound.setTrumpPicker(roundService.getTrumpPicker().toString());
+    currentRound.setStatus("ACTIVE");
+
+    dbService.save(currentRound);
+  }
+
   @Override
   public String toString() {
     return "Party{"
-        + "botHand="
-        + botHand
-        + ", playerHand="
-        + playerHand
         + ", round="
         + roundService
         + ", botScore="
@@ -212,34 +234,42 @@ public class PartyService {
   }
 
   private void finishRound() {
-    if (roundService.getScore().get(playerHand.owner) < roundService.getScore().get(botHand.owner)
-        && roundService.getTrumpPicker().equals(playerHand.owner)) {
+    if (roundService.getScore().get(roundService.getPlayerHand().owner)
+            < roundService.getScore().get(roundService.getBotHand().owner)
+        && roundService.getTrumpPicker().equals(roundService.getPlayerHand().owner)) {
       LOG.debug("player lost his trump-round");
       roundService.setScore(
-          botHand.owner,
-          roundService.getScore().get(playerHand.owner) + roundService.getScore().get(botHand.owner));
-      roundService.setScore(playerHand.owner, 0);
-      botScore += roundService.getScore().get(botHand.owner) + roundService.getScore().get(playerHand.owner);
+          roundService.getBotHand().owner,
+          roundService.getScore().get(roundService.getPlayerHand().owner)
+              + roundService.getScore().get(roundService.getBotHand().owner));
+      roundService.setScore(roundService.getPlayerHand().owner, 0);
+      botScore +=
+          roundService.getScore().get(roundService.getBotHand().owner)
+              + roundService.getScore().get(roundService.getPlayerHand().owner);
 
-    } else if (roundService.getScore().get(botHand.owner) < roundService.getScore().get(playerHand.owner)
-        && roundService.getTrumpPicker().equals(botHand.owner)) {
+    } else if (roundService.getScore().get(roundService.getBotHand().owner)
+            < roundService.getScore().get(roundService.getPlayerHand().owner)
+        && roundService.getTrumpPicker().equals(roundService.getBotHand().owner)) {
       LOG.debug("bot lost his trump-round");
       roundService.setScore(
-          playerHand.owner,
-          roundService.getScore().get(playerHand.owner) + roundService.getScore().get(botHand.owner));
-      roundService.setScore(botHand.owner, 0);
-      playerScore += roundService.getScore().get(playerHand.owner) + roundService.getScore().get(botHand.owner);
+          roundService.getPlayerHand().owner,
+          roundService.getScore().get(roundService.getPlayerHand().owner)
+              + roundService.getScore().get(roundService.getBotHand().owner));
+      roundService.setScore(roundService.getBotHand().owner, 0);
+      playerScore +=
+          roundService.getScore().get(roundService.getPlayerHand().owner)
+              + roundService.getScore().get(roundService.getBotHand().owner);
 
     } else {
       LOG.debug("normal round");
-      playerScore += roundService.getScore().get(playerHand.owner);
-      botScore += roundService.getScore().get(botHand.owner);
+      playerScore += roundService.getScore().get(roundService.getPlayerHand().owner);
+      botScore += roundService.getScore().get(roundService.getBotHand().owner);
     }
 
     roundHistory.putIfAbsent(++roundNumber, roundService.getScore());
     LOG.info("Round history: " + roundHistory.toString());
-    score.replace(playerHand.owner, playerScore);
-    score.replace(botHand.owner, botScore);
+    score.replace(roundService.getPlayerHand().owner, playerScore);
+    score.replace(roundService.getBotHand().owner, botScore);
   }
 
   private void initParty() {
