@@ -75,9 +75,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.4.30.Final</version>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-assertions-generator-maven-plugin</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
     </dependencies>
@@ -86,9 +86,11 @@
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
+                <!--suppress MavenModelInspection -->
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <!--suppress MavenModelInspection -->
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>

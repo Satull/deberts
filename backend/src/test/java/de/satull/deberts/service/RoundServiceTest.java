@@ -1,18 +1,18 @@
 package de.satull.deberts.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import de.satull.deberts.config.DebertsConfigTest;
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.web.Card;
-import de.satull.deberts.model.web.Comparator;
-import de.satull.deberts.model.web.ComparedCard;
-import de.satull.deberts.model.enums.Owner;
-import de.satull.deberts.model.enums.Suit;
-import de.satull.deberts.model.enums.SuitDeck;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
+import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.enums.Suit;
+import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.web.Card;
+import de.satull.deberts.model.web.Comparator;
+import de.satull.deberts.model.web.ComparedCard;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +27,11 @@ class RoundServiceTest {
 
   @Autowired CardDeck testCardDeck;
 
-  @Autowired
-  PartyService testPartyService;
+  @Autowired PartyService testPartyService;
 
   @Autowired HandDeck testPlayerHand;
 
-  @Autowired
-  RoundService testRoundService;
+  @Autowired RoundService testRoundService;
 
   @Autowired TrumpDeck testTrumpDeck;
 
@@ -57,6 +55,7 @@ class RoundServiceTest {
     final Card trumpCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.ACE);
+    final int expectedScore = 21;
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
@@ -65,8 +64,8 @@ class RoundServiceTest {
     comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRoundService.decideChallenge(comparator);
 
-    assertEquals(21, testRoundService.getScore().get(Owner.PLAYER));
-    assertEquals(Owner.PLAYER, testRoundService.getTurn());
+    assertThat(testRoundService.getScore().get(Owner.PLAYER)).isEqualTo(expectedScore);
+    assertThat(testRoundService.getTurn()).isEqualTo(Owner.PLAYER);
   }
 
   @Test
@@ -74,6 +73,7 @@ class RoundServiceTest {
     final Card trumpCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.ACE);
+    final int expectedScore = 21;
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
@@ -82,8 +82,8 @@ class RoundServiceTest {
     comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRoundService.decideChallenge(comparator);
 
-    assertEquals(21, testRoundService.getScore().get(Owner.BOT));
-    assertEquals(Owner.BOT, testRoundService.getTurn());
+    assertThat(testRoundService.getScore().get(Owner.BOT)).isEqualTo(expectedScore);
+    assertThat(testRoundService.getTurn()).isEqualTo(Owner.BOT);
   }
 
   @Test
@@ -91,6 +91,7 @@ class RoundServiceTest {
     final Card trumpCard = testCardDeck.getCard(Suit.CLUBS, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.ACE);
+    final int expectedScore = 21;
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
@@ -99,8 +100,8 @@ class RoundServiceTest {
     comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRoundService.decideChallenge(comparator);
 
-    assertEquals(21, testRoundService.getScore().get(Owner.PLAYER));
-    assertEquals(Owner.PLAYER, testRoundService.getTurn());
+    assertThat(testRoundService.getScore().get(Owner.PLAYER)).isEqualTo(expectedScore);
+    assertThat(testRoundService.getTurn()).isEqualTo(Owner.PLAYER);
   }
 
   @Test
@@ -108,6 +109,7 @@ class RoundServiceTest {
     final Card trumpCard = testCardDeck.getCard(Suit.CLUBS, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.JACK);
+    final int expectedScore = 12;
 
     simulateCards(trumpCard, attackerCard, defenderCard);
 
@@ -116,8 +118,8 @@ class RoundServiceTest {
     comparator.setDefender(new ComparedCard(Owner.PLAYER, defenderCard));
     testRoundService.decideChallenge(comparator);
 
-    assertEquals(12, testRoundService.getScore().get(Owner.BOT));
-    assertEquals(Owner.BOT, testRoundService.getTurn());
+    assertThat(testRoundService.getScore().get(Owner.BOT)).isEqualTo(expectedScore);
+    assertThat(testRoundService.getTurn()).isEqualTo(Owner.BOT);
   }
 
   @Test
@@ -125,6 +127,7 @@ class RoundServiceTest {
     final Card trumpCard = testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.TEN);
     final Card defenderCard = testCardDeck.getCard(Suit.HEARTS, SuitDeck.ACE);
+    final int expectedScore = 21;
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
@@ -133,8 +136,8 @@ class RoundServiceTest {
     comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRoundService.decideChallenge(comparator);
 
-    assertEquals(21, testRoundService.getScore().get(Owner.BOT));
-    assertEquals(Owner.BOT, testRoundService.getTurn());
+    assertThat(testRoundService.getScore().get(Owner.BOT)).isEqualTo(expectedScore);
+    assertThat(testRoundService.getTurn()).isEqualTo(Owner.BOT);
   }
 
   @Test
@@ -143,6 +146,7 @@ class RoundServiceTest {
     final Card trumpCard = testCardDeck.getCard(Suit.CLUBS, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.SEVEN);
     final Card defenderCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.EIGHT);
+    final int expectedScore = 10;
 
     testPartyService.switchPhase();
     testPartyService.switchPhase();
@@ -158,8 +162,8 @@ class RoundServiceTest {
     comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRoundService.decideChallenge(comparator);
 
-    assertEquals(10, testRoundService.getScore().get(Owner.BOT));
-    assertEquals(Owner.BOT, testRoundService.getTurn());
+    assertThat(testRoundService.getScore().get(Owner.BOT)).isEqualTo(expectedScore);
+    assertThat(testRoundService.getTurn()).isEqualTo(Owner.BOT);
   }
 
   @Test
@@ -167,6 +171,7 @@ class RoundServiceTest {
     final Card trumpCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.QUEEN);
     final Card attackerCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.JACK);
     final Card defenderCard = testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.NINE);
+    final int expectedScore = 34;
 
     simulateCards(trumpCard, defenderCard, attackerCard);
 
@@ -175,8 +180,8 @@ class RoundServiceTest {
     comparator.setDefender(new ComparedCard(Owner.BOT, defenderCard));
     testRoundService.decideChallenge(comparator);
 
-    assertEquals(34, testRoundService.getScore().get(Owner.PLAYER));
-    assertEquals(Owner.PLAYER, testRoundService.getTurn());
+    assertThat(testRoundService.getScore().get(Owner.PLAYER)).isEqualTo(expectedScore);
+    assertThat(testRoundService.getTurn()).isEqualTo(Owner.PLAYER);
   }
 
   @Test
@@ -184,22 +189,25 @@ class RoundServiceTest {
     testPartyService.switchPhase();
     testPartyService.switchPhase();
     testRoundService.resetRound();
+    final int expectedCardsNumber = 32;
 
-    assertEquals(32, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isEqualTo(expectedCardsNumber);
   }
 
   @Test
   void switchPhaseToAction_Round_SwitchPhaseToActionPhase() throws NoSuchCardException {
     testRoundService.switchPhaseToTrade();
     testRoundService.switchPhaseToAction();
+    final int expectedCardsNumber = 13;
 
-    assertEquals(13, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isEqualTo(expectedCardsNumber);
   }
 
   @Test
   void switchPhaseToTrade_Round_SwitchPhaseToTradePhase() throws NoSuchCardException {
     testRoundService.switchPhaseToTrade();
+    final int expectedCardsNumber = 19;
 
-    assertEquals(19, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isEqualTo(expectedCardsNumber);
   }
 }

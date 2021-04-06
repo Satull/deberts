@@ -1,14 +1,12 @@
 package de.satull.deberts.model.deck;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import de.satull.deberts.config.DebertsConfigTest;
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.web.Card;
 import de.satull.deberts.model.enums.Suit;
 import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.web.Card;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,26 +30,26 @@ class TrumpDeckTest {
   @Test
   void getSuit_GetSuit_GetDifferentSuit() throws NoSuchCardException {
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.CLUBS, SuitDeck.SEVEN));
-    assertNotEquals(Suit.SPADES, testTrumpDeck.getSuit());
+    assertThat(testTrumpDeck.getSuit()).isNotEqualTo(Suit.SPADES);
   }
 
   @Test
   void getSuit_GetSuit_GetTrumpSuit() throws NoSuchCardException {
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.SPADES, SuitDeck.JACK));
-    assertEquals(Suit.SPADES, testTrumpDeck.getSuit());
+    assertThat(testTrumpDeck.getSuit()).isEqualTo(Suit.SPADES);
   }
 
   @Test
   void resetDeck_EmptyTrumpDeck_TrumpDeckIsNull() throws NoSuchCardException {
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
     testTrumpDeck.resetDeck();
-    assertNull(testTrumpDeck.getSuit());
+    assertThat(testTrumpDeck.getSuit()).isNull();
   }
 
   @Test
   void setTrump_SetCardAsTrump_TrumpDeckHasOneCard() throws NoSuchCardException {
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.ACE));
-    assertEquals(1, testTrumpDeck.countCards());
+    assertThat(testTrumpDeck.countCards()).isOne();
   }
 
   @Test
@@ -59,49 +57,43 @@ class TrumpDeckTest {
       throws NoSuchCardException {
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.SPADES, SuitDeck.EIGHT));
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.DIAMONDS, SuitDeck.NINE));
-    assertEquals(Suit.SPADES, testTrumpDeck.getSuit());
+    assertThat(testTrumpDeck.getSuit()).isEqualTo(Suit.SPADES);
   }
 
   @Test
   void switchTrump_SwitchTrumpToNotTrumpSeven_FailedOldTrumpStays() throws NoSuchCardException {
+    final Card expectedCard = new Card(Suit.HEARTS, SuitDeck.JACK);
+
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
     testTrumpDeck.switchTrump(testCardDeck.getCard(Suit.SPADES, SuitDeck.SEVEN));
 
-    assertEquals(
-        new Card(Suit.HEARTS, SuitDeck.JACK), testTrumpDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
+    assertThat(testTrumpDeck.getCard(Suit.HEARTS, SuitDeck.JACK)).isEqualTo(expectedCard);
   }
 
   @Test
   void switchTrump_SwitchTrumpToNotTrump_FailedOldTrumpStays() throws NoSuchCardException {
+    final Card expectedCard = new Card(Suit.HEARTS, SuitDeck.JACK);
+
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
     testTrumpDeck.switchTrump(testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN));
 
-    assertEquals(
-        new Card(Suit.HEARTS, SuitDeck.JACK), testTrumpDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
-  }
-
-  @Test
-  void switchTrump_SwitchTrumpToOtherTrump_FailedOldTrumpStays() throws NoSuchCardException {
-    testTrumpDeck.setTrump(testCardDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
-    testTrumpDeck.switchTrump(testCardDeck.getCard(Suit.HEARTS, SuitDeck.QUEEN));
-
-    assertEquals(
-        new Card(Suit.HEARTS, SuitDeck.JACK), testTrumpDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
+    assertThat(testTrumpDeck.getCard(Suit.HEARTS, SuitDeck.JACK)).isEqualTo(expectedCard);
   }
 
   @Test
   void switchTrump_SwitchTrumpToTrumpSeven_Success() throws NoSuchCardException {
+    final Card expectedCard = new Card(Suit.HEARTS, SuitDeck.SEVEN);
+
     testTrumpDeck.setTrump(testCardDeck.getCard(Suit.HEARTS, SuitDeck.JACK));
     testTrumpDeck.switchTrump(testCardDeck.getCard(Suit.HEARTS, SuitDeck.SEVEN));
 
-    assertEquals(
-        new Card(Suit.HEARTS, SuitDeck.SEVEN), testTrumpDeck.getCard(Suit.HEARTS, SuitDeck.SEVEN));
+    assertThat(testTrumpDeck.getCard(Suit.HEARTS, SuitDeck.SEVEN)).isEqualTo(expectedCard);
   }
 
   @Test
   void trumpDeck_NewTrumpDeck_CreateNewTrumpDeckObject() throws NoSuchCardException {
     TrumpDeck testTrumpParameterDeck =
         new TrumpDeck(testCardDeck.getCard(Suit.SPADES, SuitDeck.JACK));
-    assertEquals(Suit.SPADES, testTrumpParameterDeck.getSuit());
+    assertThat(testTrumpParameterDeck.getSuit()).isEqualTo(Suit.SPADES);
   }
 }

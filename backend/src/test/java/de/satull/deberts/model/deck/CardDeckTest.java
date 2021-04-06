@@ -1,16 +1,14 @@
 package de.satull.deberts.model.deck;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import de.satull.deberts.config.DebertsConfigTest;
 import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.web.Card;
 import de.satull.deberts.model.enums.Constant;
 import de.satull.deberts.model.enums.Suit;
 import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.web.Card;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
@@ -36,34 +34,30 @@ class CardDeckTest {
   @Test
   void countCards_CardDeck_NewDeckWith32Cards() {
     testCardDeck.resetDeck();
-    assertEquals(startCardsNumber, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isEqualTo(startCardsNumber);
   }
 
   @Test
   void getCard_CardDeck_FailGetCardCardIsNotInTheDeck() throws NoSuchCardException {
     testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN);
-    NoSuchCardException exception;
-    exception =
-        assertThrows(
-            NoSuchCardException.class, () -> testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN));
-
     String expectedMessage =
         "Deck does not contain a card: " + Suit.SPADES + " " + SuitDeck.QUEEN.toString();
-    String actualMessage = exception.getMessage();
 
-    assertTrue(actualMessage.contains(expectedMessage));
+    assertThatExceptionOfType(NoSuchCardException.class)
+        .isThrownBy(() -> testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN))
+        .withMessageContaining(expectedMessage);
   }
 
   @Test
   void getCard_CardDeck_GetQueenOfSpadesFromTheDeckAsExpected() throws NoSuchCardException {
-    assertEquals(
-        testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN), new Card(Suit.SPADES, SuitDeck.QUEEN));
+    final Card expectedCard = new Card(Suit.SPADES, SuitDeck.QUEEN);
+    assertThat(testCardDeck.getCard(Suit.SPADES, SuitDeck.QUEEN)).isEqualTo(expectedCard);
   }
 
   @Test
   void getCard_CardDeck_GetTenOfSpadesInsteadOfAceOfSpades() throws NoSuchCardException {
-    assertNotEquals(
-        new Card(Suit.SPADES, SuitDeck.ACE), testCardDeck.getCard(Suit.SPADES, SuitDeck.TEN));
+    final Card otherCard = new Card(Suit.SPADES, SuitDeck.ACE);
+    assertThat(testCardDeck.getCard(Suit.SPADES, SuitDeck.TEN)).isNotEqualTo(otherCard);
   }
 
   @Test
@@ -73,11 +67,11 @@ class CardDeckTest {
     testStockDeck.put(Suit.HEARTS, new ArrayList<>(EnumSet.allOf(SuitDeck.class)));
     testStockDeck.put(Suit.SPADES, new ArrayList<>(EnumSet.allOf(SuitDeck.class)));
 
-    LinkedHashMap<Constant, Object> expectedDeck = new LinkedHashMap<>();
-    expectedDeck.put(Constant.CARDS, startCardsNumber);
-    expectedDeck.put(Constant.CARD_DECK, testStockDeck);
+    LinkedHashMap<Constant, Object> otherDeck = new LinkedHashMap<>();
+    otherDeck.put(Constant.CARDS, startCardsNumber);
+    otherDeck.put(Constant.CARD_DECK, testStockDeck);
 
-    assertNotEquals(expectedDeck, testCardDeck.getDeck());
+    assertThat(testCardDeck.getDeck()).isNotEqualTo(otherDeck);
   }
 
   @Test
@@ -92,52 +86,42 @@ class CardDeckTest {
     expectedDeck.put(Constant.CARDS, startCardsNumber);
     expectedDeck.put(Constant.CARD_DECK, testStockDeck);
 
-    assertEquals(expectedDeck, testCardDeck.getDeck());
-  }
-
-  @Test
-  void getRandomCardFormSuit_CardDeck_FailGetRandomCardFromSuit() throws NoSuchCardException {
-    for (int i = 0; i < startCardsNumber / 4 + 1; i++) {
-      testCardDeck.getRandomCardFromSuit(Suit.CLUBS);
-    }
-    assertEquals(3, testCardDeck.getSuitList().size());
+    assertThat(testCardDeck.getDeck()).isEqualTo(expectedDeck);
   }
 
   @Test
   void getRandomCardFromSuit_CardDeckAndCard_NewCardHasExpectedSuit() throws NoSuchCardException {
-    Card testcard = testCardDeck.getRandomCardFromSuit(Suit.SPADES);
-    assertEquals(Suit.SPADES, testcard.getSuit());
+    final Card testcard = testCardDeck.getRandomCardFromSuit(Suit.SPADES);
+    assertThat(testcard.getSuit()).isEqualTo(Suit.SPADES);
   }
 
   @Test
-  void getRandomCardFromSuit_CardDeck_GetAllCardsFromTheSuit() throws NoSuchCardException {
+  void getRandomCardFromSuit_CardDeck_RemoveSuitIfNoCards() throws NoSuchCardException {
+    final int expectedSuitNumber = 3;
     for (int i = 0; i < startCardsNumber / 4; i++) {
       testCardDeck.getRandomCardFromSuit(Suit.HEARTS);
     }
-    assertEquals(3, testCardDeck.getSuitList().size());
+    assertThat(testCardDeck.getSuitList().size()).isEqualTo(expectedSuitNumber);
   }
 
   @Test
   void getRandomCard_CardDeck_DeckHas31CardsAfterGet() throws NoSuchCardException {
     testCardDeck.getRandomCard();
-    assertEquals(startCardsNumber - 1, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isEqualTo(startCardsNumber - 1);
   }
 
   @Test
   void getRandomCard_CardDeck_FailGetRandomCard() {
-    Exception exception =
-        assertThrows(
-            IllegalArgumentException.class,
+    final String expectedMessage = "bound must be positive";
+
+    assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(
             () -> {
               for (int i = 0; i < startCardsNumber + 1; i++) {
                 testCardDeck.getRandomCard();
               }
-            });
-
-    String expectedMessage = "bound must be positive";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
+            })
+        .withMessageContaining(expectedMessage);
   }
 
   @Test
@@ -145,7 +129,7 @@ class CardDeckTest {
     for (int i = 0; i < startCardsNumber; i++) {
       testCardDeck.getRandomCard();
     }
-    assertEquals(0, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isZero();
   }
 
   @Test
@@ -154,7 +138,7 @@ class CardDeckTest {
     suitArray.add(Suit.DIAMONDS);
     suitArray.add(Suit.SPADES);
 
-    assertNotEquals(suitArray, testCardDeck.getSuitList());
+    assertThat(testCardDeck.getSuitList()).isNotEqualTo(suitArray);
   }
 
   @Test
@@ -165,43 +149,40 @@ class CardDeckTest {
     suitArray.add(Suit.HEARTS);
     suitArray.add(Suit.SPADES);
 
-    assertEquals(suitArray, testCardDeck.getSuitList());
+    assertThat(testCardDeck.getSuitList()).isEqualTo(suitArray);
   }
 
   @Test
   void getSuitList_CardDeck_GetEmptySuitList() throws NoSuchCardException {
-    List<Suit> suitArray = new ArrayList<>();
     for (int i = 0; i < startCardsNumber; i++) {
       testCardDeck.getRandomCard();
     }
 
-    assertEquals(suitArray, testCardDeck.getSuitList());
+    assertThat(testCardDeck.getSuitList()).isEmpty();
   }
 
   @Test
   void removeCard_CardDeck_DeckHas31Cards() throws NoSuchCardException {
     testCardDeck.removeCard(new Card(Suit.SPADES, SuitDeck.QUEEN));
-    assertEquals(startCardsNumber - 1, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isLessThan(startCardsNumber);
   }
 
   @Test
   void removeCard_CardDeck_FailRemovingCard() throws NoSuchCardException {
     testCardDeck.removeCard(new Card(Suit.SPADES, SuitDeck.QUEEN));
-    Exception exception =
-        assertThrows(
-            Exception.class, () -> testCardDeck.removeCard(new Card(Suit.SPADES, SuitDeck.QUEEN)));
 
     String expectedMessage =
         "Deck does not contain a card: " + Suit.SPADES + " " + SuitDeck.QUEEN.toString();
-    String actualMessage = exception.getMessage();
 
-    assertTrue(actualMessage.contains(expectedMessage));
+    assertThatExceptionOfType(NoSuchCardException.class)
+        .isThrownBy(() -> testCardDeck.removeCard(new Card(Suit.SPADES, SuitDeck.QUEEN)))
+        .withMessageContaining(expectedMessage);
   }
 
   @Test
   void resetDeck_CardDeck_DeckHas32CardsAfterReset() throws NoSuchCardException {
     testCardDeck.getRandomCard();
     testCardDeck.resetDeck();
-    assertEquals(startCardsNumber, testCardDeck.countCards());
+    assertThat(testCardDeck.countCards()).isEqualTo(startCardsNumber);
   }
 }
