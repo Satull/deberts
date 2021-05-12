@@ -10,7 +10,16 @@
       <div v-if="isOpen" class="absolute pr-64 pt-14 right-0">
         <table class="bg-gray-900 border-l-2 border-t-2 text-center">
           <tr
-            class="border-b-2 duration-500 ease-in-out float-right hover:bg-gray-300 hover:text-gray-900 transition w-64"
+            class="
+              border-b-2
+              duration-500
+              ease-in-out
+              float-right
+              hover:bg-gray-300
+              hover:text-gray-900
+              transition
+              w-64
+            "
             v-for="(roundService, suitIndex) in roundHistory"
             :key="suitIndex"
           >
@@ -31,17 +40,17 @@
         class="tradebot"
         v-if="
           roundTurn === 'player' &&
-            trumpSuit !== undefined &&
-            trumpSuit !== null &&
-            passes < 5 &&
-            phase === 6
+          trumpSuit !== undefined &&
+          trumpSuit !== null &&
+          passes < 5 &&
+          phase === 6
         "
       >
         <a
           v-if="passes < 4"
           :class="
             'bg-green-700 border-l-2 border-r-2 float-left py-4 text-center w-32 ' +
-              turnCSS
+            turnCSS
           "
           v-on:click="pass()"
           >Pass</a
@@ -55,7 +64,7 @@
           v-if="passes < 2"
           :class="
             'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-              turnCSS
+            turnCSS
           "
           v-on:click="playTrump(trumpSuit)"
           >Play</a
@@ -65,7 +74,7 @@
           v-if="trumpSuit !== 'spades' && passes > 1 && passes < 5"
           :class="
             'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-              turnCSS
+            turnCSS
           "
           v-on:click="playTrump('spades')"
           >Spades</a
@@ -74,7 +83,7 @@
           v-if="trumpSuit !== 'clubs' && passes > 1 && passes < 5"
           :class="
             'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-              turnCSS
+            turnCSS
           "
           v-on:click="playTrump('clubs')"
           >Clubs</a
@@ -83,7 +92,7 @@
           v-if="trumpSuit !== 'diamonds' && passes > 1 && passes < 5"
           :class="
             'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-              turnCSS
+            turnCSS
           "
           v-on:click="playTrump('diamonds')"
           >Diamonds</a
@@ -92,7 +101,7 @@
           v-if="trumpSuit !== 'hearts' && passes > 1 && passes < 5"
           :class="
             'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-              turnCSS
+            turnCSS
           "
           v-on:click="playTrump('hearts')"
           >Hearts</a
@@ -100,22 +109,66 @@
       </div>
       <div class="bg-green-700 cursor-pointer float-right text-gray-300">
         <a
-          class="border-l-2 duration-500 ease-in-out float-left hover:bg-gray-300 hover:text-green-700 p-4 text-center transition w-32"
+          class="
+            border-l-2
+            duration-500
+            ease-in-out
+            float-left
+            hover:bg-gray-300
+            hover:text-green-700
+            p-4
+            text-center
+            transition
+            w-32
+          "
           v-on:click="save()"
           >Save</a
         >
         <a
-          class="border-l-2 duration-500 ease-in-out float-left hover:bg-gray-300 hover:text-green-700 p-4 text-center transition w-32"
+          class="
+            border-l-2
+            duration-500
+            ease-in-out
+            float-left
+            hover:bg-gray-300
+            hover:text-green-700
+            p-4
+            text-center
+            transition
+            w-32
+          "
           v-on:click="load()"
           >Load</a
         >
         <a
-          class="border-l-2 duration-500 ease-in-out float-left hover:bg-gray-300 hover:text-green-700 p-4 text-center transition w-32"
+          class="
+            border-l-2
+            duration-500
+            ease-in-out
+            float-left
+            hover:bg-gray-300
+            hover:text-green-700
+            p-4
+            text-center
+            transition
+            w-32
+          "
           v-on:click="isOpen = !isOpen"
           >History</a
         >
         <a
-          class="border-l-2 duration-500 ease-in-out float-left hover:bg-gray-300 hover:text-green-700 p-4 text-center transition w-32"
+          class="
+            border-l-2
+            duration-500
+            ease-in-out
+            float-left
+            hover:bg-gray-300
+            hover:text-green-700
+            p-4
+            text-center
+            transition
+            w-32
+          "
           v-on:click="reset()"
           >Reset</a
         >
@@ -134,30 +187,30 @@ export default {
   data() {
     return {
       isOpen: false,
-      turnCSS: ''
+      turnCSS: '',
     }
   },
   props: {
     passes: {
       type: Number,
-      required: true
+      required: true,
     },
     phase: {
       type: Number,
-      required: true
+      required: true,
     },
     player: {
-      required: true
+      required: true,
     },
     roundHistory: {
-      required: true
+      required: true,
     },
     roundTurn: {
-      required: true
+      required: true,
     },
     trumpSuit: {
-      type: String
-    }
+      type: String,
+    },
   },
   mounted() {
     this.setCSSOnTurn(this.roundTurn)
@@ -190,7 +243,7 @@ export default {
     },
     playTrump(trump) {
       if (this.roundTurn === 'player') {
-        DebertsService.playTrump('player', trump).then(response => {
+        DebertsService.playTrump('player', trump).then((response) => {
           if (response.status === 200) {
             this.$store.dispatch('setPasses', 5)
             this.$emit('update:partyService')
@@ -199,7 +252,7 @@ export default {
       }
     },
     reset() {
-      DebertsService.reset().then(response => {
+      DebertsService.reset().then((response) => {
         if (response.status === 200) {
           this.$store.dispatch('setPasses', 0)
           this.$emit('update:partyService')
@@ -210,7 +263,7 @@ export default {
       DebertsService.save()
     },
     load() {
-      DebertsService.load().then(response => {
+      DebertsService.load().then((response) => {
         if (response.status === 200) {
           this.$emit('update:partyService')
         }
@@ -221,7 +274,7 @@ export default {
         ? (this.turnCSS =
             'hover:bg-gray-300 hover:text-green-700 cursor-pointer')
         : (this.turnCSS = '')
-    }
+    },
   },
   updated() {
     this.setCSSOnTurn(this.roundTurn)
@@ -235,10 +288,10 @@ export default {
         ease: 'easeOutElastic',
         stagger: {
           each: 0.1,
-          from: 0
-        }
+          from: 0,
+        },
       }
     )
-  }
+  },
 }
 </script>

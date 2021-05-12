@@ -1,4 +1,4 @@
-# cardtest
+# frontend
 
 ## Project setup
 ```

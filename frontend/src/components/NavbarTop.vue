@@ -1,6 +1,15 @@
 <template>
   <div
-    class="bg-gray-900 border-b-2 border-gray-300 fixed font-bold font-sans select-none text-gray-300 text-l top-0 w-full"
+    class="
+      bg-gray-900
+      border-b-2 border-gray-300
+      fixed
+      font-bold font-sans
+      select-none
+      text-gray-300 text-l
+      top-0
+      w-full
+    "
   >
     <p hidden>{{ roundTurn }}</p>
     <a class="bg-red-700 border-r-2 float-left text-center py-4 w-32"
@@ -11,17 +20,17 @@
       class="tradetop"
       v-if="
         roundTurn === 'bot' &&
-          trumpSuit !== undefined &&
-          trumpSuit !== null &&
-          passes < 5 &&
-          phase === 6
+        trumpSuit !== undefined &&
+        trumpSuit !== null &&
+        passes < 5 &&
+        phase === 6
       "
     >
       <a
         v-if="passes < 4"
         :class="
           'bg-green-700 border-l-2 border-r-2  float-left py-4 text-center w-32 ' +
-            turnCSS
+          turnCSS
         "
         v-on:click="pass()"
         >Pass</a
@@ -93,30 +102,30 @@ export default {
   name: 'NavbarTop',
   data() {
     return {
-      turnCSS: ''
+      turnCSS: '',
     }
   },
   props: {
     passes: {
       type: Number,
-      required: true
+      required: true,
     },
     phase: {
       type: Number,
-      required: true
+      required: true,
     },
     bot: {
-      required: true
+      required: true,
     },
     player: {
-      required: true
+      required: true,
     },
     roundTurn: {
-      required: true
+      required: true,
     },
     trumpSuit: {
-      type: String
-    }
+      type: String,
+    },
   },
   mounted() {
     this.setCSSOnTurn(this.roundTurn)
@@ -130,8 +139,8 @@ export default {
         ease: 'easeOutElastic',
         stagger: {
           each: 0.1,
-          from: 0
-        }
+          from: 0,
+        },
       }
     )
   },
@@ -143,7 +152,7 @@ export default {
     },
     playTrump(trump) {
       if (this.roundTurn === 'bot') {
-        DebertsService.playTrump('bot', trump).then(response => {
+        DebertsService.playTrump('bot', trump).then((response) => {
           if (response.status === 200) {
             this.$store.dispatch('setPasses', 5)
             this.$emit('update:partyService')
@@ -156,7 +165,7 @@ export default {
         ? (this.turnCSS =
             'hover:bg-gray-300 hover:text-green-700 cursor-pointer')
         : (this.turnCSS = '')
-    }
+    },
   },
   updated() {
     this.setCSSOnTurn(this.roundTurn)
@@ -170,10 +179,10 @@ export default {
         ease: 'easeOutElastic',
         stagger: {
           each: 0.1,
-          from: 0
-        }
+          from: 0,
+        },
       }
     )
-  }
+  },
 }
 </script>
