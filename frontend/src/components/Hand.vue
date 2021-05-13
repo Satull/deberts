@@ -7,9 +7,10 @@
         :key="suitIndex"
         :deckSuits="deckSuits"
       >
-        <span class="inline-flex rendering-pixelated">
+        <span>
           <img
-            :class="owner + ' h-48 m-2 opacity-0 ' + turnCSS"
+            class="card"
+            :class="owner + turnCSS"
             v-for="(suitCard, cardIndex) in deckSuits.suitCards"
             :key="cardIndex"
             @click="
@@ -45,31 +46,31 @@ export default {
   mixins: [imageMixin],
   data() {
     return {
-      turnCSS: ''
+      turnCSS: '',
     }
   },
   props: {
     cards: {
       type: Number,
-      required: true
+      required: true,
     },
     comparator: {
-      type: Object
+      type: Object,
     },
     deck: {
-      required: true
+      required: true,
     },
     owner: {
       type: String,
-      required: true
+      required: true,
     },
     phase: {
       type: Number,
-      required: true
+      required: true,
     },
     roundTurn: {
-      required: true
-    }
+      required: true,
+    },
   },
   mounted() {
     this.setShadowOutlineOnTurn(this.roundTurn)
@@ -79,8 +80,8 @@ export default {
       ease: 'easeOutElastic',
       stagger: {
         each: 0.1,
-        from: 0
-      }
+        from: 0,
+      },
     })
     gsap.to('.player', {
       duration: 0.5,
@@ -88,8 +89,8 @@ export default {
       ease: 'easeOutElastic',
       stagger: {
         each: 0.1,
-        from: 9
-      }
+        from: 9,
+      },
     })
   },
   methods: {
@@ -113,7 +114,7 @@ export default {
         this.setDefender(comparator, comparedCard)
         this.setShadowOutlineOnTurn(this.roundTurn)
         setTimeout(() => {
-          DebertsService.compareCards(comparator).then(response => {
+          DebertsService.compareCards(comparator).then((response) => {
             if (response.status === 200) {
               this.$store.dispatch('comparator/removeCards')
               this.$emit('update:score')
@@ -127,10 +128,10 @@ export default {
         owner: name,
         card: {
           suit: suit,
-          value: card
+          value: card,
         },
         suitID: suitID,
-        cardID: cardID
+        cardID: cardID,
       }
     },
     setAttacker(comparator, comparedCard) {
@@ -148,7 +149,7 @@ export default {
       } else {
         this.$store.dispatch('bot/removeCard', comparator.defender)
       }
-    }
+    },
   },
   updated() {
     this.setShadowOutlineOnTurn(this.roundTurn)
@@ -158,8 +159,8 @@ export default {
       ease: 'easeOutElastic',
       stagger: {
         each: 0.1,
-        from: 0
-      }
+        from: 0,
+      },
     })
     gsap.to('.player', {
       duration: 0.5,
@@ -167,9 +168,17 @@ export default {
       ease: 'easeOutElastic',
       stagger: {
         each: 0.1,
-        from: 9
-      }
+        from: 9,
+      },
     })
-  }
+  },
 }
 </script>
+
+<style>
+.card {
+  width: 150px;
+  position: relative;
+  padding: 2px;
+}
+</style>
