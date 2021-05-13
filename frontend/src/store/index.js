@@ -1,13 +1,10 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import * as player from '@/store/modules/player.js'
-import * as bot from '@/store/modules/bot.js'
-import * as trump from '@/store/modules/trump.js'
-import * as comparator from '@/store/modules/comparator.js'
+import { createStore } from 'vuex'
+import * as player from '@/store/modules/player'
+import * as bot from '@/store/modules/bot'
+import * as trump from '@/store/modules/trump'
+import * as comparator from '@/store/modules/comparator'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     deckCards: 0,
     newGame: true,
@@ -15,13 +12,13 @@ export default new Vuex.Store({
     phase: 0,
     roundHistory: {},
     roundTurn: String,
-    switchAllowed: false
+    switchAllowed: false,
   },
   modules: {
     player,
     bot,
     trump,
-    comparator
+    comparator,
   },
   mutations: {
     ADD_PASSES(state) {
@@ -44,7 +41,7 @@ export default new Vuex.Store({
     },
     SET_SWITCH_ALLOWED(state, switchAllowed) {
       state.switchAllowed = switchAllowed
-    }
+    },
   },
   actions: {
     addPasses({ commit }) {
@@ -67,6 +64,6 @@ export default new Vuex.Store({
     },
     setSwitchAllowed({ commit }, switchAllowed) {
       commit('SET_SWITCH_ALLOWED', switchAllowed)
-    }
-  }
+    },
+  },
 })

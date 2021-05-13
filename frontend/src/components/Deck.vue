@@ -1,8 +1,8 @@
 <template>
   <div>
-    <span class="inline-flex">
+    <span class="trumpdeck">
       <img
-        class="carddeck h-48 m-3"
+        class="deck"
         @click="
           deckCards > 19 || player.cards + bot.cards === 0
             ? switchPhase()
@@ -14,12 +14,12 @@
       <img
         v-if="
           (trump !== undefined && trump.suit !== null && phase === 6) ||
-            phase === 3
+          phase === 3
         "
-        class="trump h-48 m-3"
+        class="card"
         v-bind:src="getImagePath(trump.suit, trump.card)"
         @click="
-          deckCards === 13 && switchAllowed == true ? switchTrump() : null
+          deckCards === 13 && switchAllowed === true ? switchTrump() : null
         "
         alt="trump"
       />
@@ -37,27 +37,27 @@ export default {
   mixins: [imageMixin],
   props: {
     bot: {
-      required: true
+      required: true,
     },
     deckCards: {
       type: Number,
-      required: true
+      required: true,
     },
     player: {
-      required: true
+      required: true,
     },
     phase: {
       type: Number,
-      required: true
+      required: true,
     },
     switchAllowed: {
       type: Boolean,
-      required: true
+      required: true,
     },
     trump: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   beforeMount() {
     this.$emit('update:partyService')
@@ -65,37 +65,29 @@ export default {
   mounted() {
     gsap.config({ nullTargetWarn: false })
     gsap.fromTo(
-      '.trump',
+      '.card',
       { x: '20px', opacity: 0 },
       {
         duration: 0.9,
         opacity: 1,
         x: 0,
         ease: 'easeOutElastic',
-        stagger: {
-          each: 0.1,
-          from: 0
-        }
       }
     )
     gsap.fromTo(
-      '.carddeck',
+      '.deck',
       { opacity: 0, x: '-20px' },
       {
         duration: 0.9,
         x: 0,
         opacity: 1,
         ease: 'easeOutElastic',
-        stagger: {
-          each: 0.1,
-          from: 0
-        }
       }
     )
   },
   methods: {
     switchPhase() {
-      DebertsService.switchPhase().then(response => {
+      DebertsService.switchPhase().then((response) => {
         if (response.status === 200) {
           this.$store.dispatch('setPasses', 0)
           this.$emit('update:partyService')
@@ -103,28 +95,45 @@ export default {
       })
     },
     switchTrump() {
-      DebertsService.switchTrump().then(response => {
+      DebertsService.switchTrump().then((response) => {
         if (response.status === 200) {
           this.$emit('update:partyService')
         }
       })
-    }
+    },
   },
   updated() {
     gsap.fromTo(
-      '.trump',
+      '.card',
       { x: '20px', opacity: 0 },
       {
         duration: 0.9,
         opacity: 1,
         x: 0,
         ease: 'easeOutElastic',
-        stagger: {
-          each: 0.1,
-          from: 0
-        }
       }
     )
-  }
+  },
 }
 </script>
+
+<style>
+.card {
+  width: 150px;
+  position: relative;
+  padding: 2px;
+}
+
+.deck {
+  width: 150px;
+  position: relative;
+  padding: 2px;
+}
+
+.trumpdeck {
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  transform: translate(0%, -50%);
+}
+</style>
