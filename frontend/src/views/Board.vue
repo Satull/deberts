@@ -1,24 +1,17 @@
 <template>
   <div>
-    <div class="absolute bottom-0 left-0 pl-10 pb-74" display="inline">
-      <Deck
-        v-on:update:partyService="updateParty"
-        :bot="bot"
-        :deckCards="deckCards"
-        :player="player"
-        :trump="trump"
-        :phase="phase"
-        :switchAllowed="switchAllowed"
-      ></Deck>
-    </div>
-    <Comparator
-      class="absolute bottom-0 left-0 pb-76 pl-120"
-      display="inline"
-      :comparator="comparator"
-    ></Comparator>
+    <Deck
+      v-on:update:partyService="updateParty"
+      :bot="bot"
+      :deckCards="deckCards"
+      :player="player"
+      :trump="trump"
+      :phase="phase"
+      :switchAllowed="switchAllowed"
+    ></Deck>
     <div v-if="deckCards < 32">
       <Hand
-        class="absolute inset-x-0 pl-8 pt-14 top-0"
+        class="botdeck"
         v-on:update:score="updateScore"
         v-on:update:turn="updateTurn"
         :cards="deckCards"
@@ -29,7 +22,7 @@
         :phase="phase"
       ></Hand>
       <Hand
-        class="absolute bottom-0 inset-x-0 pb-14 pl-8"
+        class=""
         v-on:update:score="updateScore"
         v-on:update:turn="updateTurn"
         :deck="player.deck"
@@ -64,17 +57,21 @@
 </template>
 
 <script>
-import Comparator from '@/components/Comparator.vue'
 import DebertsService from '@/services/DebertsService.js'
 import Deck from '@/components/Deck.vue'
-import Hand from '@/components/Hand.vue'
-import NavbarBottom from '@/components/NavbarBottom.vue'
-import NavbarTop from '@/components/NavbarTop.vue'
+import Hand from '@/components/Hand'
+import NavbarBottom from '@/components/NavbarBottom'
+import NavbarTop from '@/components/NavbarTop'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Board',
-  components: { Deck, NavbarBottom, NavbarTop, Hand, Comparator },
+  components: {
+    Deck,
+    Hand,
+    NavbarBottom,
+    NavbarTop,
+  },
   computed: {
     ...mapState([
       'bot',
@@ -86,8 +83,8 @@ export default {
       'roundHistory',
       'roundTurn',
       'switchAllowed',
-      'trump'
-    ])
+      'trump',
+    ]),
   },
   methods: {
     beforeEnter(el) {
@@ -111,7 +108,7 @@ export default {
     updateParty() {
       this.$store.dispatch('player/setDeck', null)
       this.$store.dispatch('bot/setDeck', null)
-      DebertsService.getParty().then(response => {
+      DebertsService.getParty().then((response) => {
         this.$store.dispatch('setRoundHistory', response.data.ROUND_HISTORY)
         this.$store.dispatch('setRoundTurn', response.data.TURN.TURN)
         this.$store.dispatch('setDeckCards', response.data.CARD_DECK.CARDS)
@@ -132,7 +129,7 @@ export default {
       })
     },
     updateScore() {
-      DebertsService.getTurn().then(response => {
+      DebertsService.getTurn().then((response) => {
         this.$store.dispatch('player/addScore', response.data.PARTY.player)
         this.$store.dispatch('player/addPoints', response.data.ROUND.player)
         this.$store.dispatch('bot/addScore', response.data.PARTY.bot)
@@ -146,7 +143,14 @@ export default {
       } else if (this.roundTurn === 'bot') {
         this.$store.dispatch('setRoundTurn', 'player')
       }
-    }
-  }
+    },
+  },
 }
 </script>
+
+<style>
+.botdeck {
+  position: absolute;
+  bottom: 50px;
+}
+</style>

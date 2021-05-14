@@ -31,11 +31,14 @@
         </table>
       </div>
     </transition>
-    <div class="bg-gray-900 border-gray-300 border-t-2 bottom-0 fixed w-full">
-      <a class="bg-blue-700 border-r-2 float-left py-4 text-center w-32"
-        >Player: {{ player.points }}</a
-      >
-      <a class="bg-gray-900 float-left py-4 text-center w-40"></a>
+    <div class="taskbar">
+      <a class="player">Player: {{ player.points }}</a>
+      <a class="menu" v-on:click="isOpen = !isOpen">History</a>
+      <a class="menu" v-on:click="reset()">Reset</a>
+      <a class="menu" v-on:click="save()">Save</a>
+      <a class="menu" v-on:click="load()">Load</a>
+
+      <a class="space"></a>
       <div
         class="tradebot"
         v-if="
@@ -48,24 +51,16 @@
       >
         <a
           v-if="passes < 4"
-          :class="
-            'bg-green-700 border-l-2 border-r-2 float-left py-4 text-center w-32 ' +
-            turnCSS
-          "
+          class="menu menu-left"
+          :class="turnCSS"
           v-on:click="pass()"
           >Pass</a
         >
-        <a
-          v-if="passes === 4"
-          class="bg-gray-900 border-r-2 float-left py-7 text-center w-32"
-        >
-        </a>
+        <a v-if="passes === 4" class="space"> </a>
         <a
           v-if="passes < 2"
-          :class="
-            'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-            turnCSS
-          "
+          class="menu menu-left right-border"
+          :class="turnCSS"
           v-on:click="playTrump(trumpSuit)"
           >Play</a
         >
@@ -105,72 +100,6 @@
           "
           v-on:click="playTrump('hearts')"
           >Hearts</a
-        >
-      </div>
-      <div class="bg-green-700 cursor-pointer float-right text-gray-300">
-        <a
-          class="
-            border-l-2
-            duration-500
-            ease-in-out
-            float-left
-            hover:bg-gray-300
-            hover:text-green-700
-            p-4
-            text-center
-            transition
-            w-32
-          "
-          v-on:click="save()"
-          >Save</a
-        >
-        <a
-          class="
-            border-l-2
-            duration-500
-            ease-in-out
-            float-left
-            hover:bg-gray-300
-            hover:text-green-700
-            p-4
-            text-center
-            transition
-            w-32
-          "
-          v-on:click="load()"
-          >Load</a
-        >
-        <a
-          class="
-            border-l-2
-            duration-500
-            ease-in-out
-            float-left
-            hover:bg-gray-300
-            hover:text-green-700
-            p-4
-            text-center
-            transition
-            w-32
-          "
-          v-on:click="isOpen = !isOpen"
-          >History</a
-        >
-        <a
-          class="
-            border-l-2
-            duration-500
-            ease-in-out
-            float-left
-            hover:bg-gray-300
-            hover:text-green-700
-            p-4
-            text-center
-            transition
-            w-32
-          "
-          v-on:click="reset()"
-          >Reset</a
         >
       </div>
     </div>
@@ -295,3 +224,60 @@ export default {
   },
 }
 </script>
+
+<style>
+.taskbar {
+  background-color: #333;
+  overflow: hidden;
+  border-top: 2px solid white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* bg-green-700 border-l-2 border-r-2 float-left py-4 text-center w-32  */
+.taskbar a.menu {
+  float: right;
+  background-color: #036140;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  width: 60px;
+  text-decoration: none;
+  font-size: 17px;
+  border-left: 2px solid white;
+  cursor: pointer;
+}
+
+.taskbar a.menu-left {
+  float: left;
+}
+
+.taskbar a.menu:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.taskbar a.player {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  background-color: #073a76;
+  width: 80px;
+  border-right: 2px solid white;
+  cursor: default;
+}
+
+.taskbar a.right-border {
+  border-right: 2px solid white;
+}
+
+.taskbar a.space {
+  float: left;
+  width: 80px;
+  padding: 14px 16px;
+}
+</style>
