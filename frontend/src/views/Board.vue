@@ -11,7 +11,7 @@
     ></Deck>
     <div v-if="deckCards < 32">
       <Hand
-        class="botdeck"
+        class="bot-deck"
         v-on:update:score="updateScore"
         v-on:update:turn="updateTurn"
         :cards="deckCards"
@@ -22,7 +22,7 @@
         :phase="phase"
       ></Hand>
       <Hand
-        class=""
+        class="player-deck"
         v-on:update:score="updateScore"
         v-on:update:turn="updateTurn"
         :deck="player.deck"
@@ -34,6 +34,7 @@
       ></Hand>
     </div>
     <NavbarTop
+      class="navbar"
       v-on:update:partyService="updateParty"
       v-on:update:turn="updateTurn"
       :bot="bot"
@@ -44,6 +45,7 @@
       :trumpSuit="trump.suit"
     ></NavbarTop>
     <NavbarBottom
+      class="navbar"
       v-on:update:partyService="updateParty"
       v-on:update:turn="updateTurn"
       :passes="passes"
@@ -149,8 +151,17 @@ export default {
 </script>
 
 <style>
-.botdeck {
+.bot-deck {
   position: absolute;
   bottom: 50px;
+}
+
+.player-deck {
+  position: absolute;
+  top: 55px;
+}
+
+.navbar {
+  margin-left: -8px;
 }
 </style>

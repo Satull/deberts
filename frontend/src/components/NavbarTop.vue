@@ -1,21 +1,13 @@
 <template>
-  <div
-    class="
-      bg-gray-900
-      border-b-2 border-gray-300
-      fixed
-      font-bold font-sans
-      select-none
-      text-gray-300 text-l
-      top-0
-      w-full
-    "
-  >
+  <div class="navbar">
     <p hidden>{{ roundTurn }}</p>
-    <a class="bg-red-700 border-r-2 float-left text-center py-4 w-32"
-      >Bot: {{ bot.points }}</a
-    >
-    <a class="bg-gray-900 float-left py-4 text-center w-40"></a>
+    <a class="bot color-bot">Bot: {{ bot.points }}</a>
+
+    <a class="score color-bot">Bot: {{ bot.score }}</a>
+    <a class="score color-player">Player: {{ player.score }}</a>
+    <a class="score">Score: </a>
+
+    <a class="space"></a>
     <div
       class="tradetop"
       v-if="
@@ -26,70 +18,51 @@
         phase === 6
       "
     >
-      <a
-        v-if="passes < 4"
-        :class="
-          'bg-green-700 border-l-2 border-r-2  float-left py-4 text-center w-32 ' +
-          turnCSS
-        "
-        v-on:click="pass()"
-        >Pass</a
-      >
-      <a
-        v-if="passes === 4"
-        class="bg-gray-900 border-r-2 float-left py-7 text-center w-32"
-      ></a>
-      <a
-        v-if="passes < 2"
-        :class="
-          'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' + turnCSS
-        "
-        v-on:click="playTrump(trumpSuit)"
-        >Play</a
-      >
-      <a
-        v-if="trumpSuit !== 'spades' && passes > 1 && passes < 5"
-        :class="
-          'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' + turnCSS
-        "
-        v-on:click="playTrump('spades')"
-        >Spades</a
-      >
-      <a
-        v-if="trumpSuit !== 'clubs' && passes > 1 && passes < 5"
-        :class="
-          'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' + turnCSS
-        "
-        v-on:click="playTrump('clubs')"
-        >Clubs</a
-      >
-      <a
-        v-if="trumpSuit !== 'diamonds' && passes > 1 && passes < 5"
-        :class="
-          'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' + turnCSS
-        "
-        v-on:click="playTrump('diamonds')"
-        >Diamonds</a
-      >
-      <a
-        v-if="trumpSuit !== 'hearts' && passes > 1 && passes < 5"
-        :class="
-          'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' + turnCSS
-        "
-        v-on:click="playTrump('hearts')"
-        >Hearts</a
-      >
-    </div>
-
-    <div class="float-right text-center">
-      <a class="bg-green-700 border-l-2 float-left p-4 w-32">Score: </a>
-      <a class="bg-red-700 border-l-2 float-left p-4 w-32"
-        >Bot: {{ bot.score }}</a
-      >
-
-      <a class="bg-blue-700 border-l-2 float-left p-4 w-32"
-        >Player: {{ player.score }}</a
-      >
+      <div>
+        <a
+          v-if="passes < 4"
+          class="menu menu-left"
+          :class="turnCSS"
+          v-on:click="pass()"
+          >Pass</a
+        >
+        <a
+          v-if="passes < 2"
+          class="menu menu-left"
+          :class="turnCSS"
+          v-on:click="playTrump(trumpSuit)"
+          >Play</a
+        >
+        <a
+          v-if="trumpSuit !== 'spades' && passes > 1 && passes < 5"
+          class="menu menu-left"
+          :class="turnCSS"
+          v-on:click="playTrump('spades')"
+          >Spades</a
+        >
+        <a
+          v-if="trumpSuit !== 'clubs' && passes > 1 && passes < 5"
+          class="menu menu-left"
+          :class="turnCSS"
+          v-on:click="playTrump('clubs')"
+          >Clubs</a
+        >
+        <a
+          v-if="trumpSuit !== 'diamonds' && passes > 1 && passes < 5"
+          class="menu menu-left"
+          :class="turnCSS"
+          v-on:click="playTrump('diamonds')"
+          >Diamonds</a
+        >
+        <a
+          v-if="trumpSuit !== 'hearts' && passes > 1 && passes < 5"
+          class="menu menu-left"
+          :class="turnCSS"
+          v-on:click="playTrump('hearts')"
+          >Hearts</a
+        >
+        <a class="border right-border"></a>
+      </div>
     </div>
   </div>
 </template>
@@ -146,9 +119,10 @@ export default {
   },
   methods: {
     pass() {
-      this.roundTurn === 'bot'
-        ? this.$emit('update:turn') && this.$store.dispatch('addPasses')
-        : null
+      if (this.roundTurn === 'bot') {
+        this.$emit('update:turn')
+        this.$store.dispatch('addPasses')
+      }
     },
     playTrump(trump) {
       if (this.roundTurn === 'bot') {
@@ -186,3 +160,91 @@ export default {
   },
 }
 </script>
+
+<style>
+.navbar {
+  background-color: #333;
+  overflow: hidden;
+  border-bottom: 2px solid white;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  margin: 0;
+}
+
+.navbar a.menu {
+  float: right;
+  background-color: #036140;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  width: 60px;
+  text-decoration: none;
+  font-size: 17px;
+  border-left: 2px solid white;
+  cursor: pointer;
+}
+
+.navbar a.score {
+  float: right;
+  background-color: #036140;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  width: 80px;
+  text-decoration: none;
+  font-size: 17px;
+  border-left: 2px solid white;
+  cursor: default;
+}
+
+.navbar a.color-player {
+  background-color: #073a76;
+}
+
+.navbar a.color-bot {
+  background-color: #76071d;
+}
+
+.navbar a.menu-left {
+  float: left;
+}
+
+.navbar a.menu:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.navbar a.bot {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  width: 80px;
+  border-right: 2px solid white;
+  cursor: default;
+}
+
+.navbar a.right-border {
+  border-right: 2px solid white;
+}
+
+.navbar a.space {
+  float: left;
+  width: 80px;
+  padding: 14px 16px;
+}
+
+.navbar a.border {
+  height: 100%;
+  padding: 30px 0px;
+}
+</style>

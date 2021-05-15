@@ -45,6 +45,7 @@ export default createStore({
   },
   actions: {
     addPasses({ commit }) {
+      console.log('HELLO AGAIN')
       commit('ADD_PASSES')
     },
     setDeckCards({ commit }, cardsNumber) {

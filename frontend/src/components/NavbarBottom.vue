@@ -59,48 +59,43 @@
         <a v-if="passes === 4" class="space"> </a>
         <a
           v-if="passes < 2"
-          class="menu menu-left right-border"
+          class="menu menu-left"
           :class="turnCSS"
           v-on:click="playTrump(trumpSuit)"
           >Play</a
         >
 
-        <a
-          v-if="trumpSuit !== 'spades' && passes > 1 && passes < 5"
-          :class="
-            'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-            turnCSS
-          "
-          v-on:click="playTrump('spades')"
-          >Spades</a
-        >
-        <a
-          v-if="trumpSuit !== 'clubs' && passes > 1 && passes < 5"
-          :class="
-            'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-            turnCSS
-          "
-          v-on:click="playTrump('clubs')"
-          >Clubs</a
-        >
-        <a
-          v-if="trumpSuit !== 'diamonds' && passes > 1 && passes < 5"
-          :class="
-            'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-            turnCSS
-          "
-          v-on:click="playTrump('diamonds')"
-          >Diamonds</a
-        >
-        <a
-          v-if="trumpSuit !== 'hearts' && passes > 1 && passes < 5"
-          :class="
-            'bg-green-700 border-r-2 float-left py-4 text-center w-32 ' +
-            turnCSS
-          "
-          v-on:click="playTrump('hearts')"
-          >Hearts</a
-        >
+        <div class="right-border">
+          <a
+            v-if="trumpSuit !== 'spades' && passes > 1 && passes < 5"
+            class="menu menu-left"
+            :class="turnCSS"
+            v-on:click="playTrump('spades')"
+            >Spades</a
+          >
+          <a
+            v-if="trumpSuit !== 'clubs' && passes > 1 && passes < 5"
+            class="menu menu-left"
+            :class="turnCSS"
+            v-on:click="playTrump('clubs')"
+            >Clubs</a
+          >
+          <a
+            v-if="trumpSuit !== 'diamonds' && passes > 1 && passes < 5"
+            class="menu menu-left"
+            :class="turnCSS"
+            v-on:click="playTrump('diamonds')"
+            >Diamonds</a
+          >
+          <a
+            v-if="trumpSuit !== 'hearts' && passes > 1 && passes < 5"
+            class="menu menu-left"
+            :class="turnCSS"
+            v-on:click="playTrump('hearts')"
+            >Hearts</a
+          >
+          <a class="border right-border"></a>
+        </div>
       </div>
     </div>
   </div>
@@ -166,9 +161,10 @@ export default {
       )
     },
     pass() {
-      this.roundTurn === 'player'
-        ? this.$emit('update:turn') && this.$store.dispatch('addPasses')
-        : null
+      if (this.roundTurn === 'player') {
+        this.$emit('update:turn')
+        this.$store.dispatch('addPasses')
+      }
     },
     playTrump(trump) {
       if (this.roundTurn === 'player') {
@@ -228,14 +224,20 @@ export default {
 <style>
 .taskbar {
   background-color: #333;
+  padding-left: 0;
   overflow: hidden;
   border-top: 2px solid white;
   position: fixed;
   bottom: 0;
   width: 100%;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 
-/* bg-green-700 border-l-2 border-r-2 float-left py-4 text-center w-32  */
 .taskbar a.menu {
   float: right;
   background-color: #036140;
@@ -273,6 +275,11 @@ export default {
 
 .taskbar a.right-border {
   border-right: 2px solid white;
+}
+
+.taskbar a.border {
+  height: 100%;
+  padding: 30px 0px;
 }
 
 .taskbar a.space {
