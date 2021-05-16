@@ -10,7 +10,7 @@
         <span>
           <img
             class="card"
-            :class="owner + turnCSS"
+            :class="turnCSS"
             v-for="(suitCard, cardIndex) in deckSuits.suitCards"
             :key="cardIndex"
             @click="
@@ -96,7 +96,7 @@ export default {
   methods: {
     setShadowOutlineOnTurn(roundTurn) {
       roundTurn === this.owner
-        ? (this.turnCSS = 'hover:shadow-outline')
+        ? (this.turnCSS = 'marked ' + this.owner)
         : (this.turnCSS = '')
     },
     compareCards(comparator, comparedCard) {
@@ -180,5 +180,17 @@ export default {
   width: 150px;
   position: relative;
   padding: 2px;
+}
+
+.marked:hover {
+  box-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+}
+
+.player:hover {
+  top: -20px;
+}
+
+.bot:hover {
+  top: 20px;
 }
 </style>

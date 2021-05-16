@@ -49,18 +49,11 @@
           phase === 6
         "
       >
-        <a
-          v-if="passes < 4"
-          class="menu menu-left"
-          :class="turnCSS"
-          v-on:click="pass()"
-          >Pass</a
-        >
+        <a v-if="passes < 4" class="menu menu-left" v-on:click="pass()">Pass</a>
         <a v-if="passes === 4" class="space"> </a>
         <a
           v-if="passes < 2"
           class="menu menu-left"
-          :class="turnCSS"
           v-on:click="playTrump(trumpSuit)"
           >Play</a
         >

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <span class="float-left inline-flex">
+    <span>
       <img
-        class="attacker h-48 m-2 opacity-0"
+        class="attacker card"
         v-if="comparator.attacker !== null"
         v-bind:src="
           getImagePath(
@@ -13,7 +13,7 @@
         alt="attacker's card"
       />
       <img
-        class="defender h-48 m-2 opacity-0"
+        class="defender card"
         v-if="comparator.defender !== null"
         v-bind:src="
           getImagePath(
@@ -36,8 +36,8 @@ export default {
   mixins: [imageMixin],
   props: {
     comparator: {
-      required: true
-    }
+      required: true,
+    },
   },
   updated() {
     gsap.to('.attacker', {
@@ -47,8 +47,8 @@ export default {
       ease: 'easeOutElastic',
       stagger: {
         each: 0.1,
-        from: 0
-      }
+        from: 0,
+      },
     })
     gsap.fromTo(
       '.defender',
@@ -60,10 +60,18 @@ export default {
         ease: 'easeOutElastic',
         stagger: {
           each: 0.1,
-          from: 0
-        }
+          from: 0,
+        },
       }
     )
-  }
+  },
 }
 </script>
+
+<style>
+.card {
+  width: 150px;
+  position: relative;
+  padding: 2px;
+}
+</style>

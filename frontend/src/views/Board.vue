@@ -31,8 +31,14 @@
         :owner="'player'"
         :roundTurn="roundTurn"
         :phase="phase"
-      ></Hand>
+      >
+      </Hand>
     </div>
+    <Comparator
+      class="comparator"
+      display="inline"
+      :comparator="comparator"
+    ></Comparator>
     <NavbarTop
       class="navbar"
       v-on:update:partyService="updateParty"
@@ -64,6 +70,7 @@ import Deck from '@/components/Deck.vue'
 import Hand from '@/components/Hand'
 import NavbarBottom from '@/components/NavbarBottom'
 import NavbarTop from '@/components/NavbarTop'
+import Comparator from '@/components/Comparator'
 import { mapState } from 'vuex'
 
 export default {
@@ -73,6 +80,7 @@ export default {
     Hand,
     NavbarBottom,
     NavbarTop,
+    Comparator,
   },
   computed: {
     ...mapState([
@@ -151,17 +159,24 @@ export default {
 </script>
 
 <style>
-.bot-deck {
+.player-deck {
   position: absolute;
   bottom: 50px;
 }
 
-.player-deck {
+.bot-deck {
   position: absolute;
   top: 55px;
 }
 
 .navbar {
   margin-left: -8px;
+}
+
+.comparator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(0%, -50%);
 }
 </style>
