@@ -51,7 +51,7 @@
       :trumpSuit="trump.suit"
     ></NavbarTop>
     <NavbarBottom
-      class="navbar"
+      class="navbar-bot"
       v-on:update:partyService="updateParty"
       v-on:update:turn="updateTurn"
       :passes="passes"
@@ -170,6 +170,10 @@ export default {
 }
 
 .navbar {
+  margin-left: -8px;
+}
+
+.navbar-bot {
   margin-left: -8px;
 }
 

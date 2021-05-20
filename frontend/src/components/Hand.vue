@@ -176,12 +176,6 @@ export default {
 </script>
 
 <style>
-.card {
-  width: 150px;
-  position: relative;
-  padding: 2px;
-}
-
 .marked:hover {
   box-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
 }

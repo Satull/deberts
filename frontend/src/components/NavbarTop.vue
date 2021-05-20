@@ -171,7 +171,6 @@ export default {
   width: 100%;
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
@@ -245,6 +244,6 @@ export default {
 
 .navbar a.border {
   height: 100%;
-  padding: 30px 0px;
+  padding: 30px 0;
 }
 </style>

@@ -67,11 +67,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.card {
-  width: 150px;
-  position: relative;
-  padding: 2px;
-}
-</style>

@@ -7,24 +7,15 @@
       @leave="leave"
       :css="false"
     >
-      <div v-if="isOpen" class="absolute pr-64 pt-14 right-0">
-        <table class="bg-gray-900 border-l-2 border-t-2 text-center">
+      <div v-if="isOpen" class="history">
+        <table class="tablespace">
           <tr
-            class="
-              border-b-2
-              duration-500
-              ease-in-out
-              float-right
-              hover:bg-gray-300
-              hover:text-gray-900
-              transition
-              w-64
-            "
+            class=""
             v-for="(roundService, suitIndex) in roundHistory"
             :key="suitIndex"
           >
-            <td class="py-3 w-31">{{ roundService.bot }}</td>
-            <td class="border-l-2 py-3 w-32">
+            <td class="cell">{{ roundService.bot }}</td>
+            <td class="cell">
               {{ roundService.player }}
             </td>
           </tr>
@@ -33,7 +24,7 @@
     </transition>
     <div class="taskbar">
       <a class="player">Player: {{ player.points }}</a>
-      <a class="menu" v-on:click="isOpen = !isOpen">History</a>
+      <a class="menu" v-on:click="changeOpen()">History</a>
       <a class="menu" v-on:click="reset()">Reset</a>
       <a class="menu" v-on:click="save()">Save</a>
       <a class="menu" v-on:click="load()">Load</a>
@@ -58,7 +49,7 @@
           >Play</a
         >
 
-        <div class="right-border">
+        <div>
           <a
             v-if="trumpSuit !== 'spades' && passes > 1 && passes < 5"
             class="menu menu-left"
@@ -87,7 +78,7 @@
             v-on:click="playTrump('hearts')"
             >Hearts</a
           >
-          <a class="border right-border"></a>
+          <a class="right-border menu-left"></a>
         </div>
       </div>
     </div>
@@ -133,16 +124,19 @@ export default {
     this.setCSSOnTurn(this.roundTurn)
   },
   methods: {
+    changeOpen() {
+      this.isOpen = !this.isOpen
+      console.log(this.isOpen)
+    },
     beforeEnter(el) {
       el.style.opacity = '0'
       el.style.width = '0'
       el.style.left = '1500px'
-      el.style.height = '0'
     },
     enter(el, done) {
       Velocity(
         el,
-        { opacity: 1, width: '12em', left: '1184px' },
+        { opacity: 1, width: '231px', left: '1202px' },
         { duration: 1000, easing: [600, 50], complete: done }
       )
     },
@@ -215,6 +209,30 @@ export default {
 </script>
 
 <style>
+.history {
+  position: absolute;
+  top: 50px;
+  float: right;
+  right: 0px;
+  margin-left: 8px;
+}
+
+.cell {
+  background-color: #036140;
+  border-left: 3px;
+  border-color: white;
+  border-bottom: 2px solid white;
+  border-left: 2px solid white;
+
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 45px;
+  text-decoration: none;
+  font-size: 17px;
+  width: 80px;
+  cursor: default;
+}
+
 .taskbar {
   background-color: #333;
   padding-left: 0;
@@ -244,6 +262,19 @@ export default {
   cursor: pointer;
 }
 
+.taskbar a.right-border {
+  float: right;
+  background-color: #610319;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 0px 0px;
+  height: 48px;
+  text-decoration: none;
+  font-size: 17px;
+  border-right: 2px solid white;
+  cursor: pointer;
+}
+
 .taskbar a.menu-left {
   float: left;
 }
@@ -264,15 +295,6 @@ export default {
   width: 80px;
   border-right: 2px solid white;
   cursor: default;
-}
-
-.taskbar a.right-border {
-  border-right: 2px solid white;
-}
-
-.taskbar a.border {
-  height: 100%;
-  padding: 30px 0px;
 }
 
 .taskbar a.space {

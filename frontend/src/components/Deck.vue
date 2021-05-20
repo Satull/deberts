@@ -118,18 +118,11 @@ export default {
 </script>
 
 <style>
-.card {
-  width: 150px;
-  position: relative;
-  padding: 2px;
-}
-
 .deck {
   width: 150px;
   position: relative;
   padding: 2px;
 }
-
 .trumpdeck {
   position: absolute;
   top: 50%;
