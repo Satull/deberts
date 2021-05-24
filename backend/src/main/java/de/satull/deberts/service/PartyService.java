@@ -29,7 +29,7 @@ public class PartyService {
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   private final RoundService roundService;
-  @Autowired private DataBaseService dbService;
+  @Autowired DataBaseService dbService;
   private int botScore;
   private int roundNumber;
   private LinkedHashMap<Owner, Integer> score;
@@ -37,6 +37,7 @@ public class PartyService {
   private int playerScore;
   private LinkedHashMap<Integer, LinkedHashMap<Owner, Integer>> roundHistory;
   private boolean trumpDefined = false;
+  private ObjectMapper objectMapper;
 
   /**
    * Parametrised constructor for dependency injection.
@@ -44,8 +45,9 @@ public class PartyService {
    * @param roundService round information in the party
    */
   @Autowired
-  public PartyService(RoundService roundService) {
+  public PartyService(RoundService roundService, ObjectMapper objectMapper) {
     this.roundService = roundService;
+    this.objectMapper = objectMapper;
     initParty();
   }
 
@@ -185,7 +187,6 @@ public class PartyService {
 
   public void saveParty() throws JsonProcessingException {
     LOG.info("You are trying to save the game");
-    ObjectMapper objectMapper = new ObjectMapper();
     // set player
     Player playerEntity = dbService.listPlayers().get(0);
     // set party

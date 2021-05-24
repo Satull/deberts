@@ -1,9 +1,11 @@
 package de.satull.deberts.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.satull.deberts.model.deck.CardDeck;
 import de.satull.deberts.model.deck.HandDeck;
 import de.satull.deberts.model.deck.TrumpDeck;
 import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.service.DataBaseService;
 import de.satull.deberts.service.PartyService;
 import de.satull.deberts.service.RoundService;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,11 @@ import org.springframework.context.annotation.Configuration;
 public class DebertsConfig {
 
   @Bean
+  public ObjectMapper objectMapper(){
+    return new ObjectMapper();
+  }
+
+  @Bean
   public HandDeck botHand() {
     return new HandDeck(Owner.BOT);
   }
@@ -31,7 +38,7 @@ public class DebertsConfig {
 
   @Bean
   public PartyService partyService() {
-    return new PartyService(roundService());
+    return new PartyService(roundService(), objectMapper());
   }
 
   @Bean
