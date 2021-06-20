@@ -13,7 +13,7 @@ https://giftour.ru/en/contests-birthday/the-rules-of-the-debert-card-game-debert
 ### Actual ToDo's:
 
 1. Refactoring
-    1. User Interface instead of Implementation
+    1. User abstract class instead of Implementation
     2. Generate Deck on the Base of Cartesian Product
     3. Refactoring because of new Deck structure
 2. Configure work with two docker images (game + database)
