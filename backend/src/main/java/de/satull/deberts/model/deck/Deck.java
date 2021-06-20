@@ -1,31 +1,23 @@
 package de.satull.deberts.model.deck;
 
-import de.satull.deberts.exception.NoSuchCardException;
-import de.satull.deberts.model.enums.Constant;
 import de.satull.deberts.model.enums.Suit;
-import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.enums.Value;
 import de.satull.deberts.model.web.Card;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public interface Deck {
+/**
+ * An abstract class that contains and performs cards. Cards are grouped by suits. A suit exists
+ * only if it has at least one card.
+ *
+ * @author Ievgenii Izrailtenko
+ * @version 1.0
+ */
+public abstract class Deck {
 
-  /**
-   * Returns a random card from the deck.
-   *
-   * @return random card from the deck
-   * @throws NoSuchCardException the deck is empty
-   */
-  Card getRandomCard() throws NoSuchCardException;
-
-  /**
-   * Returns a random card from the specified of the deck
-   *
-   * @param suit suit to get a card
-   * @return random card from the suit
-   * @throws NoSuchCardException the suit is empty
-   */
-  Card getRandomCardFromSuit(Suit suit) throws NoSuchCardException;
+  private static final Logger LOG =
+      LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
 
   /**
    * Returns true if this deck contains the specified Card. Returns: true if this string contains s,
@@ -34,52 +26,55 @@ public interface Deck {
    * @param card the card to search for
    * @return true if this Deck contains card, false otherwise
    */
-  boolean contains(Card card);
+  public abstract boolean contains(Card card);
 
   /**
-   * Returns the count of cards in this deck.
+   * Returns the countCards of cards in this deck.
    *
    * @return number of cards
    */
-  int count();
+  public abstract int countCards();
 
   /**
-   * Returns the card card from the deck using suit and value.
+   * Returns the card from the deck using suit and value.
    *
    * @param suit  of the card
    * @param value of the card
    * @return card founded card
-   * @throws NoSuchCardException removed card is not in the deck
    */
-  Card getCard(Suit suit, SuitDeck value) throws NoSuchCardException;
-
-  /**
-   * Returns deck information with the actual number of cards.
-   *
-   * @return information about cards in the deck and its number
-   */
-  LinkedHashMap<Constant, Object> getDeck();
-
-  /**
-   * Returns the list of actual suits in the deck
-   *
-   * @return list of all suits in the deck
-   */
-  List<Suit> getSuitList();
-
+  public abstract Card getCard(Suit suit, Value value);
 
   /**
    * Removes card from the deck.
    *
-   * @param card to remove
-   * @throws NoSuchCardException card to remove is not in the deck
+   * @param card card to remove
    */
-  void removeCard(Card card) throws NoSuchCardException;
+  public abstract void removeCard(Card card);
 
   /**
    * Reset the deck to the init values.
    */
-  void resetDeck();
+  public abstract void resetDeck();
 
+  /**
+   * Returns a random card from the deck.
+   *
+   * @return random card from the deck
+   */
+  public abstract Card getRandomCard();
 
+  /**
+   * Returns a random card from the specified suit of the deck.
+   *
+   * @param suit suit to get a card
+   * @return random card from the suit
+   */
+  public abstract Card getRandomCardFromSuit(Suit suit);
+
+  /**
+   * Add card into the deck.
+   *
+   * @param card to add
+   */
+  public abstract void addCard(Card card);
 }

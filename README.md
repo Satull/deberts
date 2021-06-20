@@ -1,3 +1,6 @@
+<h1>At this moment I started a refactoring in the develop-branch. Because of this, the project will be
+not runnable next commits.</h1>
+
 # deberts
 
 Learn project for Java und Javascript. Own creation of the in CIS popular card game deberts. This
@@ -12,6 +15,7 @@ https://giftour.ru/en/contests-birthday/the-rules-of-the-debert-card-game-debert
 1. Refactoring
     1. User Interface instead of Implementation
     2. Generate Deck on the Base of Cartesian Product
+    3. Refactoring because of new Deck structure
 2. Configure work with two docker images (game + database)
 
 ### Project setup

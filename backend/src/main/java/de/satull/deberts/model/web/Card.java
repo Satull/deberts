@@ -1,7 +1,7 @@
 package de.satull.deberts.model.web;
 
 import de.satull.deberts.model.enums.Suit;
-import de.satull.deberts.model.enums.SuitDeck;
+import de.satull.deberts.model.enums.Value;
 import java.util.Objects;
 
 /**
@@ -12,16 +12,17 @@ import java.util.Objects;
  * @since 1.0
  */
 public class Card {
+
   private final Suit suit;
-  private final SuitDeck value;
+  private final Value value;
 
   /**
    * Creates a card entity
    *
-   * @param suit suit of the card
+   * @param suit      suit of the card
    * @param cardValue value of the card
    */
-  public Card(Suit suit, SuitDeck cardValue) {
+  public Card(Suit suit, Value cardValue) {
     this.suit = suit;
     this.value = cardValue;
   }
@@ -50,7 +51,7 @@ public class Card {
    *
    * @return card value
    */
-  public SuitDeck getValue() {
+  public Value getValue() {
     return value;
   }
 

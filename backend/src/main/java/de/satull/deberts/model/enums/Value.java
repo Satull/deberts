@@ -7,6 +7,6 @@ package de.satull.deberts.model.enums;
  * @version 1.5
  * @since 1.0
  */
-public enum SuitDeck {
+public enum Value {
   SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE
 }
