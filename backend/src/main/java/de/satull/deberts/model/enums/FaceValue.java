@@ -1,12 +1,12 @@
 package de.satull.deberts.model.enums;
 
 /**
- * Represents all relevant cards for each suit.
+ * Represents all relevant face values of cards.
  *
  * @author Ievgenii Izrailtenko
- * @version 1.5
+ * @version 1.0
  * @since 1.0
  */
-public enum Value {
+public enum FaceValue {
   SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE
 }
