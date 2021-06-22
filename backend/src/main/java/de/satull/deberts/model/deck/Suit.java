@@ -1,4 +1,4 @@
-package de.satull.deberts.model.enums;
+package de.satull.deberts.model.deck;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;

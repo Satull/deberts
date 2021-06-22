@@ -1,7 +1,4 @@
-package de.satull.deberts.model.web;
-
-import de.satull.deberts.model.enums.FaceValue;
-import de.satull.deberts.model.enums.Suit;
+package de.satull.deberts.model.deck;
 
 /**
  * Represents a single card. Each cards has a suit and face value. Active parameter defines if card
@@ -23,15 +20,31 @@ public class Card {
     this.active = true;
   }
 
+  private Card(Card card) {
+    this.suit = card.getSuit();
+    this.faceValue = card.getValue();
+    this.active = card.isActive();
+  }
+
   /**
    * Factory method to create a new card entity. Each new card is by default active.
    *
    * @param suit          suit of the card
    * @param cardFaceValue value of the card
-   * @return card entity
+   * @return new card object
    */
   public static Card newInstance(Suit suit, FaceValue cardFaceValue) {
     return new Card(suit, cardFaceValue);
+  }
+
+  /**
+   * Factory method to copy the card entity.
+   *
+   * @param card card to copy
+   * @return new card object
+   */
+  public static Card newInstance(Card card) {
+    return new Card(card);
   }
 
   /**
@@ -62,11 +75,40 @@ public class Card {
   }
 
   /**
+   * Gets a suit int value of the card
+   *
+   * @return suit value
+   */
+  public int getSuitValue() {
+    return suit.getValue();
+  }
+
+  /**
    * Gets a value of the card
    *
    * @return card value
    */
   public FaceValue getValue() {
     return faceValue;
+  }
+
+  /**
+   * Returns true if this card has the same suit, false otherwise.
+   *
+   * @param suit suit to check
+   * @return true if the same suit, false otherwise
+   */
+  public boolean hasSuit(Suit suit) {
+    return this.suit.equals(suit);
+  }
+
+  /**
+   * Returns true if this card has the same face value, false otherwise.
+   *
+   * @param faceValue faceValue to check
+   * @return true if the same faceValue, false otherwise
+   */
+  public boolean hasFaceValue(FaceValue faceValue) {
+    return this.faceValue.equals(faceValue);
   }
 }

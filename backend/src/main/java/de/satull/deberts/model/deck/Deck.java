@@ -1,9 +1,5 @@
 package de.satull.deberts.model.deck;
 
-import de.satull.deberts.model.enums.FaceValue;
-import de.satull.deberts.model.enums.Suit;
-import de.satull.deberts.model.web.Card;
-
 
 /**
  * An object that contains and manages cards. This interface provides more methods then business
@@ -38,7 +34,7 @@ public interface Deck {
    * @param faceValue of the card
    * @return card founded card
    */
-  Card getCard(Suit suit, FaceValue faceValue);
+  Card dealCard(Suit suit, FaceValue faceValue);
 
   /**
    * Removes card from the deck.
