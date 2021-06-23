@@ -37,13 +37,6 @@ public interface Deck {
   Card dealCard(Suit suit, FaceValue faceValue);
 
   /**
-   * Removes card from the deck.
-   *
-   * @param card card to remove
-   */
-  void removeCard(Card card);
-
-  /**
    * Reset the deck to the init values.
    */
   void resetDeck();

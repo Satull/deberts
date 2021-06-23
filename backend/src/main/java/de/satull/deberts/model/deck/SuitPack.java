@@ -2,8 +2,11 @@ package de.satull.deberts.model.deck;
 
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +77,7 @@ class SuitPack {
    * @return true if this suit pack contains any active Card, false otherwise
    */
   boolean isEmpty() {
-    return activeCars == 0;
+    return activeCars != 0;
   }
 
   /**
@@ -105,6 +108,41 @@ class SuitPack {
       }
     }
     throw new NoSuchElementException("Deck does not contain the card");
+  }
+
+  /**
+   * Returns a random card from the suit pack.
+   *
+   * @return random card from the suit pack
+   */
+  public Card dealRandomCard() {
+    if (!isEmpty()) {
+      List<Card> activeCards = cards.stream().filter(Card::isActive).collect(Collectors.toList());
+      var cardIndex = new Random().nextInt(activeCards.size());
+      Card dealtCard = Card.newInstance(activeCards.get(cardIndex));
+      LOG.debug("Dealt Card: {}", dealtCard);
+      dealtCard.setActive(false);
+      activeCars--;
+      return dealtCard;
+    }
+    throw new NoSuchElementException("Deck does not contain any cards");
+  }
+
+
+  /**
+   * Resets the suit pack to the init values.
+   *
+   * <p>Each contained card is active.
+   */
+  void resetPack() {
+    if (!isEmpty()) {
+      activeCars = 0;
+      for (Card deckCard : cards) {
+        deckCard.setActive(true);
+        activeCars++;
+      }
+    }
+    LOG.debug("SuitPack reset");
   }
 
 }
