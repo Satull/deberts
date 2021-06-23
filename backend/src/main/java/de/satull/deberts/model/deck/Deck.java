@@ -2,8 +2,7 @@ package de.satull.deberts.model.deck;
 
 
 /**
- * An object that contains and manages cards. This interface provides more methods then business
- * logic to improve test capability of the object.
+ * Cards grouped by suit. The user of this interface can manage stored cards inside of this object.
  *
  * @author Ievgenii Izrailtenko
  * @version 1.0
@@ -13,55 +12,56 @@ package de.satull.deberts.model.deck;
 public interface Deck {
 
   /**
-   * Returns true if this deck contains the specified Card false otherwise.
+   * Adds a {@code Card} to the {@code Deck}.
    *
-   * @param card the card to search for
-   * @return true if this Deck contains card, false otherwise
+   * @param card a {@code Card} to add
+   */
+  void addCard(Card card);
+
+  /**
+   * Returns {@code true} if this {@code Deck} contains the specified {@code Card}, {@code false}
+   * otherwise.
+   *
+   * @param card a {@code Card} to search for
+   * @return {@code true} if this {@code Deck} contains card, {@code false} otherwise
    */
   boolean contains(Card card);
 
   /**
-   * Returns the number of cards in this deck.
+   * Returns the number of cards inside this {@code Deck}.
    *
-   * @return number of cards
+   * @return a number of cards
    */
   int countCards();
 
   /**
-   * Returns the card from the deck using suit and value.
+   * Returns the {@code Card} from the {@code Deck} using {@code Suit} and {@code Value}.
    *
-   * @param suit      of the card
-   * @param faceValue of the card
-   * @return card founded card
+   * @param suit      a {@code Suit} of the {@code Card}
+   * @param faceValue a {@code faceValue} of the {@code Card}
+   * @return card founded {@code Card}
    */
   Card dealCard(Suit suit, FaceValue faceValue);
 
   /**
-   * Reset the deck to the init values.
+   * Returns a random {@code Card} from the {@code Deck}.
+   *
+   * @return random {@code Card}
+   */
+  Card dealRandomCard();
+
+  /**
+   * Returns a random {@code Card} from the specified suit of the {@code Deck}.
+   *
+   * @param suit {@code Suit} to get a {@code Card}
+   * @return a random {@code Card} from the {@code Suit}
+   */
+  Card dealRandomCardFromSuit(Suit suit);
+
+  /**
+   * Resets a {@code Deck} to its init values.
    */
   void resetDeck();
-
-  /**
-   * Returns a random card from the deck.
-   *
-   * @return random card from the deck
-   */
-  Card getRandomCard();
-
-  /**
-   * Returns a random card from the specified suit of the deck.
-   *
-   * @param suit suit to get a card
-   * @return random card from the suit
-   */
-  Card getRandomCardFromSuit(Suit suit);
-
-  /**
-   * Add card into the deck.
-   *
-   * @param card to add
-   */
-  void addCard(Card card);
 
 
 }

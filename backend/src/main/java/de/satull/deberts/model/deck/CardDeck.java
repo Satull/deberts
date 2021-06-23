@@ -1,16 +1,16 @@
 package de.satull.deberts.model.deck;
 
-import edu.emory.mathcs.backport.java.util.LinkedList;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
- * An object that contains and manages cards. Cards are grouped by suits. Each suit is a set of
- * cards.
+ * An entity that contains and manages cards. Cards are grouped by {@code SuitPack}. All suits are
+ * inside of {@code ArrayList}.
  *
  * @author Ievgenii Izrailtenko
  * @version 1.0
@@ -21,12 +21,12 @@ public class CardDeck implements Deck {
   private static final Logger LOG =
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   private final ArrayList<SuitPack> suitList = new ArrayList<>(4);
-  private final LinkedList fullSuits = new LinkedList();
+  private final LinkedList<Suit> fullSuits = new LinkedList<>();
 
   /**
-   * Creates new CardDeck entity. During initialisation creates cards using cartesian product of
-   * Suit and FaceValue. Visibility of constructor is package private in order to create single
-   * creation point in DeckFactory.
+   * Creates new {@code CardDeck} entity. During initialisation creates cards using cartesian
+   * product of Suit and FaceValue. Visibility of constructor is package private in order to create
+   * single creation point in {@code DeckFactory}.
    */
   CardDeck() {
     for (Suit suit : Suit.values()) {
@@ -44,10 +44,22 @@ public class CardDeck implements Deck {
   }
 
   /**
-   * Returns true if this deck contains the specified Card false otherwise.
+   * Adds a {@code Card} to the {@code Deck}.
    *
-   * @param card the card to search for
-   * @return true if this Deck contains card, false otherwise
+   * @param card a {@code Card} to add
+   */
+  @Override
+  public void addCard(Card card) {
+    SuitPack suitCardList = suitList.get(card.getSuitValue());
+    suitCardList.addCard(card);
+  }
+
+  /**
+   * Returns {@code true} if this {@code Deck} contains the specified {@code Card}, {@code false}
+   * otherwise.
+   *
+   * @param card a {@code Card} to search for
+   * @return {@code true} if this {@code Deck} contains card, {@code false} otherwise
    */
   @Override
   public boolean contains(Card card) {
@@ -56,9 +68,9 @@ public class CardDeck implements Deck {
   }
 
   /**
-   * Returns the number of cards in this deck.
+   * Returns the number of cards inside this {@code Deck}.
    *
-   * @return number of cards
+   * @return a number of cards
    */
   @Override
   public int countCards() {
@@ -70,11 +82,14 @@ public class CardDeck implements Deck {
   }
 
   /**
-   * Returns the card from the deck using suit and value.
+   * Returns the {@code Card} from the {@code Deck} using {@code Suit} and {@code Value}.
    *
-   * @param suit      of the card
-   * @param faceValue of the card
-   * @return card founded card
+   * <p>Deals a {@code Card} from its {@code SuitPack}. Removes the {@code suitPack} from full
+   * suits if it gets empty.
+   *
+   * @param suit      a {@code Suit} of the {@code Card}
+   * @param faceValue a {@code faceValue} of the {@code Card}
+   * @return card founded {@code Card}
    */
   @Override
   public Card dealCard(Suit suit, FaceValue faceValue) {
@@ -87,7 +102,30 @@ public class CardDeck implements Deck {
   }
 
   /**
-   * Resets the deck to the init values.
+   * Returns a random {@code Card} from the {@code Deck}.
+   *
+   * @return a random {@code Card}
+   */
+  @Override
+  public Card dealRandomCard() {
+    var suitIndex = new Random().nextInt(fullSuits.size());
+    SuitPack suitPack = suitList.get(suitIndex);
+    return suitPack.dealRandomCard();
+  }
+
+  /**
+   * Returns a random {@code Card} from the specified suit of the {@code Deck}.
+   *
+   * @param suit {@code Suit} to get a {@code Card}
+   * @return a random {@code Card} from the {@code Suit}
+   */
+  @Override
+  public Card dealRandomCardFromSuit(Suit suit) {
+    return suitList.get(suit.getValue()).dealRandomCard();
+  }
+
+  /**
+   * Resets a {@code Deck} to its init values.
    */
   @Override
   public void resetDeck() {
@@ -99,39 +137,5 @@ public class CardDeck implements Deck {
       }
     }
     LOG.debug("Deck successfully reset!");
-  }
-
-  /**
-   * Returns a random card from the deck.
-   *
-   * @return random card from the deck
-   */
-  @Override
-  public Card getRandomCard() {
-    var suitIndex = new Random().nextInt(fullSuits.size());
-    SuitPack suitPack = suitList.get(suitIndex);
-    return suitPack.dealRandomCard();
-  }
-
-  /**
-   * Returns a random card from the specified suit of the deck.
-   *
-   * @param suit suit to get a card
-   * @return random card from the suit
-   */
-  @Override
-  public Card getRandomCardFromSuit(Suit suit) {
-    return suitList.get(suit.getValue()).dealRandomCard();
-  }
-
-  /**
-   * Add card into the deck.
-   *
-   * @param card to add
-   */
-  @Override
-  public void addCard(Card card) {
-    SuitPack suitCardList = suitList.get(card.getSuitValue());
-    suitCardList.addCard(card);
   }
 }
