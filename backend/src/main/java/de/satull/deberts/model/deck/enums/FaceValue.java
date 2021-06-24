@@ -1,4 +1,4 @@
-package de.satull.deberts.model.deck;
+package de.satull.deberts.model.deck.enums;
 
 /**
  * Represents all relevant face values of cards.

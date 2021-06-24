@@ -1,9 +1,9 @@
-package de.satull.deberts.model.enums;
+package de.satull.deberts.model.deck.enums;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Represents all owners for card decks.
+ * Represents all owners for {@code Decks}.
  *
  * @author Ievgenii Izrailtenko
  * @version 1.0

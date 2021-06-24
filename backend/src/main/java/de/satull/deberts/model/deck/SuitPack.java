@@ -1,5 +1,6 @@
 package de.satull.deberts.model.deck;
 
+import de.satull.deberts.model.deck.enums.FaceValue;
 import java.lang.invoke.MethodHandles;
 import java.util.HashSet;
 import java.util.List;
@@ -11,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * An object that contains and manages if the suit cards. Each suit is a set of cards. Deal or
- * removed cards will be marked as not active.
+ * An object that contains and manages the suit {@code Cards}. Each suit is a {@code Set} of {@code
+ * Cards}. Deal or removed cards will be marked as not active.
  *
  * @author Ievgenii Izrailtenko
  * @version 1.0
@@ -33,18 +34,18 @@ class SuitPack {
 
 
   /**
-   * Factory method to create a new suit pack.
+   * Factory method to create a new {@code SuitPack}.
    *
-   * @return new SuitPack object
+   * @return new {@code SuitPack} object
    */
   static SuitPack newInstance() {
     return new SuitPack();
   }
 
   /**
-   * Adds a new card to the suit pack.
+   * Adds a new {@code Card} to the {@code SuitPack}.
    *
-   * @param card card to add
+   * @param card {@code Card} to add
    */
   void addCard(Card card) {
     cards.add(card);
@@ -53,10 +54,11 @@ class SuitPack {
   }
 
   /**
-   * Returns true if this suit pack contains the specified Card, false otherwise.
+   * Returns {@code true} if this {@code SuitPack} contains the specified {@code Card}, {@code
+   * false} otherwise.
    *
-   * @param value face value of the card to search for
-   * @return true if this suit pack contains Card, false otherwise
+   * @param value {@code FaceValue} of the {@code Card} to search for
+   * @return {@code true} if this {@code SuitPack} contains {@code Card}, {@code false} otherwise
    */
   boolean contains(FaceValue value) {
     if (activeCars == 0) {
@@ -72,28 +74,29 @@ class SuitPack {
   }
 
   /**
-   * Returns true if this suit pack contains any active Card, false otherwise.
+   * Returns {@code true} if this {@code SuitPack} contains any active {@code Card}, {@code false}
+   * otherwise.
    *
-   * @return true if this suit pack contains any active Card, false otherwise
+   * @return {@code true}  if {@code SuitPack} has active {@code Card}, {@code false} otherwise
    */
   boolean isEmpty() {
     return activeCars != 0;
   }
 
   /**
-   * Return the number of the active Cards in the SuitPack
+   * Return the number of the active {@code Cards} in the {@code SuitPack}
    *
-   * @return number of Cards
+   * @return number of {@code Cards}
    */
   int getActiveCars() {
     return activeCars;
   }
 
   /**
-   * Returns the card from the suit pack  using suit and value.
+   * Returns the {@code Card} from the {@code SuitPack} using {@code Suit} and {@code FaceValue}.
    *
-   * @param faceValue face value of the card
-   * @return founded card
+   * @param faceValue value of the {@code Card}
+   * @return founded {@code Card}
    */
   Card dealCard(FaceValue faceValue) {
     if (!isEmpty()) {
@@ -111,9 +114,9 @@ class SuitPack {
   }
 
   /**
-   * Returns a random card from the suit pack.
+   * Returns a random {@code Card} from the {@code SuitPack}.
    *
-   * @return random card from the suit pack
+   * @return random {@code Card} from the {@code SuitPack}
    */
   public Card dealRandomCard() {
     if (!isEmpty()) {
@@ -130,9 +133,9 @@ class SuitPack {
 
 
   /**
-   * Resets the suit pack to the init values.
+   * Resets the {@code SuitPack} to the init values.
    *
-   * <p>Each contained card is active.
+   * <p>Each contained {@code Card} is active.
    */
   void resetPack() {
     if (!isEmpty()) {
@@ -145,4 +148,35 @@ class SuitPack {
     LOG.debug("SuitPack reset");
   }
 
+  @Override
+  public int hashCode() {
+    int result = cards.hashCode();
+    result = 31 * result + getActiveCars();
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof SuitPack)) {
+      return false;
+    }
+
+    var suitPack = (SuitPack) o;
+
+    if (getActiveCars() != suitPack.getActiveCars()) {
+      return false;
+    }
+    return cards.equals(suitPack.cards);
+  }
+
+  @Override
+  public String toString() {
+    return "SuitPack{" +
+        "cards=" + cards +
+        ", activeCars=" + activeCars +
+        '}';
+  }
 }

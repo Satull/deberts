@@ -1,8 +1,11 @@
 package de.satull.deberts.model.deck;
 
+import de.satull.deberts.model.deck.enums.FaceValue;
+import de.satull.deberts.model.deck.enums.Suit;
+
 /**
- * Represents a single card. Each cards has a suit and face value. Active parameter defines if card
- * is ready to play or was already dealt.
+ * Represents a single card. Each card has a {@code Suit} and {@code FaceValue}. Active parameter
+ * defines if {@code Card} is ready to play or was already dealt.
  *
  * @author Ievgenii Izrailtenko
  * @version 1.0
@@ -27,37 +30,38 @@ public class Card {
   }
 
   /**
-   * Factory method to create a new card entity. Each new card is by default active.
+   * Factory method to create a new {@code Card} entity. Each new {@code Card} is by default
+   * active.
    *
-   * @param suit          suit of the card
-   * @param cardFaceValue value of the card
-   * @return new card object
+   * @param suit      {@code Suit} of the {@code Card}
+   * @param faceValue {@code faceValue} of the {@code Card}
+   * @return new {@code Card} object
    */
-  public static Card newInstance(Suit suit, FaceValue cardFaceValue) {
-    return new Card(suit, cardFaceValue);
+  public static Card newInstance(Suit suit, FaceValue faceValue) {
+    return new Card(suit, faceValue);
   }
 
   /**
-   * Factory method to copy the card entity.
+   * Factory method to copy a {@code Card}.
    *
-   * @param card card to copy
-   * @return new card object
+   * @param card a {@code Card} to copy
+   * @return a new {@code Card} object
    */
   public static Card newInstance(Card card) {
     return new Card(card);
   }
 
   /**
-   * Returns true if the card is ready to play.
+   * Returns {@code true} if the {@code Card} is ready to play, {@code false} otherwise.
    *
-   * @return true if card is active
+   * @return {@code true} if {@code Card} is active, {@code false} otherwise
    */
   public boolean isActive() {
     return active;
   }
 
   /**
-   * Sets active status for the card.
+   * Sets active status for the {@code Card}.
    *
    * @param active new active status
    */
@@ -66,47 +70,48 @@ public class Card {
   }
 
   /**
-   * Gets a suit of the card
+   * Gets a {@code Suit} of the {@code Card}.
    *
-   * @return suit name
+   * @return {@code Suit} name
    */
   public Suit getSuit() {
     return suit;
   }
 
   /**
-   * Gets a suit int value of the card
+   * Gets a {@code Suit int} value of the {@code Card}.
    *
-   * @return suit value
+   * @return {@code Suit} value
    */
   public int getSuitValue() {
     return suit.getValue();
   }
 
   /**
-   * Gets a value of the card
+   * Gets a {@code faceValue} of the {@code Card}.
    *
-   * @return card value
+   * @return {@code Card faceValue}
    */
   public FaceValue getValue() {
     return faceValue;
   }
 
   /**
-   * Returns true if this card has the same suit, false otherwise.
+   * Returns {@code true} if this {@code Card} has the same {@code Suit}, {@code false} otherwise.
    *
-   * @param suit suit to check
-   * @return true if the same suit, false otherwise
+   * @param suit {@code Suit} to check
+   * @return {@code true} if the same {@code Suit}, {@code false} otherwise
    */
   public boolean hasSuit(Suit suit) {
     return this.suit.equals(suit);
   }
 
   /**
-   * Returns true if this card has the same face value, false otherwise.
+   * Returns {@code true} if this {@code Card} has the same {@code FaceValue}, {@code false}
+   * otherwise.
    *
-   * @param faceValue faceValue to check
-   * @return true if the same faceValue, false otherwise
+   * @param faceValue {@code FaceValue} to check
+   * @return {@code true} if the same {@code FaceValue}, {@code false} otherwise
    */
   public boolean hasFaceValue(FaceValue faceValue) {
     return this.faceValue.equals(faceValue);
