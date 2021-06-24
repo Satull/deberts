@@ -1,16 +1,24 @@
 package de.satull.deberts.model.deck;
 
-import de.satull.deberts.model.enums.Owner;
+import de.satull.deberts.model.deck.enums.Owner;
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Factory class to create different Deck implementations.
+ * Factory class to create different {@code Deck} implementations.
  *
  * @author Ievgenii Izrailtenko
  * @version 1.0
  * @see CardDeck
+ * @see HandDeck
  * @since 1.0
  */
 public class DeckFactory {
+
+  private static final Logger LOG =
+      LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
+  private static final int DEBERTS_MAX_CARDS_NUMBER = 9;
 
   private DeckFactory() {
   }
@@ -23,12 +31,13 @@ public class DeckFactory {
    * @param owner owner of the generated deck
    * @return new Deck entity
    */
-
   public static Deck createDeck(Owner owner) {
-    if (owner.equals(Owner.NOBODY)) {
-      return new CardDeck();
+    if (owner.equals(Owner.BOT) || owner.equals(Owner.PLAYER)) {
+      LOG.debug("Try to create a HandDeck for: {}", owner);
+      return new HandDeck(owner, DEBERTS_MAX_CARDS_NUMBER);
     } else {
-      return null;
+      LOG.debug("Try to create a CardDeck");
+      return new CardDeck();
     }
   }
 }
