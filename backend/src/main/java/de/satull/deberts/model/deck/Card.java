@@ -116,4 +116,32 @@ public class Card {
   public boolean hasFaceValue(FaceValue faceValue) {
     return this.faceValue.equals(faceValue);
   }
+
+  @Override
+  public int hashCode() {
+    int result = getSuit().hashCode();
+    result = 31 * result + faceValue.hashCode();
+    result = 31 * result + (isActive() ? 1 : 0);
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Card)) {
+      return false;
+    }
+
+    var card = (Card) o;
+
+    if (isActive() != card.isActive()) {
+      return false;
+    }
+    if (getSuit() != card.getSuit()) {
+      return false;
+    }
+    return faceValue == card.faceValue;
+  }
 }
