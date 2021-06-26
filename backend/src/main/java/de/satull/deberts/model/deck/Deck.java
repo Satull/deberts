@@ -43,7 +43,7 @@ public abstract class Deck {
    * @return {@code true} if this {@code Deck} contains card, {@code false} otherwise
    */
   public boolean contains(Card card) {
-    SuitPack suitPack = suitList.get(card.getSuitValue());
+    var suitPack = suitList.get(card.getSuitValue());
     return suitPack.contains(card.getValue());
   }
 
@@ -55,7 +55,7 @@ public abstract class Deck {
   public int countCards() {
     var activeCards = 0;
     for (SuitPack suitPack : suitList) {
-      activeCards += suitPack.getActiveCars();
+      activeCards += suitPack.getActiveCards();
     }
     return activeCards;
   }
@@ -68,8 +68,8 @@ public abstract class Deck {
    * @return card founded {@code Card}
    */
   public Card dealCard(Suit suit, FaceValue faceValue) {
-    SuitPack suitPack = suitList.get(suit.getValue());
-    Card dealtCard = suitPack.dealCard(faceValue);
+    var suitPack = suitList.get(suit.getValue());
+    var dealtCard = suitPack.dealCard(faceValue);
     if (suitPack.isEmpty()) {
       fullSuits.remove(suit);
     }
@@ -83,7 +83,7 @@ public abstract class Deck {
    */
   public Card dealRandomCard() {
     var suitIndex = new Random().nextInt(fullSuits.size());
-    SuitPack suitPack = suitList.get(suitIndex);
+    var suitPack = suitList.get(suitIndex);
     return suitPack.dealRandomCard();
   }
 
@@ -102,7 +102,7 @@ public abstract class Deck {
    */
   public void resetDeck() {
     for (Suit suit : Suit.values()) {
-      SuitPack suitPack = suitList.get(suit.getValue());
+      var suitPack = suitList.get(suit.getValue());
       suitPack.resetPack();
       if (!suitPack.isEmpty()) {
         fullSuits.add(suit);

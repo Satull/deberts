@@ -19,6 +19,7 @@ class CardTest {
       "KING", "ACE"})
   void newInstance_diamondsSuitEachFaceValue_byDefault(FaceValue faceValue) {
     Card card = Card.newInstance(Suit.DIAMONDS, faceValue);
+
     assertThat(card.getValue()).isEqualTo(faceValue);
   }
 
@@ -27,6 +28,7 @@ class CardTest {
       "KING", "ACE"})
   void newInstance_heartsSuitEachFaceValue_byDefault(FaceValue faceValue) {
     Card card = Card.newInstance(Suit.HEARTS, faceValue);
+
     assertThat(card.getValue()).isEqualTo(faceValue);
   }
 
@@ -35,6 +37,7 @@ class CardTest {
       "KING", "ACE"})
   void newInstance_spadesSuitEachFaceValue_byDefault(FaceValue faceValue) {
     Card card = Card.newInstance(Suit.SPADES, faceValue);
+
     assertThat(card.getValue()).isEqualTo(faceValue);
   }
 
@@ -43,6 +46,7 @@ class CardTest {
       "KING", "ACE"})
   void newInstance_clubsSuitEachFaceValue_byDefault(FaceValue faceValue) {
     Card card = Card.newInstance(Suit.CLUBS, faceValue);
+
     assertThat(card.getValue()).isEqualTo(faceValue);
   }
 
@@ -50,6 +54,7 @@ class CardTest {
   @EnumSource(value = Suit.class, names = {"DIAMONDS", "HEARTS", "SPADES", "CLUBS"})
   void newInstance_faceValueSevenEachSuit_byDefault(Suit suit) {
     Card card = Card.newInstance(suit, FaceValue.SEVEN);
+
     assertThat(card.getSuit()).isEqualTo(suit);
   }
 
@@ -57,19 +62,14 @@ class CardTest {
   void newInstance_newInstanceFromCardDiamondsSeven_isEqualByDefault() {
     Card firstCard = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
     Card secondCard = Card.newInstance(firstCard);
-    assertThat(firstCard).isEqualTo(secondCard);
-  }
 
-  @Test
-  void equals_diamondsSevenRandomObject_isNotEqual() {
-    Card card = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
-    Object object = new Object();
-    assertThat(card).isNotEqualTo(object);
+    assertThat(firstCard).isEqualTo(secondCard);
   }
 
   @Test
   void equals_diamondsSevenWithSameCard_equalByDefault() {
     Card card = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
+
     assertThat(card).isEqualTo(card);
   }
 
@@ -77,7 +77,9 @@ class CardTest {
   void equals_diamondsSevenNewInstanceFromCardDiamondsSevenNotActive_isNotEqual() {
     Card firstCard = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
     Card secondCard = Card.newInstance(firstCard);
+
     secondCard.setActive(false);
+
     assertThat(firstCard).isNotEqualTo(secondCard);
   }
 
@@ -85,6 +87,7 @@ class CardTest {
   void equals_diamondsSevenHeartsEight_isNotEqual() {
     Card firstCard = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
     Card secondCard = Card.newInstance(Suit.HEARTS, FaceValue.EIGHT);
+
     assertThat(firstCard).isNotEqualTo(secondCard);
   }
 
@@ -92,6 +95,7 @@ class CardTest {
   void equals_diamondsSevenDiamondsEight_isNotEqual() {
     Card firstCard = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
     Card secondCard = Card.newInstance(Suit.DIAMONDS, FaceValue.EIGHT);
+
     assertThat(firstCard).isNotEqualTo(secondCard);
   }
 
@@ -99,6 +103,7 @@ class CardTest {
   void hashcode_diamondsSevenNewInstanceFromCardDiamondsSeven_isEqual() {
     Card firstCard = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
     Card secondCard = Card.newInstance(firstCard);
+
     assertThat(firstCard).hasSameHashCodeAs(secondCard);
   }
 
@@ -106,6 +111,7 @@ class CardTest {
   void hashcode_diamondsSevenHeartsEight_isNotEqual() {
     Card firstCard = Card.newInstance(Suit.DIAMONDS, FaceValue.SEVEN);
     Card secondCard = Card.newInstance(Suit.HEARTS, FaceValue.EIGHT);
+
     assertThat(firstCard.hashCode()).isNotEqualTo(secondCard.hashCode());
   }
 
@@ -113,25 +119,30 @@ class CardTest {
   @EnumSource(value = Suit.class, names = {"DIAMONDS", "HEARTS", "SPADES", "CLUBS"})
   void getValue_faceValueEightEachSuit_suitValueByDefault(Suit suit) {
     Card card = Card.newInstance(suit, FaceValue.SEVEN);
+
     assertThat(card.getSuitValue()).isEqualTo(suit.getValue());
   }
 
   @Test
   void isActive_newInstance_trueByDefault() {
     Card card = Card.newInstance(Suit.DIAMONDS, FaceValue.ACE);
+
     assertThat(card.isActive()).isTrue();
   }
 
   @Test
   void isActive_newInstanceSetFalse_false() {
     Card card = Card.newInstance(Suit.DIAMONDS, FaceValue.ACE);
+
     card.setActive(false);
+
     assertThat(card.isActive()).isFalse();
   }
 
   @Test
   void hasSuit_suitDiamondsCheckWithDiamondsSuit_true() {
     Card card = Card.newInstance(Suit.DIAMONDS, FaceValue.ACE);
+
     assertThat(card.hasSuit(Suit.DIAMONDS)).isTrue();
   }
 
@@ -139,12 +150,14 @@ class CardTest {
   @EnumSource(value = Suit.class, names = {"HEARTS", "SPADES", "CLUBS"})
   void hasSuit_suitDiamondsCheckWithOtherSuits_false(Suit suit) {
     Card card = Card.newInstance(suit, FaceValue.SEVEN);
+
     assertThat(card.hasSuit(suit)).isTrue();
   }
 
   @Test
   void hasFaceValue_faceValueNineCheckWithNineFaceValue_true() {
     Card card = Card.newInstance(Suit.DIAMONDS, FaceValue.NINE);
+
     assertThat(card.hasFaceValue(FaceValue.NINE)).isTrue();
   }
 
@@ -153,6 +166,7 @@ class CardTest {
       "ACE"})
   void hasFaceValue_suitDiamondsCheckWithOtherSuits_false(FaceValue faceValue) {
     Card card = Card.newInstance(Suit.DIAMONDS, faceValue);
+
     assertThat(card.hasFaceValue(faceValue)).isTrue();
   }
 
@@ -164,6 +178,7 @@ class CardTest {
         ", faceValue=" + FaceValue.NINE +
         ", active=" + true +
         '}';
+
     assertThat(card.toString()).hasToString(expectedString);
   }
 }

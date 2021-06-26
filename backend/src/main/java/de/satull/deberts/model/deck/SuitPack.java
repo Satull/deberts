@@ -48,19 +48,36 @@ class SuitPack {
    * @param card {@code Card} to add
    */
   void addCard(Card card) {
+    if (this.checkPresence(card.getValue())) {
+      throw new IllegalArgumentException(
+          "Card: " + card + " with value: " + card.getValue() + " is already in the suitPack");
+    }
     cards.add(card);
     activeCars++;
     LOG.debug("Added Card: {}", card);
   }
 
   /**
-   * Returns {@code true} if this {@code SuitPack} contains the specified {@code Card}, {@code
-   * false} otherwise.
+   * Returns {@code true} if this {@code SuitPack} contains active the specified {@code Card},
+   * {@code false} otherwise.
    *
    * @param value {@code FaceValue} of the {@code Card} to search for
    * @return {@code true} if this {@code SuitPack} contains {@code Card}, {@code false} otherwise
    */
   boolean contains(FaceValue value) {
+    if (activeCars == 0) {
+      return false;
+    }
+
+    for (Card deckCard : cards) {
+      if (deckCard.hasFaceValue(value) && deckCard.isActive()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private boolean checkPresence(FaceValue value) {
     if (activeCars == 0) {
       return false;
     }
@@ -80,7 +97,7 @@ class SuitPack {
    * @return {@code true}  if {@code SuitPack} has active {@code Card}, {@code false} otherwise
    */
   boolean isEmpty() {
-    return activeCars != 0;
+    return activeCars == 0;
   }
 
   /**
@@ -88,7 +105,7 @@ class SuitPack {
    *
    * @return number of {@code Cards}
    */
-  int getActiveCars() {
+  int getActiveCards() {
     return activeCars;
   }
 
@@ -103,7 +120,7 @@ class SuitPack {
       for (Card deckCard : cards) {
         if (deckCard.hasFaceValue(faceValue) && deckCard.isActive()) {
           LOG.debug("Dealt Card: {}", deckCard);
-          Card dealtCard = Card.newInstance(deckCard);
+          var dealtCard = Card.newInstance(deckCard);
           deckCard.setActive(false);
           activeCars--;
           return dealtCard;
@@ -122,7 +139,7 @@ class SuitPack {
     if (!isEmpty()) {
       List<Card> activeCards = cards.stream().filter(Card::isActive).collect(Collectors.toList());
       var cardIndex = new Random().nextInt(activeCards.size());
-      Card dealtCard = Card.newInstance(activeCards.get(cardIndex));
+      var dealtCard = Card.newInstance(activeCards.get(cardIndex));
       LOG.debug("Dealt Card: {}", dealtCard);
       dealtCard.setActive(false);
       activeCars--;
@@ -138,12 +155,10 @@ class SuitPack {
    * <p>Each contained {@code Card} is active.
    */
   void resetPack() {
-    if (!isEmpty()) {
-      activeCars = 0;
-      for (Card deckCard : cards) {
-        deckCard.setActive(true);
-        activeCars++;
-      }
+    activeCars = 0;
+    for (Card deckCard : cards) {
+      deckCard.setActive(true);
+      activeCars++;
     }
     LOG.debug("SuitPack reset");
   }
@@ -151,7 +166,7 @@ class SuitPack {
   @Override
   public int hashCode() {
     int result = cards.hashCode();
-    result = 31 * result + getActiveCars();
+    result = 31 * result + getActiveCards();
     return result;
   }
 
@@ -166,7 +181,7 @@ class SuitPack {
 
     var suitPack = (SuitPack) o;
 
-    if (getActiveCars() != suitPack.getActiveCars()) {
+    if (getActiveCards() != suitPack.getActiveCards()) {
       return false;
     }
     return cards.equals(suitPack.cards);
