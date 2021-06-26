@@ -144,4 +144,13 @@ public class Card {
     }
     return faceValue == card.faceValue;
   }
+
+  @Override
+  public String toString() {
+    return "Card{" +
+        "suit=" + suit +
+        ", faceValue=" + faceValue +
+        ", active=" + active +
+        '}';
+  }
 }
