@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import de.satull.deberts.model.deck.enums.FaceValue;
 import de.satull.deberts.model.deck.enums.Suit;
 import java.util.NoSuchElementException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,9 +14,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SuitPackTest {
 
+  private SuitPack firstSuitPack;
+
+  @BeforeEach
+  void beforeEach() {
+    firstSuitPack = SuitPack.newInstance();
+  }
+
   @Test
   void hashCode_createTwoNewEmptyInstances_sameHashCodeByDefault() {
-    SuitPack firstSuitPack = SuitPack.newInstance();
     SuitPack secondSuitPack = SuitPack.newInstance();
 
     assertThat(firstSuitPack).hasSameHashCodeAs(secondSuitPack);
@@ -23,7 +30,6 @@ class SuitPackTest {
 
   @Test
   void hashCode_createTwoInstancesAddCardToOtherInstance_differentHashCodes() {
-    SuitPack firstSuitPack = SuitPack.newInstance();
     SuitPack secondSuitPack = SuitPack.newInstance();
 
     Card card = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
@@ -34,7 +40,6 @@ class SuitPackTest {
 
   @Test
   void equals_createTwoNewEmptyInstances_trueByDefault() {
-    SuitPack firstSuitPack = SuitPack.newInstance();
     SuitPack secondSuitPack = SuitPack.newInstance();
 
     assertThat(firstSuitPack).isEqualTo(secondSuitPack);
@@ -42,7 +47,6 @@ class SuitPackTest {
 
   @Test
   void equals_createTwoInstancesAddCardToOtherInstance_false() {
-    SuitPack firstSuitPack = SuitPack.newInstance();
     SuitPack secondSuitPack = SuitPack.newInstance();
 
     Card card = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
@@ -53,181 +57,159 @@ class SuitPackTest {
 
   @Test
   void toString_suitPackWithCardSpadesQueen_expectedToString() {
-    String expectedString = "SuitPack{cards=[Card{suit=SPADES, faceValue=QUEEN, active=true}], activeCars=1}";
-    SuitPack suitPack = SuitPack.newInstance();
+    String expectedString =
+        "SuitPack{cards=[Card{suit=SPADES, faceValue=QUEEN, active=true}], activeCars=1}";
 
     Card card = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
-    suitPack.addCard(card);
+    firstSuitPack.addCard(card);
 
-    assertThat(suitPack).hasToString(expectedString);
+    assertThat(firstSuitPack).hasToString(expectedString);
   }
 
   @Test
   void isEmpty_newInstance_trueByDefault() {
-    SuitPack suitPack = SuitPack.newInstance();
-
-    assertThat(suitPack.isEmpty()).isTrue();
+    assertThat(firstSuitPack.isEmpty()).isTrue();
   }
 
   @Test
   void isEmpty_newInstanceAddOneCard_false() {
-    SuitPack suitPack = SuitPack.newInstance();
-
     Card card = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
-    suitPack.addCard(card);
+    firstSuitPack.addCard(card);
 
-    assertThat(suitPack.isEmpty()).isFalse();
+    assertThat(firstSuitPack.isEmpty()).isFalse();
   }
 
   @Test
   void contains_newEmptyInstanceCheckNewCard_falseByDefault() {
-    SuitPack emptySuitPack = SuitPack.newInstance();
     Card card = Card.newInstance(Suit.CLUBS, FaceValue.JACK);
 
-    assertThat(emptySuitPack.contains(card.getValue())).isFalse();
+    assertThat(firstSuitPack.contains(card.getValue())).isFalse();
   }
 
   @Test
   void contains_newInstanceWithCardSpadesQueenCheckNewCardDiamondsKing_false() {
-    SuitPack suitPack = SuitPack.newInstance();
     Card cardToCheck = Card.newInstance(Suit.DIAMONDS, FaceValue.KING);
 
     Card card = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
-    suitPack.addCard(card);
+    firstSuitPack.addCard(card);
 
-    assertThat(suitPack.contains(cardToCheck.getValue())).isFalse();
+    assertThat(firstSuitPack.contains(cardToCheck.getValue())).isFalse();
   }
-
 
   @Test
   void contains_newInstanceWithNotActiveCardSpadesQueenCheckSameActiveCard_false() {
-    SuitPack suitPack = SuitPack.newInstance();
     Card cardToCheck = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
 
     Card card = Card.newInstance(cardToCheck);
-    suitPack.addCard(card);
-    suitPack.dealRandomCard();
+    firstSuitPack.addCard(card);
+    firstSuitPack.dealRandomCard();
 
-    assertThat(suitPack.contains(cardToCheck.getValue())).isFalse();
+    assertThat(firstSuitPack.contains(cardToCheck.getValue())).isFalse();
   }
 
   @Test
   void contains_newInstanceCardSpadesQueenCheckSameActiveCard_true() {
-    SuitPack suitPack = SuitPack.newInstance();
     Card cardToCheck = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
 
     Card card = Card.newInstance(cardToCheck);
-    suitPack.addCard(card);
+    firstSuitPack.addCard(card);
 
-    assertThat(suitPack.contains(cardToCheck.getValue())).isTrue();
+    assertThat(firstSuitPack.contains(cardToCheck.getValue())).isTrue();
   }
 
   @Test
-  void addCard_newInstanceAddTwoTimesSameCard_throwIllegalArgumentException() {
-    SuitPack suitPack = SuitPack.newInstance();
+  void addCard_newInstanceAddTwoTimesSameCard_throwsIllegalArgumentException() {
     Card firstCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
     Card secondCardToAdd = Card.newInstance(firstCardToAdd);
 
-    suitPack.addCard(firstCardToAdd);
+    firstSuitPack.addCard(firstCardToAdd);
 
     assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> suitPack.addCard(secondCardToAdd));
+        .isThrownBy(() -> firstSuitPack.addCard(secondCardToAdd));
   }
 
   @Test
-  void addCard_newInstanceAddNotActiveCardAndActiveCardWithSameValue_throwIllegalArgumentException() {
-    SuitPack suitPack = SuitPack.newInstance();
+  void
+      addCard_newInstanceAddNotActiveCardAndActiveCardWithSameValue_throwsIllegalArgumentException() {
     Card firstCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
     Card secondCardToAdd = Card.newInstance(firstCardToAdd);
 
     firstCardToAdd.setActive(false);
-    suitPack.addCard(firstCardToAdd);
+    firstSuitPack.addCard(firstCardToAdd);
 
     assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> suitPack.addCard(secondCardToAdd));
+        .isThrownBy(() -> firstSuitPack.addCard(secondCardToAdd));
   }
 
   @Test
   void getActiveCards_newInstance_0ByDefault() {
-    SuitPack suitPack = SuitPack.newInstance();
 
-    assertThat(suitPack.getActiveCards()).isZero();
+    assertThat(firstSuitPack.getActiveCards()).isZero();
   }
 
   @Test
   void getActiveCards_suitPackWith4Cards3Active_3ActiveCards() {
-    SuitPack suitPack = SuitPack.newInstance();
     Card firstCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
     Card secondCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.JACK);
     Card thirdCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.TEN);
     Card fourthCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.NINE);
 
-    suitPack.addCard(firstCardToAdd);
-    suitPack.addCard(secondCardToAdd);
-    suitPack.addCard(thirdCardToAdd);
-    suitPack.addCard(fourthCardToAdd);
-    suitPack.dealRandomCard();
+    firstSuitPack.addCard(firstCardToAdd);
+    firstSuitPack.addCard(secondCardToAdd);
+    firstSuitPack.addCard(thirdCardToAdd);
+    firstSuitPack.addCard(fourthCardToAdd);
+    firstSuitPack.dealRandomCard();
 
-    assertThat(suitPack.getActiveCards()).isEqualTo(3);
+    assertThat(firstSuitPack.getActiveCards()).isEqualTo(3);
   }
 
   @Test
   void dealCard_newInstance_throwNoSuchElementException() {
-    SuitPack suitPack = SuitPack.newInstance();
 
     assertThatExceptionOfType(NoSuchElementException.class)
-        .isThrownBy(() -> suitPack.dealCard(FaceValue.QUEEN));
+        .isThrownBy(() -> firstSuitPack.dealCard(FaceValue.QUEEN));
   }
 
   @Test
   void dealCard_suitPackWith4CardsDealSpadesNine_dealCard() {
-    SuitPack suitPack = SuitPack.newInstance();
     Card firstCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
     Card secondCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.JACK);
     Card thirdCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.TEN);
     Card fourthCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.NINE);
 
-    suitPack.addCard(firstCardToAdd);
-    suitPack.addCard(secondCardToAdd);
-    suitPack.addCard(thirdCardToAdd);
-    suitPack.addCard(fourthCardToAdd);
-    Card dealtCard = suitPack.dealCard(firstCardToAdd.getValue());
+    firstSuitPack.addCard(firstCardToAdd);
+    firstSuitPack.addCard(secondCardToAdd);
+    firstSuitPack.addCard(thirdCardToAdd);
+    firstSuitPack.addCard(fourthCardToAdd);
+    Card dealtCard = firstSuitPack.dealCard(firstCardToAdd.getValue());
 
-    assertThat(suitPack.contains(dealtCard.getValue())).isFalse();
+    assertThat(firstSuitPack.contains(dealtCard.getValue())).isFalse();
   }
 
   @Test
   void dealRandomCard_newInstance_throwNoSuchElementException() {
-    SuitPack suitPack = SuitPack.newInstance();
 
     assertThatExceptionOfType(NoSuchElementException.class)
-        .isThrownBy(suitPack::dealRandomCard);
+        .isThrownBy(firstSuitPack::dealRandomCard);
   }
 
   @Test
-  void resetDeck_suitPackWith4CardsDealAllCardsResetDeck_4ActiveCards() {
-    SuitPack suitPack = SuitPack.newInstance();
+  void resetPack_suitPackWith4CardsDealAllCardsResetDeck_4ActiveCards() {
     Card firstCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.QUEEN);
     Card secondCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.JACK);
     Card thirdCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.TEN);
     Card fourthCardToAdd = Card.newInstance(Suit.SPADES, FaceValue.NINE);
 
-    suitPack.addCard(firstCardToAdd);
-    suitPack.addCard(secondCardToAdd);
-    suitPack.addCard(thirdCardToAdd);
-    suitPack.addCard(fourthCardToAdd);
-    suitPack.dealRandomCard();
-    suitPack.dealRandomCard();
-    suitPack.dealRandomCard();
-    suitPack.dealRandomCard();
-    suitPack.resetPack();
+    firstSuitPack.addCard(firstCardToAdd);
+    firstSuitPack.addCard(secondCardToAdd);
+    firstSuitPack.addCard(thirdCardToAdd);
+    firstSuitPack.addCard(fourthCardToAdd);
+    firstSuitPack.dealRandomCard();
+    firstSuitPack.dealRandomCard();
+    firstSuitPack.dealRandomCard();
+    firstSuitPack.dealRandomCard();
+    firstSuitPack.resetPack();
 
-    assertThat(suitPack.getActiveCards()).isEqualTo(4);
+    assertThat(firstSuitPack.getActiveCards()).isEqualTo(4);
   }
 }
-
-
-
-/*
-resetPack
- */

@@ -32,7 +32,6 @@ class SuitPack {
     activeCars = 0;
   }
 
-
   /**
    * Factory method to create a new {@code SuitPack}.
    *
@@ -46,11 +45,12 @@ class SuitPack {
    * Adds a new {@code Card} to the {@code SuitPack}.
    *
    * @param card {@code Card} to add
+   * @throws IllegalArgumentException {@code Card} is already in the {@code SuitPack}
    */
-  void addCard(Card card) {
+  void addCard(Card card) throws IllegalArgumentException {
     if (this.checkPresence(card.getValue())) {
       throw new IllegalArgumentException(
-          "Card: " + card + " with value: " + card.getValue() + " is already in the suitPack");
+          "Card: " + card + " with value: " + card.getValue() + " is already in the SuitPack");
     }
     cards.add(card);
     activeCars++;
@@ -94,14 +94,14 @@ class SuitPack {
    * Returns {@code true} if this {@code SuitPack} contains any active {@code Card}, {@code false}
    * otherwise.
    *
-   * @return {@code true}  if {@code SuitPack} has active {@code Card}, {@code false} otherwise
+   * @return {@code true} if {@code SuitPack} has active {@code Card}, {@code false} otherwise
    */
   boolean isEmpty() {
     return activeCars == 0;
   }
 
   /**
-   * Return the number of the active {@code Cards} in the {@code SuitPack}
+   * Return the number of the active {@code Cards} in the {@code SuitPack}.
    *
    * @return number of {@code Cards}
    */
@@ -114,8 +114,9 @@ class SuitPack {
    *
    * @param faceValue value of the {@code Card}
    * @return founded {@code Card}
+   * @throws NoSuchElementException {@code Card} is not in the {@code SuitPack}
    */
-  Card dealCard(FaceValue faceValue) {
+  Card dealCard(FaceValue faceValue) throws NoSuchElementException {
     if (!isEmpty()) {
       for (Card deckCard : cards) {
         if (deckCard.hasFaceValue(faceValue) && deckCard.isActive()) {
@@ -134,20 +135,21 @@ class SuitPack {
    * Returns a random {@code Card} from the {@code SuitPack}.
    *
    * @return random {@code Card} from the {@code SuitPack}
+   * @throws NoSuchElementException {@code Card} is not in the {@code SuitPack}
    */
-  public Card dealRandomCard() {
+  public Card dealRandomCard() throws NoSuchElementException {
     if (!isEmpty()) {
       List<Card> activeCards = cards.stream().filter(Card::isActive).collect(Collectors.toList());
       var cardIndex = new Random().nextInt(activeCards.size());
+      var deckCard = activeCards.get(cardIndex);
       var dealtCard = Card.newInstance(activeCards.get(cardIndex));
       LOG.debug("Dealt Card: {}", dealtCard);
-      dealtCard.setActive(false);
+      deckCard.setActive(false);
       activeCars--;
       return dealtCard;
     }
     throw new NoSuchElementException("Deck does not contain any cards");
   }
-
 
   /**
    * Resets the {@code SuitPack} to the init values.
@@ -189,9 +191,6 @@ class SuitPack {
 
   @Override
   public String toString() {
-    return "SuitPack{" +
-        "cards=" + cards +
-        ", activeCars=" + activeCars +
-        '}';
+    return "SuitPack{" + "cards=" + cards + ", activeCars=" + activeCars + '}';
   }
 }

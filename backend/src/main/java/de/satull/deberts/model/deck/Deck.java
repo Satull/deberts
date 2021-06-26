@@ -1,12 +1,12 @@
 package de.satull.deberts.model.deck;
 
-
 import de.satull.deberts.model.deck.enums.FaceValue;
 import de.satull.deberts.model.deck.enums.Owner;
 import de.satull.deberts.model.deck.enums.Suit;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +27,13 @@ public abstract class Deck {
   final LinkedList<Suit> fullSuits = new LinkedList<>();
   Owner owner;
 
-
   /**
    * Adds a {@code Card} to the {@code Deck}.
    *
    * @param card a {@code Card} to add
+   * @throws IllegalArgumentException {@code Card} can not be added to the Deck
    */
-  public abstract void addCard(Card card);
+  public abstract void addCard(Card card) throws IllegalArgumentException;
 
   /**
    * Returns {@code true} if this {@code Deck} contains the specified {@code Card}, {@code false}
@@ -63,7 +63,7 @@ public abstract class Deck {
   /**
    * Returns the {@code Card} from the {@code Deck} using {@code Suit} and {@code Value}.
    *
-   * @param suit      a {@code Suit} of the {@code Card}
+   * @param suit a {@code Suit} of the {@code Card}
    * @param faceValue a {@code faceValue} of the {@code Card}
    * @return card founded {@code Card}
    */
@@ -80,11 +80,23 @@ public abstract class Deck {
    * Returns a random {@code Card} from the {@code Deck}.
    *
    * @return a random {@code Card}
+   * @throws NoSuchElementException {@code Deck} is empty
    */
-  public Card dealRandomCard() {
-    var suitIndex = new Random().nextInt(fullSuits.size());
-    var suitPack = suitList.get(suitIndex);
-    return suitPack.dealRandomCard();
+  public Card dealRandomCard() throws NoSuchElementException {
+    try {
+      LOG.debug("FullSuits: {}", fullSuits);
+      var suitIndex = new Random().nextInt(fullSuits.size());
+      Suit suit = fullSuits.get(suitIndex);
+      var suitPack = suitList.get(suit.getValue());
+      LOG.debug("SuitIndex: {}, SuitPack: {}", suitIndex, suitPack);
+      Card cardToDeal = suitPack.dealRandomCard();
+      if (suitPack.isEmpty()) {
+        fullSuits.remove(suit);
+      }
+      return cardToDeal;
+    } catch (IllegalArgumentException e) {
+      throw new NoSuchElementException("Deck does not contain any cards");
+    }
   }
 
   /**
@@ -92,14 +104,13 @@ public abstract class Deck {
    *
    * @param suit {@code Suit} to get a {@code Card}
    * @return a random {@code Card} from the {@code Suit}
+   * @throws NoSuchElementException {@code Suit} is empty
    */
-  public Card dealRandomCardFromSuit(Suit suit) {
+  public Card dealRandomCardFromSuit(Suit suit) throws NoSuchElementException {
     return suitList.get(suit.getValue()).dealRandomCard();
   }
 
-  /**
-   * Resets a {@code Deck} to its init values.
-   */
+  /** Resets a {@code Deck} to its init values. */
   public void resetDeck() {
     for (Suit suit : Suit.values()) {
       var suitPack = suitList.get(suit.getValue());
@@ -112,12 +123,22 @@ public abstract class Deck {
   }
 
   /**
-   * Returns owner of this {@code Deck}
+   * Returns owner of this {@code Deck}.
    *
    * @return owner
    */
   public Owner getOwner() {
     return owner;
+  }
+
+  /**
+   * Returns {@code true} if the {@code Deck} does not contain any {@code Cards}, {@code false}
+   * otherwise.
+   *
+   * @return {@code true} if the {@code Deck} has no cards
+   */
+  public boolean isEmpty() {
+    return fullSuits.isEmpty();
   }
 
   @Override
@@ -146,10 +167,6 @@ public abstract class Deck {
 
   @Override
   public String toString() {
-    return "Deck{" +
-        "suitList=" + suitList +
-        ", fullSuits=" + fullSuits +
-        ", owner=" + owner +
-        '}';
+    return "Deck{" + "suitList=" + suitList + ", fullSuits=" + fullSuits + ", owner=" + owner + '}';
   }
 }

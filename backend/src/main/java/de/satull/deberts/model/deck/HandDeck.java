@@ -23,7 +23,7 @@ public class HandDeck extends Deck {
    * collect {@code Card}s Visibility of constructor is package private in order to create single
    * creation point in {@code DeckFactory}.
    *
-   * @param owner          {@code Owner} of this {@code HandDeck}
+   * @param owner {@code Owner} of this {@code HandDeck}
    * @param maxCardsNumber how much {@code Cards} could contain the {@code HandDeck}
    */
   HandDeck(Owner owner, int maxCardsNumber) {
@@ -37,19 +37,21 @@ public class HandDeck extends Deck {
 
   /**
    * Adds a {@code Card} to the {@code Deck}.
-   * <p>
-   * {@code HandDeck} con not contain more {@code Card}s then {@code maxCardsNumber}
+   *
+   * <p>{@code HandDeck} con not contain more {@code Card}s then {@code maxCardsNumber}
    *
    * @param card a {@code Card} to add
+   * @throws IllegalArgumentException Tries to add over the card limit
    */
   @Override
-  public void addCard(Card card) {
+  public void addCard(Card card) throws IllegalArgumentException {
     if (containedCards < maxCardsNumber) {
       SuitPack suitCardList = suitList.get(card.getSuitValue());
       suitCardList.addCard(card);
       containedCards++;
     } else {
-      throw new IllegalArgumentException("HandDeck contains more then" + maxCardsNumber + "Cards");
+      throw new IllegalArgumentException(
+          "HandDeck can not contain more then" + maxCardsNumber + "Cards");
     }
   }
 
@@ -58,6 +60,7 @@ public class HandDeck extends Deck {
     int result = super.hashCode();
     result = 31 * result + maxCardsNumber;
     result = 31 * result + containedCards;
+    result = 31 * result + owner.hashCode();
     return result;
   }
 
@@ -78,17 +81,22 @@ public class HandDeck extends Deck {
     if (maxCardsNumber != handDeck.maxCardsNumber) {
       return false;
     }
-    return containedCards == handDeck.containedCards;
+    return containedCards == handDeck.containedCards && owner == handDeck.getOwner();
   }
 
   @Override
   public String toString() {
-    return "HandDeck{" +
-        "suitList=" + suitList +
-        ", fullSuits=" + fullSuits +
-        ", owner=" + owner +
-        ", maxCardsNumber=" + maxCardsNumber +
-        ", containedCards=" + containedCards +
-        '}';
+    return "HandDeck{"
+        + "suitList="
+        + suitList
+        + ", fullSuits="
+        + fullSuits
+        + ", owner="
+        + owner
+        + ", maxCardsNumber="
+        + maxCardsNumber
+        + ", containedCards="
+        + containedCards
+        + '}';
   }
 }

@@ -4,7 +4,6 @@ import de.satull.deberts.model.deck.enums.FaceValue;
 import de.satull.deberts.model.deck.enums.Owner;
 import de.satull.deberts.model.deck.enums.Suit;
 
-
 /**
  * An entity that contains and manages cards. Cards are grouped by {@code SuitPack}. All suits are
  * inside of {@code ArrayList}.
@@ -15,7 +14,6 @@ import de.satull.deberts.model.deck.enums.Suit;
  */
 public class CardDeck extends Deck {
 
-
   /**
    * Creates new {@code CardDeck} entity. During initialisation creates cards using cartesian
    * product of {@code Suit} and {@code FaceValue}. Visibility of constructor is package private in
@@ -25,9 +23,9 @@ public class CardDeck extends Deck {
     owner = Owner.NOBODY;
     for (Suit suit : Suit.values()) {
       suitList.add(suit.getValue(), SuitPack.newInstance());
-      SuitPack suitPack = suitList.get(suit.getValue());
+      var suitPack = suitList.get(suit.getValue());
       for (FaceValue value : FaceValue.values()) {
-        Card newCard = Card.newInstance(suit, value);
+        var newCard = Card.newInstance(suit, value);
         suitPack.addCard(newCard);
         LOG.debug("Card successfully added: {}", newCard);
       }
@@ -38,16 +36,13 @@ public class CardDeck extends Deck {
   }
 
   @Override
-  public void addCard(Card card) {
+  public void addCard(Card card) throws IllegalArgumentException {
     SuitPack suitCardList = suitList.get(card.getSuitValue());
     suitCardList.addCard(card);
   }
 
   @Override
   public String toString() {
-    return "CardDeck{" +
-        "suitList=" + suitList +
-        ", fullSuits=" + fullSuits +
-        '}';
+    return "CardDeck{" + "suitList=" + suitList + ", fullSuits=" + fullSuits + '}';
   }
 }
