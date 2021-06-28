@@ -36,7 +36,7 @@ public class CardDeck extends Deck {
   }
 
   @Override
-  public void addCard(Card card) throws IllegalArgumentException {
+  public void addCard(Card card) {
     SuitPack suitCardList = suitList.get(card.getSuitValue());
     suitCardList.addCard(card);
   }

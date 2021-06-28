@@ -45,9 +45,8 @@ class SuitPack {
    * Adds a new {@code Card} to the {@code SuitPack}.
    *
    * @param card {@code Card} to add
-   * @throws IllegalArgumentException {@code Card} is already in the {@code SuitPack}
    */
-  void addCard(Card card) throws IllegalArgumentException {
+  void addCard(Card card) {
     if (this.checkPresence(card.getValue())) {
       throw new IllegalArgumentException(
           "Card: " + card + " with value: " + card.getValue() + " is already in the SuitPack");
@@ -114,9 +113,8 @@ class SuitPack {
    *
    * @param faceValue value of the {@code Card}
    * @return founded {@code Card}
-   * @throws NoSuchElementException {@code Card} is not in the {@code SuitPack}
    */
-  Card dealCard(FaceValue faceValue) throws NoSuchElementException {
+  Card dealCard(FaceValue faceValue) {
     if (!isEmpty()) {
       for (Card deckCard : cards) {
         if (deckCard.hasFaceValue(faceValue) && deckCard.isActive()) {
@@ -135,9 +133,8 @@ class SuitPack {
    * Returns a random {@code Card} from the {@code SuitPack}.
    *
    * @return random {@code Card} from the {@code SuitPack}
-   * @throws NoSuchElementException {@code Card} is not in the {@code SuitPack}
    */
-  public Card dealRandomCard() throws NoSuchElementException {
+  public Card dealRandomCard() {
     if (!isEmpty()) {
       List<Card> activeCards = cards.stream().filter(Card::isActive).collect(Collectors.toList());
       var cardIndex = new Random().nextInt(activeCards.size());

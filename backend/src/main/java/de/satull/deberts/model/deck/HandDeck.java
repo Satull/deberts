@@ -41,10 +41,9 @@ public class HandDeck extends Deck {
    * <p>{@code HandDeck} con not contain more {@code Card}s then {@code maxCardsNumber}
    *
    * @param card a {@code Card} to add
-   * @throws IllegalArgumentException Tries to add over the card limit
    */
   @Override
-  public void addCard(Card card) throws IllegalArgumentException {
+  public void addCard(Card card) {
     if (containedCards < maxCardsNumber) {
       SuitPack suitCardList = suitList.get(card.getSuitValue());
       suitCardList.addCard(card);

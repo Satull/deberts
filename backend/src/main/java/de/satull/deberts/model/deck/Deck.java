@@ -31,9 +31,8 @@ public abstract class Deck {
    * Adds a {@code Card} to the {@code Deck}.
    *
    * @param card a {@code Card} to add
-   * @throws IllegalArgumentException {@code Card} can not be added to the Deck
    */
-  public abstract void addCard(Card card) throws IllegalArgumentException;
+  public abstract void addCard(Card card);
 
   /**
    * Returns {@code true} if this {@code Deck} contains the specified {@code Card}, {@code false}
@@ -80,9 +79,8 @@ public abstract class Deck {
    * Returns a random {@code Card} from the {@code Deck}.
    *
    * @return a random {@code Card}
-   * @throws NoSuchElementException {@code Deck} is empty
    */
-  public Card dealRandomCard() throws NoSuchElementException {
+  public Card dealRandomCard() {
     try {
       LOG.debug("FullSuits: {}", fullSuits);
       var suitIndex = new Random().nextInt(fullSuits.size());
@@ -104,9 +102,8 @@ public abstract class Deck {
    *
    * @param suit {@code Suit} to get a {@code Card}
    * @return a random {@code Card} from the {@code Suit}
-   * @throws NoSuchElementException {@code Suit} is empty
    */
-  public Card dealRandomCardFromSuit(Suit suit) throws NoSuchElementException {
+  public Card dealRandomCardFromSuit(Suit suit) {
     return suitList.get(suit.getValue()).dealRandomCard();
   }
 
