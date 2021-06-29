@@ -30,10 +30,9 @@ public class Card {
   }
 
   /**
-   * Factory method to create a new {@code Card} entity. Each new {@code Card} is by default
-   * active.
+   * Factory method to create a new {@code Card} entity. Each new {@code Card} is by default active.
    *
-   * @param suit      {@code Suit} of the {@code Card}
+   * @param suit {@code Suit} of the {@code Card}
    * @param faceValue {@code faceValue} of the {@code Card}
    * @return new {@code Card} object
    */
@@ -147,10 +146,6 @@ public class Card {
 
   @Override
   public String toString() {
-    return "Card{" +
-        "suit=" + suit +
-        ", faceValue=" + faceValue +
-        ", active=" + active +
-        '}';
+    return "Card{" + "suit=" + suit + ", faceValue=" + faceValue + ", active=" + active + '}';
   }
 }
