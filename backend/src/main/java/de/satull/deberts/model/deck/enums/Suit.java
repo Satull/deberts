@@ -26,7 +26,7 @@ public enum Suit {
   }
 
   /**
-   * Return the int value of the {@code Suit}. {@code Int} value is necessary to determine an array
+   * Returns the int value of the {@code Suit}. {@code Int} value is necessary to determine an array
    * position to store {@code Cards} grouped by {@code Suit}.
    *
    * @return {@code int} value of the {@code Suit}
