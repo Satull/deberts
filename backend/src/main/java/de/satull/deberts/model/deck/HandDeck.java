@@ -1,6 +1,6 @@
 package de.satull.deberts.model.deck;
 
-import de.satull.deberts.model.deck.enums.Owner;
+import de.satull.deberts.enums.Owner;
 import de.satull.deberts.model.deck.enums.Suit;
 
 /**

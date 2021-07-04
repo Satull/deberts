@@ -1,15 +1,16 @@
 package de.satull.deberts.model.deck;
 
+import de.satull.deberts.enums.Owner;
 import de.satull.deberts.model.deck.enums.FaceValue;
-import de.satull.deberts.model.deck.enums.Owner;
 import de.satull.deberts.model.deck.enums.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Random;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * An abstract class to contain and manage cards. Cards are grouped by {@code SuitPack}. All suits

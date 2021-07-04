@@ -1,9 +1,10 @@
 package de.satull.deberts.model.deck;
 
-import de.satull.deberts.model.deck.enums.Owner;
-import java.lang.invoke.MethodHandles;
+import de.satull.deberts.enums.Owner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.invoke.MethodHandles;
 
 /**
  * Factory class to create different {@code Deck} implementations.
@@ -20,8 +21,7 @@ public class DeckFactory {
       LoggerFactory.getLogger(MethodHandles.lookup().lookupClass().getSimpleName());
   private static final int DEBERTS_MAX_CARDS_NUMBER = 9;
 
-  private DeckFactory() {
-  }
+  private DeckFactory() {}
 
   /**
    * Returns new Deck entity depends of the input parameter. If the input parameter belongs to the

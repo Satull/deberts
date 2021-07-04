@@ -1,15 +1,16 @@
 package de.satull.deberts.model.deck;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-
+import de.satull.deberts.enums.Owner;
 import de.satull.deberts.model.deck.enums.FaceValue;
-import de.satull.deberts.model.deck.enums.Owner;
 import de.satull.deberts.model.deck.enums.Suit;
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.NoSuchElementException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SuppressWarnings("javadoc")
 @SpringBootTest

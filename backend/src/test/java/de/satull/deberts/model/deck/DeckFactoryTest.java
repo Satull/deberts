@@ -1,12 +1,12 @@
 package de.satull.deberts.model.deck;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import de.satull.deberts.model.deck.enums.Owner;
+import de.satull.deberts.enums.Owner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("javadoc")
 @SpringBootTest
@@ -20,7 +20,9 @@ class DeckFactoryTest {
   }
 
   @ParameterizedTest
-  @EnumSource(value = Owner.class, names = {"BOT", "PLAYER"})
+  @EnumSource(
+      value = Owner.class,
+      names = {"BOT", "PLAYER"})
   void createDeck_OwnerBot_newHandDeck(Owner owner) {
     Deck deck = DeckFactory.createDeck(owner);
 
