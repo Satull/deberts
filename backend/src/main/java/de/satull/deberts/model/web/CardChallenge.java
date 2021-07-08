@@ -2,6 +2,7 @@ package de.satull.deberts.model.web;
 
 import de.satull.deberts.enums.Owner;
 import de.satull.deberts.model.deck.Card;
+import de.satull.deberts.model.deck.enums.Suit;
 
 /**
  * An entity that contains cards to compare and their owners.
@@ -121,5 +122,35 @@ public class CardChallenge implements Challenge<Card> {
           String.format(
               "Defender can't have same card: %s like attacker: %s", value, attackerCard));
     }
+  }
+
+  /**
+   * Returns {@code Owner} enum of the winner. To decide a winner trump information is needed.
+   *
+   * @param trump trump {@code Suit}
+   * @return winner
+   */
+  @Override
+  public Owner getWinner(Suit trump) {
+    if (attackerCard.getSuit().equals(defenderCard.getSuit())) {
+      int compareResult =
+          Integer.compare(attackerCard.getPoints(trump), defenderCard.getPoints(trump));
+      if (compareResult == 0) {
+        compareResult = attackerCard.getValue().compareTo(defenderCard.getValue());
+      }
+      return compareResult > 0 ? attacker : defender;
+    }
+    return defenderCard.getSuit().equals(trump) ? defender : attacker;
+  }
+
+  /**
+   * Returns points of the decided challenge. To decide a winner trump information is needed.
+   *
+   * @param trump trump {@code Suit}
+   * @return winner points
+   */
+  @Override
+  public int getPoints(Suit trump) {
+    return attackerCard.getPoints(trump) + defenderCard.getPoints(trump);
   }
 }

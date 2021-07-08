@@ -1,6 +1,7 @@
 package de.satull.deberts.model.web;
 
 import de.satull.deberts.enums.Owner;
+import de.satull.deberts.model.deck.enums.Suit;
 
 /**
  * An object that contains values to compare in each game turn. A map cannot contain duplicate keys;
@@ -73,4 +74,20 @@ public interface Challenge<T> {
    * @throws IllegalArgumentException attacker and defender can't use same value to challenge
    */
   void setDefenderValue(T value);
+
+  /**
+   * Returns {@code Owner} enum of the winner. To decide a winner trump information is needed.
+   *
+   * @param trump trump {@code Suit}
+   * @return winner
+   */
+  Owner getWinner(Suit trump);
+
+  /**
+   * Returns points of the decided challenge. To decide a winner trump information is needed.
+   *
+   * @param trump trump {@code Suit}
+   * @return winner points
+   */
+  int getPoints(Suit trump);
 }

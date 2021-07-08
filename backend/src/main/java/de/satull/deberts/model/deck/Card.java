@@ -116,6 +116,16 @@ public class Card {
     return this.faceValue.equals(faceValue);
   }
 
+  /**
+   * Returns points of the {@code Card} depends from the trump suit.
+   *
+   * @param trump suit
+   * @return points
+   */
+  public int getPoints(Suit trump) {
+    return faceValue.getPoints(suit.equals(trump));
+  }
+
   @Override
   public int hashCode() {
     int result = getSuit().hashCode();
