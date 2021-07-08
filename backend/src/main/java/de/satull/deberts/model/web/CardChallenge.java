@@ -17,11 +17,22 @@ public class CardChallenge implements Challenge<Card> {
   private Card attackerCard;
   private Card defenderCard;
 
+  /**
+   * Returns {@code Owner} of the attacker.
+   *
+   * @return {@code Owner}
+   */
   @Override
   public Owner getAttacker() {
     return attacker;
   }
 
+  /**
+   * Sets attackers {@code Owner}.
+   *
+   * @param attacker {@code Owner}
+   * @throws IllegalArgumentException attacker and defender can't be the same user
+   */
   @Override
   public void setAttacker(Owner attacker) {
     if (!attacker.equals(defender)) {
@@ -32,11 +43,22 @@ public class CardChallenge implements Challenge<Card> {
     }
   }
 
+  /**
+   * Returns {@code Owner} of the defender.
+   *
+   * @return {@code Owner}
+   */
   @Override
   public Owner getDefender() {
     return defender;
   }
 
+  /**
+   * Sets attackers {@code Owner}.
+   *
+   * @param defender {@code Owner}
+   * @throws IllegalArgumentException attacker and defender can't be the same user
+   */
   @Override
   public void setDefender(Owner defender) {
     if (!attacker.equals(defender)) {
@@ -47,11 +69,22 @@ public class CardChallenge implements Challenge<Card> {
     }
   }
 
+  /**
+   * Returns attackers value to compare.
+   *
+   * @return attackers value to compare
+   */
   @Override
   public Card getAttackerValue() {
     return attackerCard;
   }
 
+  /**
+   * Sets attackers value to compare.
+   *
+   * @param value attackers value
+   * @throws IllegalArgumentException attacker and defender can't use same value to challenge
+   */
   @Override
   public void setAttackerValue(Card value) {
     if (!defenderCard.equals(value)) {
@@ -63,11 +96,22 @@ public class CardChallenge implements Challenge<Card> {
     }
   }
 
+  /**
+   * Returns defenders value to compare.
+   *
+   * @return defenders value to compare
+   */
   @Override
   public Card getDefenderValue() {
     return defenderCard;
   }
 
+  /**
+   * Sets defenders value to compare.
+   *
+   * @param value defenders value
+   * @throws IllegalArgumentException attacker and defender can't use same value to challenge
+   */
   @Override
   public void setDefenderValue(Card value) {
     if (!attackerCard.equals(value)) {
