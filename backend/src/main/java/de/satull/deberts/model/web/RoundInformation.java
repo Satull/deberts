@@ -2,6 +2,7 @@ package de.satull.deberts.model.web;
 
 import de.satull.deberts.enums.Owner;
 import de.satull.deberts.enums.Phase;
+import de.satull.deberts.model.deck.AbstractDeck;
 import de.satull.deberts.model.deck.Deck;
 import de.satull.deberts.model.deck.Trump;
 import lombok.Builder;
@@ -74,7 +75,7 @@ public class RoundInformation {
    *
    * @param playerDeck {@code HandDeck} of the bot
    */
-  public void setPlayerDeck(Deck playerDeck) {
+  public void setPlayerDeck(AbstractDeck playerDeck) {
     this.playerDeck = playerDeck;
   }
 
@@ -90,10 +91,10 @@ public class RoundInformation {
   /**
    * Sets {@code HandDeck} of the bot.
    *
-   * @param botDeck {@code HandDeck} of the bot
+   * @param botAbstractDeck {@code HandDeck} of the bot
    */
-  public void setBotDeck(Deck botDeck) {
-    this.botDeck = botDeck;
+  public void setBotDeck(AbstractDeck botAbstractDeck) {
+    this.botDeck = botAbstractDeck;
   }
 
   /**

@@ -1,14 +1,14 @@
 package de.satull.deberts.model.deck;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+
 import de.satull.deberts.enums.Owner;
 import de.satull.deberts.model.deck.enums.FaceValue;
 import de.satull.deberts.model.deck.enums.Suit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @SuppressWarnings("javadoc")
 @SpringBootTest

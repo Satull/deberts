@@ -12,7 +12,7 @@ import de.satull.deberts.model.deck.enums.Suit;
  * @version 1.0
  * @since 1.0
  */
-public class CardDeck extends Deck {
+public class CardDeck extends AbstractDeck {
 
   /**
    * Creates new {@code CardDeck} entity. During initialisation creates cards using cartesian

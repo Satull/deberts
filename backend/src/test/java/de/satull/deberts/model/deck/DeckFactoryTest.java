@@ -1,12 +1,12 @@
 package de.satull.deberts.model.deck;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.satull.deberts.enums.Owner;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("javadoc")
 @SpringBootTest

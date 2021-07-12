@@ -1,10 +1,9 @@
 package de.satull.deberts.model.deck;
 
 import de.satull.deberts.enums.Owner;
+import java.lang.invoke.MethodHandles;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.invoke.MethodHandles;
 
 /**
  * Factory class to create different {@code Deck} implementations.

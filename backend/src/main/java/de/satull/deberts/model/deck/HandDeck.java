@@ -13,7 +13,7 @@ import de.satull.deberts.model.deck.enums.Suit;
  * @version 1.0
  * @since 1.0
  */
-public class HandDeck extends Deck {
+public class HandDeck extends AbstractDeck {
 
   private final int maxCardsNumber;
   private int containedCards = 0;
