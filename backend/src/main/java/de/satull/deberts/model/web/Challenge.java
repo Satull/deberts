@@ -4,9 +4,8 @@ import de.satull.deberts.enums.Owner;
 import de.satull.deberts.model.deck.enums.Suit;
 
 /**
- * An object that contains values to compare in each game turn. A map cannot contain duplicate keys;
- * each key can map to at Each challenge contains an attacker and defender with names of the players
- * and values to compare.
+ * An object that contains values to compare in each game turn. Each challenge contains an attacker
+ * and defender with names of the players and values to compare.
  *
  * @param <T> value to challenge
  * @author Ievgenii Izrailtenko

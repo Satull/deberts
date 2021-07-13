@@ -17,7 +17,9 @@ public enum Suit {
   @JsonProperty("spades")
   SPADES(2),
   @JsonProperty("clubs")
-  CLUBS(3);
+  CLUBS(3),
+  @JsonProperty("no-suit")
+  NO_SUIT(-1);
 
   private final int value;
 

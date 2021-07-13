@@ -2,6 +2,7 @@ package de.satull.deberts.model.deck;
 
 import de.satull.deberts.enums.CombinationName;
 import de.satull.deberts.enums.Owner;
+import de.satull.deberts.model.deck.enums.FaceValue;
 import de.satull.deberts.model.deck.enums.Suit;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -38,11 +39,10 @@ public class PlayerCombination {
    * Adds new {@code Combination} to the list using the {@code Set<Card>}.
    *
    * @param combination set of cards
-   * @param trump is it a trump combination
    */
-  public void addCombination(Set<Card> combination, boolean trump) {
+  public void addCombination(Set<Card> combination) {
     if (isCombination(combination)) {
-      combinationList.add(Combination.newInstance(combination, trump));
+      combinationList.add(Combination.newInstance(combination));
     } else {
       throw new IllegalArgumentException(
           "Combination: " + combination + "has wrong number of cards or not the same suit");
@@ -52,12 +52,17 @@ public class PlayerCombination {
   /**
    * Returns the highest {@code Combination} of all combinations of the player.
    *
+   * @param trump trump {@code Suit}
    * @return highest {@code Combination}
    */
-  public Combination getHighestCombination() {
-    Combination result = Combination.newInstance(new HashSet<>(), false);
+  public Combination getHighestCombination(Suit trump) {
+    Combination result = Combination.newInstance(new HashSet<>());
     for (Combination combination : combinationList) {
-      if (result.compareTo(combination) < 1) {
+      int compareValue = result.compareTo(combination);
+
+      if (compareValue == 0) {
+        result = combination.getSuit().equals(trump) ? combination : result;
+      } else if (compareValue < 1) {
         result = combination;
       }
     }
@@ -84,10 +89,12 @@ public class PlayerCombination {
 
   private boolean isCombination(Set<Card> combination) {
     boolean result;
-    result = CombinationName.getNameByCards(combination.size()) != null;
+    CombinationName name = CombinationName.getNameByCards(combination.size());
+    result = name.equals(CombinationName.EMPTY);
     if (combination.stream().findFirst().isPresent()) {
       Suit suit = combination.stream().findFirst().get().getSuit();
       for (Card card : combination) {
+        result = isPossibleBella(name, card.getValue());
         if (!result) {
           break;
         }
@@ -95,5 +102,12 @@ public class PlayerCombination {
       }
     }
     return result;
+  }
+
+  private boolean isPossibleBella(CombinationName name, FaceValue cardValue) {
+    if (name.equals(CombinationName.BELLA)) {
+      return cardValue.equals(FaceValue.QUEEN) || cardValue.equals(FaceValue.KING);
+    }
+    return false;
   }
 }

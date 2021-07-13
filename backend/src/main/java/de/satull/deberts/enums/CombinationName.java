@@ -10,17 +10,19 @@ import java.util.Arrays;
  * @since 1.0
  */
 public enum CombinationName {
-  FIFTY(4, 50),
-  TERTZ(3, 20),
-  BELLA(2, 20),
-  EMPTY(0, 0);
+  FIFTY(4, 50, 50),
+  TERTZ(3, 20, 20),
+  BELLA(2, 0, 20),
+  EMPTY(0, 0, 0);
 
   private final int cards;
-  private final int points;
+  private final int standardPoints;
+  private final int trumpPoints;
 
-  CombinationName(int cards, int points) {
+  CombinationName(int cards, int standardPoints, int trumpPoints) {
     this.cards = cards;
-    this.points = points;
+    this.standardPoints = standardPoints;
+    this.trumpPoints = trumpPoints;
   }
 
   /**
@@ -43,11 +45,13 @@ public enum CombinationName {
   }
 
   /**
-   * Return how much points brings a combination.
+   * Return how much points brings a combination. Trump is needed to decide if combination is BELLA
+   * or just kind and queen.
    *
+   * @param trump is this a trump combination
    * @return points of combination
    */
-  public int getPoints() {
-    return points;
+  public int getPoints(boolean trump) {
+    return trump ? trumpPoints : standardPoints;
   }
 }

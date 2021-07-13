@@ -2,6 +2,7 @@ package de.satull.deberts.model.deck;
 
 import de.satull.deberts.enums.CombinationName;
 import de.satull.deberts.model.deck.enums.FaceValue;
+import de.satull.deberts.model.deck.enums.Suit;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -14,22 +15,19 @@ import java.util.TreeSet;
  */
 public class Combination implements Comparable<Combination> {
   private final TreeSet<Card> combination;
-  private final boolean trump;
 
-  private Combination(Set<Card> combination, boolean trump) {
+  private Combination(Set<Card> combination) {
     this.combination = new TreeSet<>(combination);
-    this.trump = trump;
   }
 
   /**
    * Factory method to create a new {@code Combination} entity.
    *
    * @param combination {@code Set<Card>} for combination
-   * @param trump declares if the combination is from the trump suit
    * @return Combination new combination entity
    */
-  public static Combination newInstance(Set<Card> combination, boolean trump) {
-    return new Combination(combination, trump);
+  public static Combination newInstance(Set<Card> combination) {
+    return new Combination(combination);
   }
 
   /**
@@ -50,6 +48,16 @@ public class Combination implements Comparable<Combination> {
     return combination.last().getValue();
   }
 
+  /**
+   * Returns a {@code Suit} value of the {@code Combination}.
+   *
+   * @return {@code Suit} value
+   */
+  public Suit getSuit() {
+    Card combinationCard = combination.first();
+    return combinationCard != null ? combinationCard.getSuit() : Suit.NO_SUIT;
+  }
+
   @Override
   public int compareTo(Combination combination) {
     int comparedName = compareName(combination.getName());
@@ -57,12 +65,7 @@ public class Combination implements Comparable<Combination> {
       return comparedName;
     }
 
-    int comparedHeight = compareHeight(combination.getHeight());
-    if (comparedHeight != 0) {
-      return comparedHeight;
-    }
-
-    return compareTrump(combination.trump);
+    return compareHeight(combination.getHeight());
   }
 
   private int compareName(CombinationName combinationName) {
@@ -71,15 +74,5 @@ public class Combination implements Comparable<Combination> {
 
   private int compareHeight(FaceValue height) {
     return this.getHeight().compareTo(height);
-  }
-
-  private int compareTrump(boolean trump) {
-    if (this.trump == trump) {
-      return 0;
-    } else if (this.trump) {
-      return 1;
-    } else {
-      return -1;
-    }
   }
 }

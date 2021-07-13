@@ -69,7 +69,7 @@ public class Card {
   }
 
   /**
-   * Gets a {@code Suit} of the {@code Card}.
+   * Returns a {@code Suit} of the {@code Card}.
    *
    * @return {@code Suit} name
    */
@@ -78,7 +78,7 @@ public class Card {
   }
 
   /**
-   * Gets a {@code Suit int} value of the {@code Card}.
+   * Returns a {@code Suit int} value of the {@code Card}.
    *
    * @return {@code Suit} value
    */
